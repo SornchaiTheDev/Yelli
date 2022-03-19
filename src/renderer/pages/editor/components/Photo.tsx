@@ -14,7 +14,7 @@ function Photo({
       }`}
       // onClick={() => onClick!(path)}
     >
-      <img src={path} className="pointer-events-none w-full h-full" />
+      <img src={path} className="pointer-events-none" />
     </div>
   );
 }
