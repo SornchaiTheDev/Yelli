@@ -33,7 +33,7 @@ function BigPhoto({ path, onClick, selectedPhoto }: BigPhotoProps) {
           />
           <div className="flex justify-end items-center w-full py-2 px-4">
             <div className="flex space-x-4">
-              <button className="w-full px-4 py-2 rounded-full bg-yellow-500 font-bold">
+              <button className="w-full px-6 py-3 rounded-full bg-yellow-500 font-bold">
                 Next
               </button>
             </div>
