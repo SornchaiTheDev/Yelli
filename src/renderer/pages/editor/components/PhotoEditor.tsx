@@ -1,17 +1,15 @@
-import { useState, useRef, useEffect, LegacyRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Star, Image as KonvaImage } from 'react-konva';
 
 function PhotoEditor() {
   const [size, setSize] = useState({ width: 400, height: 300 });
   const [image, setImage] = useState<CanvasImageSource | null>(null);
   const stageRef = useRef<any>(null);
-  // const image =
-  //   '';
 
   const handleImageInit = () => {
     const img = new Image();
 
-    img.addEventListener('load', (e: Event) => {
+    img.addEventListener('load', () => {
       const { width, height } = img;
       setSize({ width, height });
     });
@@ -21,17 +19,12 @@ function PhotoEditor() {
     setImage(img);
   };
 
+  // set Stage size to iamge size
   useEffect(() => {
     handleImageInit();
   }, []);
 
-  // useEffect(() => {
-  //   if (divRef.current !== null) {
-  //     const { width, height } = divRef.current!.getBoundingClientRect();
-  //     setSize({ width, height });
-  //   }
-  // }, [divRef]);
-
+  // convert canvas to image (base64)
   const toBase64 = () => {
     const image = stageRef.current.toDataURL();
     console.log(image);
@@ -51,7 +44,6 @@ function PhotoEditor() {
             x={10}
             y={100}
             draggable
-            onDragEnd={toBase64}
             fill="gold"
             width={200}
             height={200}
