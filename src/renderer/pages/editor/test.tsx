@@ -3,11 +3,16 @@ import Photo from './components/Photo';
 import { BiCool } from 'react-icons/bi';
 import { MdPhotoFilter } from 'react-icons/md';
 import PhotoEditor from './components/PhotoEditor';
+import Button from 'renderer/components/Button';
+
 function Editor(): JSX.Element {
   return (
     <>
-      <BackBtn />
-      <div className="grid grid-cols-6 place-items-center gap-2 pl-2 h-screen">
+      <div className="absolute px-4 top-4 w-full flex justify-between items-center">
+        <BackBtn />
+        <Button>Print</Button>
+      </div>
+      <div className="grid grid-cols-6 place-items-center gap-2 pl-2 h-screen  pt-10">
         {/* Photo Viwer */}
         <div className="col-span-1  h-2/3 bg-white overflow-scroll">
           <div className="flex flex-col space-y-5 items-center w-full h-1/2 px-4">
@@ -21,7 +26,7 @@ function Editor(): JSX.Element {
           </div>
         </div>
 
-        <div className="col-span-5 w-full h-full flex items-center space-x-2 px-5">
+        <div className="col-span-5 w-full h-full flex items-center space-x-5 px-5">
           {/* Photo Editor */}
           <PhotoEditor />
           <div className="flex flex-col justify-center space-y-8">

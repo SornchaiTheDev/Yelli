@@ -1,10 +1,10 @@
 import { BiArrowBack } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
-function BackBtn() {
+function BackBtn({ className = '' }: { className?: string }) {
   const navigate = useNavigate();
   return (
     <div
-      className="absolute flex items-center top-10 left-10 cursor-pointer"
+      className={'flex items-center cursor-pointer ' + className}
       onClick={() => navigate(-1)}
     >
       <div className="w-12">

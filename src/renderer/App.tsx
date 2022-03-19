@@ -8,8 +8,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/" element={<PhotoExplorer />} /> */}
-        <Route path="/" element={<Editor />} />
+        <Route path="/" element={<PhotoExplorer />} />
+        {/* <Route path="/" element={<Editor />} /> */}
         <Route path="/options" element={<Options />} />
         <Route path="/editor" element={<Editor />} />
       </Routes>

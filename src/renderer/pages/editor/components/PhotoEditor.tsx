@@ -2,7 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { Stage, Layer, Star, Image as KonvaImage } from 'react-konva';
 
 function PhotoEditor() {
-  const [size, setSize] = useState({ width: 400, height: 300 });
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
   const [image, setImage] = useState<CanvasImageSource | null>(null);
   const stageRef = useRef<any>(null);
 
