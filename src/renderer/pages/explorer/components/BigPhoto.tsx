@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
+
 interface BigPhotoProps {
   path: string;
   onClick: () => void;
-  selectedPhoto: string[];
 }
-import Select from './Select';
-function BigPhoto({ path, onClick, selectedPhoto }: BigPhotoProps) {
+
+function BigPhoto({ path, onClick }: BigPhotoProps) {
   const [size, setSize] = useState({ width: 1470, height: 980 });
   useEffect(() => {
     const img = new Image();
@@ -27,15 +28,18 @@ function BigPhoto({ path, onClick, selectedPhoto }: BigPhotoProps) {
         </div>
         <div className="bg-white overflow-hidden rounded-xl  shadow-xl">
           <img
-            className="rounded-t-xl "
+            className="rounded-t-xl"
             style={{ width: size.width / 1.5, height: size.height / 1.5 }}
             src={path}
           />
           <div className="flex justify-end items-center w-full py-2 px-4">
             <div className="flex space-x-4">
-              <button className="w-full px-6 py-3 rounded-full bg-yellow-500 font-bold">
+              <Link
+                to="/options"
+                className="w-full px-6 py-3 rounded-full bg-yellow-500 font-bold"
+              >
                 Next
-              </button>
+              </Link>
             </div>
           </div>
         </div>

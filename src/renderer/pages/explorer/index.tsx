@@ -2,6 +2,7 @@ import { useState } from 'react';
 import BigPhoto from './components/BigPhoto';
 import mockPhoto from '../../dummy';
 import Photo from './components/Photo';
+import { Link } from 'react-router-dom';
 const Index = (): JSX.Element => {
   const [bigPreview, setBigPreview] = useState(false);
   const [PhotoSrc, setPhotoSrc] = useState('');
@@ -26,11 +27,7 @@ const Index = (): JSX.Element => {
   return (
     <>
       {bigPreview && !isSelect && (
-        <BigPhoto
-          path={PhotoSrc}
-          onClick={() => setBigPreview(false)}
-          selectedPhoto={selectedPhoto}
-        />
+        <BigPhoto path={PhotoSrc} onClick={() => setBigPreview(false)} />
       )}
 
       <div className="px-10 pt-10 flex flex-col space-y-10 h-screen">
@@ -42,12 +39,12 @@ const Index = (): JSX.Element => {
           </h1>
           <div>
             {selectedPhoto.length > 0 && (
-              <button
+              <Link
+                to="/options"
                 className="text-xl font-bold outline-none rounded-full px-4 py-2 bg-yellow-500 mr-2"
-                onClick={handleSelect}
               >
                 Next
-              </button>
+              </Link>
             )}
             <button
               className="text-xl font-bold outline-none rounded-full px-4 py-2 bg-yellow-500"
