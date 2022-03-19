@@ -11,7 +11,7 @@ import Button from 'renderer/components/Button';
 function Editor(): JSX.Element {
   return (
     <div className="flex flex-col pt-2 h-screen">
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full pl-6 pt-2 flex justify-between items-center">
         <BackBtn />
         <Button>Print</Button>
       </div>
@@ -20,7 +20,6 @@ function Editor(): JSX.Element {
         <div className="col-span-1 flex flex-col w-full rounded-lg shadow-xl">
           <div className="w-full rounded-t-lg flex-1 my-6 overflow-scroll">
             <div className="flex flex-col space-y-5 px-4 h-2">
-              {/* {Array(100).fill("").map(() => <h1>s</h1>)} */}
               <Photo path="https://images.unsplash.com/photo-1575641248750-4b81f06e2360?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
               <Photo path="https://images.unsplash.com/photo-1575641248750-4b81f06e2360?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
               <Photo path="https://images.unsplash.com/photo-1575641248750-4b81f06e2360?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" />
