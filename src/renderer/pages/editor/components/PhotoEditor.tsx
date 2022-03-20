@@ -18,6 +18,9 @@ function PhotoEditor({
   const [image, setImage] = useState<CanvasImageSource | null>(null);
   const stageRef = useRef<any>(null);
 
+  // sticker sample
+  const [isSelected, setIsSelected] = useState<number | null>(null);
+
   const handleImageInit = () => {
     const img = new Image();
 
@@ -30,12 +33,16 @@ function PhotoEditor({
     setImage(img);
   };
 
-  // set Stage size to iamge size
+  // set Stage size to image size
   useEffect(() => {
     handleImageInit();
     stageRef.current.hitOnDragEnabled = true;
   }, [src]);
-  const [stickers, setStickers] = useState<StickerInteface[]>([]);
+  const [stickers, setStickers] = useState<StickerInteface[]>([
+    { x: 100, y: 100, scale: 1 },
+    { x: 200, y: 100, scale: 1 },
+    { x: 300, y: 100, scale: 1 },
+  ]);
   const handleOnDecorate = () => {
     onFinishDecorate!({ index: index!, layers: stickers });
   };
@@ -44,6 +51,10 @@ function PhotoEditor({
   const toBase64 = () => {
     const image = stageRef.current.toDataURL();
     console.log(image);
+  };
+
+  const handleOnClick = () => {
+    setIsSelected(null);
   };
 
   return (
@@ -56,8 +67,21 @@ function PhotoEditor({
         onMouseUp={handleOnDecorate}
       >
         <Layer>
-          <KonvaImage image={image!} />
-          <Sticker />
+          <KonvaImage
+            image={image!}
+            onClick={handleOnClick}
+            onTap={handleOnClick}
+          />
+          {stickers.map(({ x, y, scale }, index) => (
+            <Sticker
+              key={index}
+              scale={scale}
+              x={x}
+              y={y}
+              isSelected={isSelected === index}
+              onSelect={() => setIsSelected(index)}
+            />
+          ))}
         </Layer>
       </Stage>
     </>

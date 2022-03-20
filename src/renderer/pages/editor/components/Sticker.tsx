@@ -1,11 +1,19 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Transformer, Star } from 'react-konva';
+import { StickerInteface } from '../interface';
 
-function Sticker() {
+function Sticker({
+  isSelected,
+  x,
+  y,
+  scale,
+  onSelect,
+}: StickerInteface & { isSelected: boolean; onSelect: () => void }) {
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
 
   const selected = () => {
+    onSelect();
     transfromRef.current.nodes([shapeRef.current]);
     transfromRef.current.getLayer().batchDraw();
   };
@@ -17,8 +25,9 @@ function Sticker() {
         ref={shapeRef}
         onClick={selected}
         onTap={selected}
-        x={10}
-        y={100}
+        x={x}
+        y={y}
+        scale={{ x: scale, y: scale }}
         fill="gold"
         width={200}
         height={200}
@@ -28,6 +37,9 @@ function Sticker() {
       />
       <Transformer
         borderEnabled={false}
+        anchorSize={25}
+        anchorCornerRadius={16}
+        visible={isSelected}
         enabledAnchors={[
           'top-left',
           'top-right',
