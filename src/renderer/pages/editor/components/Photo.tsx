@@ -4,7 +4,7 @@ function Photo({
   className,
 }: {
   path: string;
-  onClick?: (path: string) => void;
+  onClick?: () => void;
   className?: string;
 }) {
   return (
@@ -12,7 +12,7 @@ function Photo({
       className={`bg-gray-200 rounded-lg overflow-hidden select-none cursor-pointer flex-shrink-0 ${
         className !== undefined ? className : ''
       }`}
-      // onClick={() => onClick!(path)}
+      onClick={onClick}
     >
       <img src={path} className="pointer-events-none" />
     </div>

@@ -55,10 +55,10 @@ const Index = (): JSX.Element => {
           </div>
         </div>
         <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10">
-          {mockPhoto.map(({ path }) => (
+          {mockPhoto.map(({ src }) => (
             <Photo
-              checked={selectedPhoto.includes(path)}
-              path={path}
+              checked={selectedPhoto.includes(src)}
+              path={src}
               isSelect={isSelect}
               onClick={handleSelectPhoto}
             />
