@@ -38,11 +38,13 @@ function PhotoEditor({
     handleImageInit();
     stageRef.current.hitOnDragEnabled = true;
   }, [src]);
+
   const [stickers, setStickers] = useState<StickerInteface[]>([
     { x: 100, y: 100, scale: 1 },
     { x: 200, y: 100, scale: 1 },
     { x: 300, y: 100, scale: 1 },
   ]);
+
   const handleOnDecorate = () => {
     onFinishDecorate!({ index: index!, layers: stickers });
   };

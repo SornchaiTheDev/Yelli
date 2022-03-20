@@ -25,6 +25,8 @@ function Sticker({
         ref={shapeRef}
         onClick={selected}
         onTap={selected}
+        onDragStart={selected}
+        onTouchStart={selected}
         x={x}
         y={y}
         scale={{ x: scale, y: scale }}
