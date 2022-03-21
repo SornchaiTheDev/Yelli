@@ -14,7 +14,7 @@ function Content() {
   return (
     <div className="flex flex-col pt-2 h-screen">
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
-        <BackBtn />
+        <Button>Cancel</Button>
         <Button>Print</Button>
       </div>
       <div className="grid grid-cols-6 gap-2 px-2 h-full">

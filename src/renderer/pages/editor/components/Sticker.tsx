@@ -1,19 +1,31 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useRef, useState, useEffect } from 'react';
-import { Transformer, Image as KonvaImage } from 'react-konva';
+import {
+  Transformer,
+  Image as KonvaImage,
+  Group,
+  Circle,
+  Rect,
+} from 'react-konva';
 import { StickerInteface, StickerProperties } from '../interface';
 
 function Sticker({
+  stageHeight,
   stickerIndex,
   isSelected,
   properties = { x: 0, y: 0, scale: 1, rotation: 0 },
   src,
   onSelect,
   onTransfromEnd,
+  index,
+  handleDeleteSticker,
 }: StickerInteface & {
+  stageHeight: number;
   stickerIndex: number;
   isSelected: boolean;
+  index: string;
   onSelect: () => void;
+  handleDeleteSticker: () => void;
 }) {
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
@@ -92,11 +104,11 @@ function Sticker({
         scale={{ x: StickerProperties.scale, y: StickerProperties.scale }}
       />
       <Transformer
-        rotateAnchorOffset={50}
-        borderEnabled={false}
-        anchorSize={25}
-        anchorStroke="transparent"
-        anchorCornerRadius={16}
+        ref={transfromRef}
+        rotateAnchorOffset={0}
+        anchorSize={20}
+        anchorStroke="white"
+        anchorCornerRadius={0}
         visible={isSelected}
         enabledAnchors={[
           'top-left',
@@ -105,9 +117,25 @@ function Sticker({
           'bottom-right',
         ]}
         rotationSnaps={[0, 90, 180, 270]}
-        ref={transfromRef}
         onTransform={handleOnTransform}
-      />
+      >
+        <Group>
+          <Circle
+            onClick={() => handleDeleteSticker()}
+            x={
+              transfromRef.current !== null
+                ? transfromRef.current.getWidth()
+                : 0
+            }
+            y={0}
+            radius={20}
+            width={30}
+            height={30}
+            fill="red"
+            fillPatternImage={img}
+          />
+        </Group>
+      </Transformer>
     </>
   );
 }

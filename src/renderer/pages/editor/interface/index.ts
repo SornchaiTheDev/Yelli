@@ -24,13 +24,16 @@ export interface StickerInteface {
 export type onFinishDecorateInterface = ({
   photoIndex,
   stickers,
+  thumbnail,
 }: {
   photoIndex: number;
   stickers: StickerInteface[];
+  thumbnail: string;
 }) => void;
 
 export interface PhotoInterface {
   src: string;
+  thumbnail?: string;
   stickers: StickerInteface[];
   onFinishDecorate?: onFinishDecorateInterface;
   photoIndex?: number;

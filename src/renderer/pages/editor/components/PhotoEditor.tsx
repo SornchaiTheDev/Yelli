@@ -57,7 +57,7 @@ function PhotoEditor({
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
-    console.log(photoIndex);
+    handleOnClick();
     const newStickers = _stickers.map((sticker, index) => {
       if (index === stickerIndex) {
         return {
@@ -68,18 +68,27 @@ function PhotoEditor({
       return sticker;
     });
     setStickers(newStickers);
-    onFinishDecorate!({ photoIndex, stickers: newStickers });
+    onFinishDecorate!({
+      photoIndex,
+      stickers: newStickers,
+      thumbnail: toBase64(),
+    });
   };
 
   /* convert canvas to image (base64) */
   const toBase64 = () => {
     const image = stageRef.current.toDataURL();
-    console.log(image);
+    return image;
   };
 
   /* handle on Stage click */
   const handleOnClick = () => {
     setIsSelected(null);
+  };
+
+  const handleDeleteSticker = () => {
+    const otherStickers = _stickers.filter((_, index) => index !== isSelected!);
+    setStickers(otherStickers);
   };
 
   return (
@@ -116,12 +125,15 @@ function PhotoEditor({
           {_stickers.map(({ properties, src, key }, index) => (
             <Sticker
               key={key}
+              index={key}
               src={src}
+              stageHeight={size.height}
               stickerIndex={index}
               properties={properties}
               isSelected={isSelected === index}
               onTransfromEnd={handleTransfromEnd}
               onSelect={() => setIsSelected(index)}
+              handleDeleteSticker={handleDeleteSticker}
             />
           ))}
         </Layer>

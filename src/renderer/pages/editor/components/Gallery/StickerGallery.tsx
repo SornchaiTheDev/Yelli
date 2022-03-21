@@ -1,12 +1,13 @@
 import balloon from '../../../../../../public/stickers/balloon.png';
 import crocodile from '../../../../../../public/stickers/crocodile.png';
 import hny from '../../../../../../public/stickers/happy-new-year.png';
+import witchHat from '../../../../../../public/stickers/witch-hat.png';
 import StickerPreview from './components/StickerPreview';
 
 const mock_sticker = [
   {
     name: 'Party',
-    stickerSets: [balloon],
+    stickerSets: [balloon, witchHat],
   },
   {
     name: 'Animals',

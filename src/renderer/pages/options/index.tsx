@@ -4,7 +4,7 @@ import BackBtn from 'renderer/components/BackBtn';
 function Options() {
   return (
     <>
-      <BackBtn className="absolute top-10 left-10" />
+      <BackBtn text="Preview" className="absolute top-10 left-10" />
       <div className="flex flex-col space-y-20 justify-center items-center w-full h-screen">
         <h1 className="text-4xl font-bold">Tap to Choose</h1>
         <div className="flex justify-center items-center space-x-28">
