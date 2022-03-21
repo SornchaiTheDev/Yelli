@@ -17,9 +17,7 @@ function Content() {
       <div className="grid grid-cols-6 gap-2 px-2 h-full">
         {/* Photo Viwer */}
         <div className="col-span-1 flex flex-col w-full rounded-lg shadow-xl">
-          <div className="w-full rounded-t-lg flex-1 my-6 overflow-scroll">
-            <Gallery selected="sticker" />
-          </div>
+          <Gallery selected="sticker" />
         </div>
 
         <div className="col-span-5 w-full h-full flex justify-center items-center space-x-5 px-5">
