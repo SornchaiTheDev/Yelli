@@ -70,6 +70,8 @@ function Sticker({
       <KonvaImage
         image={img}
         draggable
+        offsetX={img?.width! / 2}
+        offsetY={img?.height! / 2}
         ref={shapeRef}
         onClick={selected}
         onTap={selected}

@@ -6,6 +6,8 @@ import {
   StickerInteface,
 } from '../interface';
 import Sticker from './Sticker';
+import { useEditorContext } from '../context';
+import balloon from '../../../../../public/stickers/balloon.png';
 
 function PhotoEditor({
   photoIndex,
@@ -13,6 +15,9 @@ function PhotoEditor({
   stickers,
   onFinishDecorate,
 }: SelectedPhotoInterface): JSX.Element {
+  const { stageRef, selectSticker } = useEditorContext();
+  // const stageRef = useRef<any>(null);
+
   /* Stage size */
   const [size, setSize] = useState({
     width: window.innerWidth,
@@ -21,7 +26,6 @@ function PhotoEditor({
 
   /* Add Image to canvas */
   const [image, setImage] = useState<CanvasImageSource | null>(null);
-  const stageRef = useRef<any>(null);
 
   /* sticker sample */
   const [isSelected, setIsSelected] = useState<number | null>(null);
@@ -75,7 +79,22 @@ function PhotoEditor({
   };
 
   return (
-    <>
+    <div
+      onDrop={(e) => {
+        console.log(e);
+        e.preventDefault();
+        stageRef.current.setPointersPositions(e);
+
+        setStickers((prev) => [
+          ...prev,
+          {
+            src: selectSticker!,
+            properties: stageRef.current.getPointerPosition(),
+          },
+        ]);
+      }}
+      onDragOver={(e) => e.preventDefault()}
+    >
       <Stage
         width={size.width}
         height={size.height}
@@ -88,7 +107,7 @@ function PhotoEditor({
             onClick={handleOnClick}
             onTap={handleOnClick}
           />
-          {stickers.map(({ properties, src }, index) => (
+          {_stickers.map(({ properties, src }, index) => (
             <Sticker
               src={src}
               stickerIndex={index}
@@ -101,7 +120,7 @@ function PhotoEditor({
           ))}
         </Layer>
       </Stage>
-    </>
+    </div>
   );
 }
 
