@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BackBtn from 'renderer/components/BackBtn';
 import Photo from './components/Photo';
 import { BiCool } from 'react-icons/bi';
@@ -6,17 +6,28 @@ import { MdPhotoFilter } from 'react-icons/md';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import { onFinishDecorateInterface, SelectedPhotoInterface } from './interface';
+import balloon from '../../../../public/stickers/balloon.png';
+import mock_photo from 'renderer/dummy';
 
 function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
-  const [allPhotos, setAllPhotos] = useState(photos);
+  const [allPhotos, setAllPhotos] =
+    useState<SelectedPhotoInterface[]>(mock_photo);
   const [selectedPhoto, setSelectedPhoto] = useState<SelectedPhotoInterface>({
     src: photos[0].src,
-    stickers: [],
+    stickers: [{ src: balloon }],
   });
 
   const onFinishDecorate: onFinishDecorateInterface = ({ index, stickers }) => {
-    console.log(index);
-    console.log(stickers);
+    const saveToAllPhotos = allPhotos.map((photo, i) => {
+      if (i === index) {
+        return {
+          ...photo,
+          stickers,
+        };
+      }
+      return photo;
+    });
+    setAllPhotos(saveToAllPhotos);
   };
 
   return (
@@ -30,13 +41,11 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
         <div className="col-span-1 flex flex-col w-full rounded-lg shadow-xl">
           <div className="w-full rounded-t-lg flex-1 my-6 overflow-scroll">
             <div className="flex flex-col space-y-5 px-4 h-2">
-              {allPhotos.map(({ src }, index) => {
+              {allPhotos.map(({ src, stickers }, index) => {
                 return (
                   <Photo
                     key={index}
-                    onClick={() =>
-                      setSelectedPhoto({ src, index, stickers: [] })
-                    }
+                    onClick={() => setSelectedPhoto({ src, index, stickers })}
                     path={src}
                   />
                 );
@@ -48,7 +57,9 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
         <div className="col-span-5 w-full h-full flex justify-center items-center space-x-5 px-5">
           {/* Photo Editor */}
           <PhotoEditor
-            index={selectedPhoto.index}
+            index={allPhotos.findIndex(
+              (photo) => photo.src === selectedPhoto.src
+            )}
             src={selectedPhoto.src}
             stickers={selectedPhoto.stickers}
             onFinishDecorate={onFinishDecorate}

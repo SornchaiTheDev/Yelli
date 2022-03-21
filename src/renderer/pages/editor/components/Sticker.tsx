@@ -13,7 +13,7 @@ type StickerProperties = {
 function Sticker({
   index,
   isSelected,
-  properties,
+  properties = { x: 0, y: 0, scale: 1, rotation: 0 },
   src,
   onSelect,
   onTransfromEnd,
@@ -24,11 +24,10 @@ function Sticker({
 }) {
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
-  const [img, setImg] = useState<HTMLImageElement | null>(null);
+  const [img, setImg] = useState<HTMLImageElement>();
   // save sticker state
-  const [StickerProperties, setStickerProperties] = useState<StickerProperties>(
-    properties!
-  );
+  const [StickerProperties, setStickerProperties] =
+    useState<StickerProperties>(properties);
 
   const handleImageInit = () => {
     const img = new Image();
@@ -36,7 +35,6 @@ function Sticker({
     img.addEventListener('load', () => {
       setImg(img);
     });
-    img.crossOrigin = 'Anonymous';
     img.src = src;
   };
 
@@ -59,6 +57,22 @@ function Sticker({
       rotation: e.target.rotation(),
     });
   };
+  const handleOnDrag = (e: KonvaEventObject<Event>) => {
+    setStickerProperties({
+      ...StickerProperties,
+      x: e.target.x(),
+      y: e.target.y(),
+    });
+  };
+
+  const handleOnDragEnd = () => {
+    console.log('onDrag end');
+    console.log(StickerProperties);
+    onTransfromEnd!({
+      index,
+      properties: StickerProperties,
+    });
+  };
 
   return (
     <>
@@ -70,6 +84,11 @@ function Sticker({
         onTap={selected}
         onDragStart={selected}
         onTouchStart={selected}
+        onDragMove={handleOnDrag}
+        onDragEnd={handleOnDragEnd}
+        onTransformEnd={() =>
+          onTransfromEnd!({ index, properties: StickerProperties })
+        }
         x={StickerProperties.x}
         y={StickerProperties.y}
         rotation={StickerProperties.rotation}
@@ -91,7 +110,6 @@ function Sticker({
         rotationSnaps={[0, 90, 180, 270]}
         ref={transfromRef}
         onTransform={handleOnTransform}
-        onTransformEnd={() => onTransfromEnd!({ index, ...StickerProperties })}
       />
     </>
   );

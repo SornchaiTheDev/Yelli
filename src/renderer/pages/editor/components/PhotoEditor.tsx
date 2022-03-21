@@ -6,7 +6,6 @@ import {
   StickerInteface,
 } from '../interface';
 import Sticker from './Sticker';
-import balloon from '../../../../../public/stickers/balloon.png';
 
 function PhotoEditor({
   index,
@@ -49,35 +48,21 @@ function PhotoEditor({
   /* Stickers that on stage now */
   const [_stickers, setStickers] = useState<StickerInteface[]>(stickers);
 
-  /* save stage */
-  const handleOnDecorate = () => {
-    onFinishDecorate!({ index: index!, stickers: _stickers });
-  };
-
   /* save sticker properties */
-  const handleTransfromEnd: onTransfromEnd = ({
-    index,
-    x,
-    y,
-    scale,
-    rotation,
-  }) => {
-    const otherSticker = _stickers.filter(
-      (sticker, stkIndex) => stkIndex !== index
-    );
-
-    const selectedSticker = _stickers.find(
-      (sticker, stkIndex) => stkIndex === index
-    );
-
-    selectedSticker!.properties = {
-      x,
-      y,
-      scale,
-      rotation,
-    };
-
-    setStickers([...otherSticker, selectedSticker!]);
+  const handleTransfromEnd: onTransfromEnd = ({ index, properties }) => {
+    console.log('called');
+    console.log(properties);
+    const newStickers = _stickers.map((sticker, i) => {
+      if (i === index) {
+        return {
+          ...sticker,
+          properties,
+        };
+      }
+      return sticker;
+    });
+    setStickers(newStickers);
+    onFinishDecorate!({ index: index!, stickers: newStickers });
   };
 
   /* convert canvas to image (base64) */
@@ -98,7 +83,6 @@ function PhotoEditor({
         height={size.height}
         ref={stageRef}
         className="rounded-lg overflow-hidden shadow-lg"
-        onMouseUp={handleOnDecorate}
       >
         <Layer>
           <KonvaImage

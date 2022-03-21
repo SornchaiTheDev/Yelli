@@ -6,12 +6,12 @@ export interface StickerProperties {
 }
 
 export type onTransfromEnd = ({
-  x,
-  y,
-  scale,
-  rotation,
   index,
-}: StickerProperties & { index: number }) => void;
+  properties,
+}: {
+  index: number;
+  properties: StickerProperties;
+}) => void;
 
 export interface StickerInteface {
   name?: string;
