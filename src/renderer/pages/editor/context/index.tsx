@@ -11,7 +11,6 @@ interface EditorContext {
   allPhotos: PhotoInterface[];
   selectedPhoto: SelectedPhotoInterface | null;
   onFinishDecorate: onFinishDecorateInterface;
-  stageRef: React.MutableRefObject<any>;
   selectSticker: string | null;
   setSelectSticker: React.Dispatch<React.SetStateAction<string | null>>;
   handleSelectPhoto: ({
@@ -32,7 +31,6 @@ const EditorCxt = createContext<EditorContext>({
   setSelectSticker: () => {},
   onFinishDecorate: () => {},
   handleSelectPhoto: () => {},
-  stageRef: { current: null },
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
@@ -42,7 +40,6 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     photoIndex: 0,
   });
 
-  const stageRef = useRef<any>(null);
   const [selectSticker, setSelectSticker] = useState<string | null>(null);
 
   const onFinishDecorate: onFinishDecorateInterface = ({
@@ -82,7 +79,6 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         setSelectSticker,
         onFinishDecorate,
         handleSelectPhoto,
-        stageRef,
       }}
     >
       {children}

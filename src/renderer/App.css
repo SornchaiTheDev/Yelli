@@ -12,3 +12,7 @@
   background: #001524;
   border-radius: 100px;
 }
+
+* {
+  user-select: none;
+}

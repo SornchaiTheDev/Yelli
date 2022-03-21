@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import {
   onTransfromEnd,
@@ -15,8 +15,8 @@ function PhotoEditor({
   stickers,
   onFinishDecorate,
 }: SelectedPhotoInterface): JSX.Element {
-  const { stageRef, selectSticker } = useEditorContext();
-  // const stageRef = useRef<any>(null);
+  const { selectSticker } = useEditorContext();
+  const stageRef = useRef<any>(null);
 
   /* Stage size */
   const [size, setSize] = useState({
@@ -89,7 +89,10 @@ function PhotoEditor({
           ...prev,
           {
             src: selectSticker!,
-            properties: stageRef.current.getPointerPosition(),
+            properties: {
+              ...stageRef.current.getPointerPosition(),
+              scale: 0.5,
+            },
           },
         ]);
       }}

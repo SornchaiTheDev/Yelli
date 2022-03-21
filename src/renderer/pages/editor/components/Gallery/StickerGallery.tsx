@@ -40,7 +40,7 @@ function StickerGallery() {
             {stickerSets.map((sticker) => {
               const [isDragging, setIsDragging] = useState<boolean>(false);
               return (
-                <div className="p-4 bg-gray-100 rounded-lg " key={sticker}>
+                <div className="p-4 bg-gray-100 rounded-lg" key={sticker}>
                   <img
                     src={sticker}
                     className={isDragging ? 'opacity-0' : 'opacity-100'}
