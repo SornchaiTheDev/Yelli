@@ -22,6 +22,10 @@ function Sticker({
   const [StickerProperties, setStickerProperties] =
     useState<StickerProperties>(properties);
 
+  // useEffect(() => {
+  //   console.log(properties);
+  // }, [properties]);
+
   const handleImageInit = () => {
     const img = new Image();
 
@@ -70,8 +74,8 @@ function Sticker({
       <KonvaImage
         image={img}
         draggable
-        offsetX={img?.width! / 2}
-        offsetY={img?.height! / 2}
+        offsetX={img ? img.width / 2 : 0}
+        offsetY={img ? img.height / 2 : 0}
         ref={shapeRef}
         onClick={selected}
         onTap={selected}

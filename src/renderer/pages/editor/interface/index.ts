@@ -14,6 +14,7 @@ export type onTransfromEnd = ({
 }) => void;
 
 export interface StickerInteface {
+  key: string;
   name?: string;
   src: string;
   properties?: StickerProperties;

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import BackBtn from 'renderer/components/BackBtn';
 import { BiCool } from 'react-icons/bi';
 import { MdPhotoFilter } from 'react-icons/md';
@@ -7,7 +8,9 @@ import Gallery from './components/Gallery';
 import { useEditorContext } from './context';
 
 function Content() {
-  const { allPhotos, selectedPhoto, onFinishDecorate } = useEditorContext();
+  const { allPhotos, selectedPhoto } = useEditorContext();
+  const [menu, setMenu] = useState<'photo' | 'sticker'>('photo');
+
   return (
     <div className="flex flex-col pt-2 h-screen">
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
@@ -17,7 +20,7 @@ function Content() {
       <div className="grid grid-cols-6 gap-2 px-2 h-full">
         {/* Photo Viwer */}
         <div className="col-span-1 flex flex-col w-full rounded-lg shadow-xl">
-          <Gallery selected="sticker" />
+          <Gallery selected={menu} />
         </div>
 
         <div className="col-span-5 w-full h-full flex justify-center items-center space-x-5 px-5">
@@ -28,11 +31,13 @@ function Content() {
             )}
             src={selectedPhoto!.src}
             stickers={selectedPhoto!.stickers}
-            onFinishDecorate={onFinishDecorate}
           />
 
           <div className="flex flex-col justify-center space-y-8">
-            <button className="flex flex-col items-center">
+            <button
+              className="flex flex-col items-center"
+              onClick={() => setMenu(menu === 'photo' ? 'sticker' : 'photo')}
+            >
               <div className="p-4 bg-yellow-500 w-16 rounded-full ">
                 <BiCool size="100%" />
               </div>

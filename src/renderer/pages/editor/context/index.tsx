@@ -1,4 +1,10 @@
-import { createContext, useContext, ReactNode, useState, useRef } from 'react';
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from 'react';
 import {
   onFinishDecorateInterface,
   SelectedPhotoInterface,
@@ -55,6 +61,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
       }
       return photo;
     });
+
     setAllPhotos(saveToAllPhotos);
   };
 

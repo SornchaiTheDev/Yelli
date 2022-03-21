@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
+import { v4 as uuid } from 'uuid';
 import {
   onTransfromEnd,
   SelectedPhotoInterface,
@@ -7,15 +8,13 @@ import {
 } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../context';
-import balloon from '../../../../../public/stickers/balloon.png';
 
 function PhotoEditor({
   photoIndex,
   src,
   stickers,
-  onFinishDecorate,
 }: SelectedPhotoInterface): JSX.Element {
-  const { selectSticker } = useEditorContext();
+  const { selectSticker, onFinishDecorate } = useEditorContext();
   const stageRef = useRef<any>(null);
 
   /* Stage size */
@@ -46,14 +45,19 @@ function PhotoEditor({
   /* set Stage size to image size */
   useEffect(() => {
     handleImageInit();
-    stageRef.current.hitOnDragEnabled = true;
   }, [src]);
 
   /* Stickers that on stage now */
-  const [_stickers, setStickers] = useState<StickerInteface[]>(stickers);
+  const [_stickers, setStickers] = useState<StickerInteface[]>([]);
+
+  /* Set Sticker to stage  */
+  useEffect(() => {
+    setStickers(stickers);
+  }, [stickers]);
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
+    console.log(photoIndex);
     const newStickers = _stickers.map((sticker, index) => {
       if (index === stickerIndex) {
         return {
@@ -81,13 +85,12 @@ function PhotoEditor({
   return (
     <div
       onDrop={(e) => {
-        console.log(e);
         e.preventDefault();
         stageRef.current.setPointersPositions(e);
-
         setStickers((prev) => [
           ...prev,
           {
+            key: uuid(),
             src: selectSticker!,
             properties: {
               ...stageRef.current.getPointerPosition(),
@@ -110,11 +113,11 @@ function PhotoEditor({
             onClick={handleOnClick}
             onTap={handleOnClick}
           />
-          {_stickers.map(({ properties, src }, index) => (
+          {_stickers.map(({ properties, src, key }, index) => (
             <Sticker
+              key={key}
               src={src}
               stickerIndex={index}
-              key={index}
               properties={properties}
               isSelected={isSelected === index}
               onTransfromEnd={handleTransfromEnd}
