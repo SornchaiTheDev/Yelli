@@ -6,10 +6,10 @@ export interface StickerProperties {
 }
 
 export type onTransfromEnd = ({
-  index,
+  stickerIndex,
   properties,
 }: {
-  index: number;
+  stickerIndex: number;
   properties: StickerProperties;
 }) => void;
 
@@ -21,15 +21,22 @@ export interface StickerInteface {
 }
 
 export type onFinishDecorateInterface = ({
-  index,
+  photoIndex,
   stickers,
 }: {
-  index: number;
+  photoIndex: number;
   stickers: StickerInteface[];
 }) => void;
 
+export interface PhotoInterface {
+  src: string;
+  stickers: StickerInteface[];
+  onFinishDecorate?: onFinishDecorateInterface;
+  photoIndex?: number;
+}
+
 export interface SelectedPhotoInterface {
-  index?: number;
+  photoIndex: number;
   src: string;
   stickers: StickerInteface[];
   onFinishDecorate?: onFinishDecorateInterface;

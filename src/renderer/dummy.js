@@ -1,7 +1,9 @@
+import balloon from '../../public/stickers/balloon.png';
+import crocodile from '../../public/stickers/crocodile.png';
 const mock_photo = [
   {
     src: 'https://images.unsplash.com/photo-1577537500263-da8814d8e040?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-    stickers: [],
+    stickers: [{ src: balloon }, { src: crocodile }],
     createdTimed: '12:48',
   },
   {

@@ -1,24 +1,17 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useRef, useState, useEffect } from 'react';
 import { Transformer, Image as KonvaImage } from 'react-konva';
-import { StickerInteface } from '../interface';
-
-type StickerProperties = {
-  x: number;
-  y: number;
-  scale: number;
-  rotation: number;
-};
+import { StickerInteface, StickerProperties } from '../interface';
 
 function Sticker({
-  index,
+  stickerIndex,
   isSelected,
   properties = { x: 0, y: 0, scale: 1, rotation: 0 },
   src,
   onSelect,
   onTransfromEnd,
 }: StickerInteface & {
-  index: number;
+  stickerIndex: number;
   isSelected: boolean;
   onSelect: () => void;
 }) {
@@ -66,10 +59,8 @@ function Sticker({
   };
 
   const handleOnDragEnd = () => {
-    console.log('onDrag end');
-    console.log(StickerProperties);
     onTransfromEnd!({
-      index,
+      stickerIndex,
       properties: StickerProperties,
     });
   };
@@ -87,7 +78,7 @@ function Sticker({
         onDragMove={handleOnDrag}
         onDragEnd={handleOnDragEnd}
         onTransformEnd={() =>
-          onTransfromEnd!({ index, properties: StickerProperties })
+          onTransfromEnd!({ stickerIndex, properties: StickerProperties })
         }
         x={StickerProperties.x}
         y={StickerProperties.y}

@@ -1,25 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BackBtn from 'renderer/components/BackBtn';
 import Photo from './components/Photo';
 import { BiCool } from 'react-icons/bi';
 import { MdPhotoFilter } from 'react-icons/md';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
-import { onFinishDecorateInterface, SelectedPhotoInterface } from './interface';
-import balloon from '../../../../public/stickers/balloon.png';
+import {
+  onFinishDecorateInterface,
+  SelectedPhotoInterface,
+  PhotoInterface,
+} from './interface';
+
 import mock_photo from 'renderer/dummy';
 
 function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
-  const [allPhotos, setAllPhotos] =
-    useState<SelectedPhotoInterface[]>(mock_photo);
+  const [allPhotos, setAllPhotos] = useState<PhotoInterface[]>(mock_photo);
   const [selectedPhoto, setSelectedPhoto] = useState<SelectedPhotoInterface>({
-    src: photos[0].src,
-    stickers: [{ src: balloon }],
+    ...allPhotos[0],
+    photoIndex: 0,
   });
 
-  const onFinishDecorate: onFinishDecorateInterface = ({ index, stickers }) => {
-    const saveToAllPhotos = allPhotos.map((photo, i) => {
-      if (i === index) {
+  const onFinishDecorate: onFinishDecorateInterface = ({
+    photoIndex,
+    stickers,
+  }) => {
+    const saveToAllPhotos = allPhotos.map((photo, index) => {
+      if (index === photoIndex) {
         return {
           ...photo,
           stickers,
@@ -45,7 +51,9 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
                 return (
                   <Photo
                     key={index}
-                    onClick={() => setSelectedPhoto({ src, index, stickers })}
+                    onClick={() =>
+                      setSelectedPhoto({ src, photoIndex: index, stickers })
+                    }
                     path={src}
                   />
                 );
@@ -57,7 +65,7 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
         <div className="col-span-5 w-full h-full flex justify-center items-center space-x-5 px-5">
           {/* Photo Editor */}
           <PhotoEditor
-            index={allPhotos.findIndex(
+            photoIndex={allPhotos.findIndex(
               (photo) => photo.src === selectedPhoto.src
             )}
             src={selectedPhoto.src}

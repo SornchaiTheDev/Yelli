@@ -8,7 +8,7 @@ import {
 import Sticker from './Sticker';
 
 function PhotoEditor({
-  index,
+  photoIndex,
   src,
   stickers,
   onFinishDecorate,
@@ -49,11 +49,9 @@ function PhotoEditor({
   const [_stickers, setStickers] = useState<StickerInteface[]>(stickers);
 
   /* save sticker properties */
-  const handleTransfromEnd: onTransfromEnd = ({ index, properties }) => {
-    console.log('called');
-    console.log(properties);
-    const newStickers = _stickers.map((sticker, i) => {
-      if (i === index) {
+  const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
+    const newStickers = _stickers.map((sticker, index) => {
+      if (index === stickerIndex) {
         return {
           ...sticker,
           properties,
@@ -62,7 +60,7 @@ function PhotoEditor({
       return sticker;
     });
     setStickers(newStickers);
-    onFinishDecorate!({ index: index!, stickers: newStickers });
+    onFinishDecorate!({ photoIndex, stickers: newStickers });
   };
 
   /* convert canvas to image (base64) */
@@ -93,7 +91,7 @@ function PhotoEditor({
           {stickers.map(({ properties, src }, index) => (
             <Sticker
               src={src}
-              index={index}
+              stickerIndex={index}
               key={index}
               properties={properties}
               isSelected={isSelected === index}
