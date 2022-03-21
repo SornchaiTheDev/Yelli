@@ -1,15 +1,20 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useRef, useState } from 'react';
-import { Transformer, Star } from 'react-konva';
+import { useRef, useState, useEffect } from 'react';
+import { Transformer, Image as KonvaImage } from 'react-konva';
 import { StickerInteface } from '../interface';
+
+type StickerProperties = {
+  x: number;
+  y: number;
+  scale: number;
+  rotation: number;
+};
 
 function Sticker({
   index,
   isSelected,
-  x,
-  y,
-  scale,
-  rotation,
+  properties,
+  src,
   onSelect,
   onTransfromEnd,
 }: StickerInteface & {
@@ -19,13 +24,26 @@ function Sticker({
 }) {
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
+  const [img, setImg] = useState<HTMLImageElement | null>(null);
   // save sticker state
-  const [properties, setProperties] = useState<StickerInteface>({
-    x,
-    y,
-    scale,
-    rotation,
-  });
+  const [StickerProperties, setStickerProperties] = useState<StickerProperties>(
+    properties!
+  );
+
+  const handleImageInit = () => {
+    const img = new Image();
+
+    img.addEventListener('load', () => {
+      setImg(img);
+    });
+    img.crossOrigin = 'Anonymous';
+    img.src = src;
+  };
+
+  // set Stage size to image size
+  useEffect(() => {
+    handleImageInit();
+  }, [src]);
 
   const selected = () => {
     onSelect();
@@ -34,7 +52,7 @@ function Sticker({
   };
 
   const handleOnTransform = (e: KonvaEventObject<Event>) => {
-    setProperties({
+    setStickerProperties({
       x: e.target.x(),
       y: e.target.y(),
       scale: e.target.scaleX(),
@@ -44,27 +62,24 @@ function Sticker({
 
   return (
     <>
-      <Star
+      <KonvaImage
+        image={img}
         draggable
         ref={shapeRef}
         onClick={selected}
         onTap={selected}
         onDragStart={selected}
         onTouchStart={selected}
-        x={properties.x}
-        y={properties.y}
-        rotation={properties.rotation}
-        scale={{ x: properties.scale, y: properties.scale }}
-        fill="gold"
-        width={200}
-        height={200}
-        numPoints={5}
-        innerRadius={50}
-        outerRadius={100}
+        x={StickerProperties.x}
+        y={StickerProperties.y}
+        rotation={StickerProperties.rotation}
+        scale={{ x: StickerProperties.scale, y: StickerProperties.scale }}
       />
       <Transformer
+        rotateAnchorOffset={50}
         borderEnabled={false}
         anchorSize={25}
+        anchorStroke="transparent"
         anchorCornerRadius={16}
         visible={isSelected}
         enabledAnchors={[
@@ -76,7 +91,7 @@ function Sticker({
         rotationSnaps={[0, 90, 180, 270]}
         ref={transfromRef}
         onTransform={handleOnTransform}
-        onTransformEnd={() => onTransfromEnd!({ index, ...properties })}
+        onTransformEnd={() => onTransfromEnd!({ index, ...StickerProperties })}
       />
     </>
   );

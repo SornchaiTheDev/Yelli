@@ -6,13 +6,15 @@ import {
   StickerInteface,
 } from '../interface';
 import Sticker from './Sticker';
+import balloon from '../../../../../public/stickers/balloon.png';
 
 function PhotoEditor({
   index,
   src,
-  layers,
+  stickers,
   onFinishDecorate,
 }: SelectedPhotoInterface): JSX.Element {
+  /* Stage size */
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -22,9 +24,10 @@ function PhotoEditor({
   const [image, setImage] = useState<CanvasImageSource | null>(null);
   const stageRef = useRef<any>(null);
 
-  // sticker sample
+  /* sticker sample */
   const [isSelected, setIsSelected] = useState<number | null>(null);
 
+  /* handle stage size to image size */
   const handleImageInit = () => {
     const img = new Image();
 
@@ -37,22 +40,21 @@ function PhotoEditor({
     setImage(img);
   };
 
-  // set Stage size to image size
+  /* set Stage size to image size */
   useEffect(() => {
     handleImageInit();
     stageRef.current.hitOnDragEnabled = true;
   }, [src]);
 
-  const [stickers, setStickers] = useState<StickerInteface[]>([
-    { x: 100, y: 100, scale: 1, rotation: 0 },
-    { x: 200, y: 100, scale: 1, rotation: 45 },
-    { x: 300, y: 100, scale: 1, rotation: 175 },
-  ]);
+  /* Stickers that on stage now */
+  const [_stickers, setStickers] = useState<StickerInteface[]>(stickers);
 
+  /* save stage */
   const handleOnDecorate = () => {
-    onFinishDecorate!({ index: index!, layers: stickers });
+    onFinishDecorate!({ index: index!, stickers: _stickers });
   };
 
+  /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({
     index,
     x,
@@ -60,19 +62,31 @@ function PhotoEditor({
     scale,
     rotation,
   }) => {
-    const otherSticker = stickers.filter(
+    const otherSticker = _stickers.filter(
       (sticker, stkIndex) => stkIndex !== index
     );
 
-    setStickers([...otherSticker, { x, y, scale, rotation }]);
+    const selectedSticker = _stickers.find(
+      (sticker, stkIndex) => stkIndex === index
+    );
+
+    selectedSticker!.properties = {
+      x,
+      y,
+      scale,
+      rotation,
+    };
+
+    setStickers([...otherSticker, selectedSticker!]);
   };
 
-  // convert canvas to image (base64)
+  /* convert canvas to image (base64) */
   const toBase64 = () => {
     const image = stageRef.current.toDataURL();
     console.log(image);
   };
 
+  /* handle on Stage click */
   const handleOnClick = () => {
     setIsSelected(null);
   };
@@ -92,14 +106,12 @@ function PhotoEditor({
             onClick={handleOnClick}
             onTap={handleOnClick}
           />
-          {stickers.map(({ x, y, scale, rotation }, index) => (
+          {stickers.map(({ properties, src }, index) => (
             <Sticker
+              src={src}
               index={index}
               key={index}
-              scale={scale}
-              rotation={rotation}
-              x={x}
-              y={y}
+              properties={properties}
               isSelected={isSelected === index}
               onTransfromEnd={handleTransfromEnd}
               onSelect={() => setIsSelected(index)}

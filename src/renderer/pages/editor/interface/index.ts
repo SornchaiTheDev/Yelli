@@ -1,30 +1,36 @@
+export interface StickerProperties {
+  x: number;
+  y: number;
+  scale: number;
+  rotation: number;
+}
+
 export type onTransfromEnd = ({
   x,
   y,
   scale,
   rotation,
   index,
-}: StickerInteface & { index: number }) => void;
+}: StickerProperties & { index: number }) => void;
 
 export interface StickerInteface {
-  x: number;
-  y: number;
-  scale: number;
-  rotation: number;
+  name?: string;
+  src: string;
+  properties?: StickerProperties;
   onTransfromEnd?: onTransfromEnd;
 }
 
 export type onFinishDecorateInterface = ({
   index,
-  layers,
+  stickers,
 }: {
   index: number;
-  layers: StickerInteface[];
+  stickers: StickerInteface[];
 }) => void;
 
 export interface SelectedPhotoInterface {
   index?: number;
   src: string;
-  layers?: StickerInteface[];
+  stickers: StickerInteface[];
   onFinishDecorate?: onFinishDecorateInterface;
 }

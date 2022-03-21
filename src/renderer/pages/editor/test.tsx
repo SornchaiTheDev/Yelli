@@ -11,11 +11,12 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
   const [allPhotos, setAllPhotos] = useState(photos);
   const [selectedPhoto, setSelectedPhoto] = useState<SelectedPhotoInterface>({
     src: photos[0].src,
+    stickers: [],
   });
 
-  const onFinishDecorate: onFinishDecorateInterface = ({ index, layers }) => {
+  const onFinishDecorate: onFinishDecorateInterface = ({ index, stickers }) => {
     console.log(index);
-    console.log(layers);
+    console.log(stickers);
   };
 
   return (
@@ -33,7 +34,9 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
                 return (
                   <Photo
                     key={index}
-                    onClick={() => setSelectedPhoto({ src, index })}
+                    onClick={() =>
+                      setSelectedPhoto({ src, index, stickers: [] })
+                    }
                     path={src}
                   />
                 );
@@ -47,7 +50,7 @@ function Editor({ photos }: { photos: SelectedPhotoInterface[] }): JSX.Element {
           <PhotoEditor
             index={selectedPhoto.index}
             src={selectedPhoto.src}
-            layers={selectedPhoto.layers}
+            stickers={selectedPhoto.stickers}
             onFinishDecorate={onFinishDecorate}
           />
 
