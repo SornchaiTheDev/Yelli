@@ -16,3 +16,13 @@
 * {
   user-select: none;
 }
+
+::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 40px; /* Set a specific slider handle width */
+  height: 40px; /* Slider handle height */
+  background: rgb(250, 204, 21); /* Green background */
+  border-radius: 100%;
+  cursor: pointer; /* Cursor on hover */
+}

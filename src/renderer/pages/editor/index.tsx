@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BiCool } from 'react-icons/bi';
+import { BiCool, BiPen } from 'react-icons/bi';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import Gallery from './components/Gallery';
@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
 
 function Content() {
   const { allPhotos, selectedPhoto } = useEditorContext();
-  const [menu, setMenu] = useState<'photo' | 'sticker' | 'filter'>('photo');
+  const [menu, setMenu] = useState<'photo' | 'sticker' | 'draw'>('photo');
   const navigate = useNavigate();
 
-  const handleMenuSelect = (selected: 'photo' | 'sticker' | 'filter') => {
+  const handleMenuSelect = (selected: 'photo' | 'sticker' | 'draw') => {
     if (selected === menu) return setMenu('photo');
     setMenu(selected);
   };
@@ -20,7 +20,7 @@ function Content() {
     <div className="flex flex-col pt-2 h-screen">
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
         <Button onClick={() => navigate('/')}>Cancel</Button>
-        <Button onClick={() => navigate("/print")}>Print</Button>
+        <Button onClick={() => navigate('/print')}>Print</Button>
       </div>
       <div className="grid grid-cols-6 gap-2 px-2 h-full">
         {/* Photo Viwer */}
@@ -39,6 +39,19 @@ function Content() {
           />
 
           <div className="flex flex-col justify-center space-y-8">
+            <button
+              className="flex flex-col items-center outline-none"
+              onClick={() => handleMenuSelect('draw')}
+            >
+              <div
+                className={`bg-yellow-500 p-4 ${
+                  menu === 'draw' && 'p-3 border-4 border-gray-900'
+                } w-16 rounded-full`}
+              >
+                <BiPen size="100%" />
+              </div>
+              <h3 className="font-semibold">Draw</h3>
+            </button>
             <button
               className="flex flex-col items-center outline-none"
               onClick={() => handleMenuSelect('sticker')}

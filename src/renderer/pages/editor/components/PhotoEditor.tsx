@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, DragEvent } from 'react';
-import { Stage, Layer, Image as KonvaImage } from 'react-konva';
+import { useState, useEffect, useRef, DragEvent, MouseEvent } from 'react';
+import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
 import { v4 as uuid } from 'uuid';
 import {
   onTransfromEnd,
@@ -8,6 +8,7 @@ import {
 } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
+import { KonvaEventObject } from 'konva/lib/Node';
 
 function PhotoEditor({
   photoIndex,
@@ -121,6 +122,46 @@ function PhotoEditor({
     }, 500);
   };
 
+  interface Lines {
+    points: number[];
+    tool: 'pen' | 'eraser';
+  }
+
+  const [tool, setTool] = useState<'pen' | 'eraser'>('pen');
+  const [lines, setLines] = useState<Lines[] | []>([]);
+  const isDrawing = useRef(false);
+
+  const handleMouseDown = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+    isDrawing.current = true;
+    const pos = e.target.getStage()!.getPointerPosition();
+    setLines([...lines, { tool, points: [pos!.x, pos!.y] }]);
+  };
+
+  const handleMouseMove = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+    // no drawing - skipping
+    if (!isDrawing.current) {
+      return;
+    }
+    const stage = e.target.getStage();
+    const point = stage!.getPointerPosition();
+    let lastLine = lines[lines.length - 1];
+    // add point
+    lastLine.points = lastLine.points.concat([point!.x, point!.y]);
+
+    // replace last
+    lines.splice(lines.length - 1, 1, lastLine);
+    setLines(lines.concat());
+  };
+
+  const handleMouseUp = () => {
+    isDrawing.current = false;
+    onFinishDecorate!({
+      photoIndex,
+      stickers: _stickers,
+      thumbnail: toBase64(),
+    });
+  };
+
   return (
     <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
       <Stage
@@ -128,6 +169,9 @@ function PhotoEditor({
         height={size.height}
         ref={stageRef}
         className="rounded-lg overflow-hidden shadow-lg"
+        onMouseDown={handleMouseDown}
+        onMousemove={handleMouseMove}
+        onMouseup={handleMouseUp}
       >
         <Layer>
           <KonvaImage
@@ -135,6 +179,19 @@ function PhotoEditor({
             onClick={handleOnClick}
             onTap={handleOnClick}
           />
+          {lines.map((line, i) => (
+            <Line
+              key={i}
+              points={line.points}
+              stroke="rgba(0,0,0,.25)"
+              strokeWidth={100}
+              tension={0.5}
+              lineCap="round"
+              globalCompositeOperation={
+                line.tool === 'eraser' ? 'destination-out' : 'source-over'
+              }
+            />
+          ))}
           {_stickers.map(({ properties, src, key }, index) => (
             <Sticker
               key={key}
