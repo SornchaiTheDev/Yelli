@@ -35,20 +35,24 @@ function Content() {
 
           <div className="flex flex-col justify-center space-y-8">
             <button
-              className="flex flex-col items-center"
+              className="flex flex-col items-center outline-none"
               onClick={() => setMenu(menu === 'photo' ? 'sticker' : 'photo')}
             >
-              <div className="p-4 bg-yellow-500 w-16 rounded-full ">
+              <div
+                className={`bg-yellow-500 p-4 ${
+                  menu === 'sticker' && 'p-3 border-4 border-gray-900'
+                } w-16 rounded-full`}
+              >
                 <BiCool size="100%" />
               </div>
               <h3 className="font-semibold">Sticker</h3>
             </button>
-            <button className="flex flex-col items-center">
+            <div className="flex flex-col items-center">
               <div className="p-4 bg-yellow-500 w-16 rounded-full ">
                 <MdPhotoFilter size="100%" />
               </div>
               <h3 className="font-semibold">Filters</h3>
-            </button>
+            </div>
           </div>
         </div>
       </div>

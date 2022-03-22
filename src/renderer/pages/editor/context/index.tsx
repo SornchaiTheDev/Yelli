@@ -47,6 +47,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     stickers,
     thumbnail,
   }) => {
+    // console.log(thumbnail);
     const saveToAllPhotos = allPhotos.map((photo, index) => {
       if (index === photoIndex) {
         return {

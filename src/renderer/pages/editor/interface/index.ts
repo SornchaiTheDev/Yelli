@@ -9,7 +9,7 @@ export type onTransfromEnd = ({
   stickerIndex,
   properties,
 }: {
-  stickerIndex: number;
+  stickerIndex: number | 'drop';
   properties: StickerProperties;
 }) => void;
 
@@ -28,7 +28,7 @@ export type onFinishDecorateInterface = ({
 }: {
   photoIndex: number;
   stickers: StickerInteface[];
-  thumbnail: string;
+  thumbnail?: string;
 }) => void;
 
 export interface PhotoInterface {

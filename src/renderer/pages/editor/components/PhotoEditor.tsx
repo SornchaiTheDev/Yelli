@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, DragEvent } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import { v4 as uuid } from 'uuid';
 import {
@@ -58,6 +58,7 @@ function PhotoEditor({
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
     handleOnClick();
+
     const newStickers = _stickers.map((sticker, index) => {
       if (index === stickerIndex) {
         return {
@@ -78,6 +79,7 @@ function PhotoEditor({
   /* convert canvas to image (base64) */
   const toBase64 = () => {
     const image = stageRef.current.toDataURL();
+
     return image;
   };
 
@@ -89,27 +91,39 @@ function PhotoEditor({
   const handleDeleteSticker = () => {
     const otherStickers = _stickers.filter((_, index) => index !== isSelected!);
     setStickers(otherStickers);
+    onFinishDecorate!({
+      photoIndex,
+      stickers: otherStickers,
+      thumbnail: toBase64(),
+    });
+  };
+
+  const handleOnStickerDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    stageRef.current.setPointersPositions(e);
+    const properties = {
+      ...stageRef.current.getPointerPosition(),
+      scale: 0.5,
+    };
+    const currentSticker = {
+      key: uuid(),
+      src: selectSticker!,
+      properties,
+    };
+    const allStickers = [..._stickers, currentSticker];
+    setStickers(allStickers);
+    setTimeout(() => {
+      onFinishDecorate!({
+        photoIndex,
+        stickers: allStickers,
+        thumbnail: toBase64(),
+      });
+      console.log(toBase64());
+    }, 500);
   };
 
   return (
-    <div
-      onDrop={(e) => {
-        e.preventDefault();
-        stageRef.current.setPointersPositions(e);
-        setStickers((prev) => [
-          ...prev,
-          {
-            key: uuid(),
-            src: selectSticker!,
-            properties: {
-              ...stageRef.current.getPointerPosition(),
-              scale: 0.5,
-            },
-          },
-        ]);
-      }}
-      onDragOver={(e) => e.preventDefault()}
-    >
+    <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
       <Stage
         width={size.width}
         height={size.height}
