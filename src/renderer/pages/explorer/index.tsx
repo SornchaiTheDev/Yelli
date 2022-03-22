@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import BigPhoto from './components/BigPhoto';
+import { useNavigate } from 'react-router-dom';
 import mockPhoto from '../../dummy';
 import Photo from './components/Photo';
 import { Link } from 'react-router-dom';
 const Index = (): JSX.Element => {
-  const [bigPreview, setBigPreview] = useState(false);
-  const [PhotoSrc, setPhotoSrc] = useState('');
   const [selectedPhoto, setSelectedPhoto] = useState<string[]>([]);
   const [isSelect, setIsSelect] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelectPhoto = (path: string) => {
     if (!isSelect) {
-      setPhotoSrc(path);
-      return setBigPreview(true);
+      return navigate('/editor');
     }
     if (!selectedPhoto.includes(path))
       return setSelectedPhoto((prev) => [...prev, path]);
@@ -22,14 +20,11 @@ const Index = (): JSX.Element => {
 
   const handleSelect = () => {
     if (isSelect) setSelectedPhoto([]);
+
     setIsSelect(!isSelect);
   };
   return (
     <>
-      {bigPreview && !isSelect && (
-        <BigPhoto path={PhotoSrc} onClick={() => setBigPreview(false)} />
-      )}
-
       <div className="px-10 pt-10 flex flex-col space-y-10 h-screen">
         <div className="flex justify-between items-center w-full ">
           <h1 className="text-3xl font-bold">
@@ -40,7 +35,7 @@ const Index = (): JSX.Element => {
           <div>
             {selectedPhoto.length > 0 && (
               <Link
-                to="/options"
+                to="/editor"
                 className="text-xl font-bold outline-none rounded-full px-4 py-2 bg-yellow-500 mr-2"
               >
                 Next

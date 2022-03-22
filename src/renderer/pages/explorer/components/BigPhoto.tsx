@@ -35,7 +35,7 @@ function BigPhoto({ path, onClick }: BigPhotoProps) {
           <div className="flex justify-end items-center w-full py-2 px-4">
             <div className="flex space-x-4">
               <Link
-                to="/options"
+                to="/editor"
                 className="w-full px-6 py-3 rounded-full bg-yellow-500 font-bold"
               >
                 Next
@@ -44,10 +44,6 @@ function BigPhoto({ path, onClick }: BigPhotoProps) {
           </div>
         </div>
       </div>
-
-      {/* <button className="mt-4 border-2 w-1/2 px-4 py-2 rounded-lg text-xl font-bold">
-        Next
-      </button> */}
     </div>
   );
 }

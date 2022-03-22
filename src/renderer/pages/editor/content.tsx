@@ -1,20 +1,26 @@
 import { useState } from 'react';
-import BackBtn from 'renderer/components/BackBtn';
 import { BiCool } from 'react-icons/bi';
 import { MdPhotoFilter } from 'react-icons/md';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import Gallery from './components/Gallery';
 import { useEditorContext } from './context';
+import { useNavigate } from 'react-router-dom';
 
 function Content() {
   const { allPhotos, selectedPhoto } = useEditorContext();
-  const [menu, setMenu] = useState<'photo' | 'sticker'>('photo');
+  const [menu, setMenu] = useState<'photo' | 'sticker' | 'filter'>('photo');
+  const navigate = useNavigate();
+
+  const handleMenuSelect = (selected: 'photo' | 'sticker' | 'filter') => {
+    if (selected === menu) return setMenu('photo');
+    setMenu(selected);
+  };
 
   return (
     <div className="flex flex-col pt-2 h-screen">
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
-        <Button>Cancel</Button>
+        <Button onClick={() => navigate('/')}>Cancel</Button>
         <Button>Print</Button>
       </div>
       <div className="grid grid-cols-6 gap-2 px-2 h-full">
@@ -36,7 +42,7 @@ function Content() {
           <div className="flex flex-col justify-center space-y-8">
             <button
               className="flex flex-col items-center outline-none"
-              onClick={() => setMenu(menu === 'photo' ? 'sticker' : 'photo')}
+              onClick={() => handleMenuSelect('sticker')}
             >
               <div
                 className={`bg-yellow-500 p-4 ${
@@ -47,12 +53,6 @@ function Content() {
               </div>
               <h3 className="font-semibold">Sticker</h3>
             </button>
-            <div className="flex flex-col items-center">
-              <div className="p-4 bg-yellow-500 w-16 rounded-full ">
-                <MdPhotoFilter size="100%" />
-              </div>
-              <h3 className="font-semibold">Filters</h3>
-            </div>
           </div>
         </div>
       </div>

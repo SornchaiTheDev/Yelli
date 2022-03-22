@@ -6,7 +6,9 @@ import {
   StickerInteface,
 } from '../interface';
 import mock_photo from 'renderer/dummy';
-
+interface Filter {
+  brightness: number;
+}
 interface EditorContext {
   allPhotos: PhotoInterface[];
   selectedPhoto: SelectedPhotoInterface | null;
@@ -73,25 +75,6 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
   }) => {
     setSelectedPhoto({ src, photoIndex: index, stickers });
   };
-
-  // const handleDeleteSticker: onFinishDecorateInterface = ({
-  //   photoIndex,
-  //   stickers,
-  //   thumbnail,
-  // }) => {
-  //   const saveToAllPhotos = allPhotos.map((photo, index) => {
-  //     if (index === photoIndex) {
-  //       return {
-  //         ...photo,
-  //         thumbnail: thumbnail,
-  //         stickers,
-  //       };
-  //     }
-  //     return photo;
-  //   });
-
-  //   setAllPhotos(saveToAllPhotos);
-  // };
 
   return (
     <EditorCxt.Provider
