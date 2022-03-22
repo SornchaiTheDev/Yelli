@@ -1,4 +1,10 @@
-import { createContext, useContext, ReactNode, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from 'react';
 import {
   onFinishDecorateInterface,
   SelectedPhotoInterface,
@@ -6,11 +12,10 @@ import {
   StickerInteface,
 } from '../interface';
 import mock_photo from 'renderer/dummy';
-interface Filter {
-  brightness: number;
-}
+
 interface EditorContext {
   allPhotos: PhotoInterface[];
+  setAllPhotos: React.Dispatch<React.SetStateAction<PhotoInterface[]>>;
   selectedPhoto: SelectedPhotoInterface | null;
   onFinishDecorate: onFinishDecorateInterface;
   selectSticker: string | null;
@@ -28,6 +33,7 @@ interface EditorContext {
 
 const EditorCxt = createContext<EditorContext>({
   allPhotos: [],
+  setAllPhotos: () => {},
   selectedPhoto: null,
   selectSticker: null,
   setSelectSticker: () => {},
@@ -42,6 +48,15 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     photoIndex: 0,
   });
 
+  /* reset Selected Photo */
+  useEffect(() => {
+    setSelectedPhoto({
+      ...allPhotos[0],
+      photoIndex: 0,
+    });
+  }, [allPhotos]);
+
+  /* handle on Drop Sticker */
   const [selectSticker, setSelectSticker] = useState<string | null>(null);
 
   const onFinishDecorate: onFinishDecorateInterface = ({
@@ -49,7 +64,6 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     stickers,
     thumbnail,
   }) => {
-    // console.log(thumbnail);
     const saveToAllPhotos = allPhotos.map((photo, index) => {
       if (index === photoIndex) {
         return {
@@ -80,6 +94,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     <EditorCxt.Provider
       value={{
         allPhotos,
+        setAllPhotos,
         selectedPhoto,
         selectSticker,
         setSelectSticker,

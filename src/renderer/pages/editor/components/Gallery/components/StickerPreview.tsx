@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useEditorContext } from '../../../context';
+import { useEditorContext } from '../../../../../context';
 
 function StickerPreview({ sticker }: { sticker: string }) {
   const [isDragging, setIsDragging] = useState<boolean>(false);

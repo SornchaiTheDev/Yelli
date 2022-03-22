@@ -1,5 +1,5 @@
 import Photo from '../Photo';
-import { useEditorContext } from '../../context';
+import { useEditorContext } from 'renderer/context';
 
 const PhotoGallery = () => {
   const { allPhotos, handleSelectPhoto } = useEditorContext();

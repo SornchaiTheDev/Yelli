@@ -7,7 +7,7 @@ import {
   StickerInteface,
 } from '../interface';
 import Sticker from './Sticker';
-import { useEditorContext } from '../context';
+import { useEditorContext } from '../../../context';
 
 function PhotoEditor({
   photoIndex,
@@ -16,7 +16,6 @@ function PhotoEditor({
 }: SelectedPhotoInterface): JSX.Element {
   const { selectSticker, onFinishDecorate } = useEditorContext();
   const stageRef = useRef<any>(null);
-  const imageRef = useRef<any>(null);
 
   /* Stage size */
   const [size, setSize] = useState({
@@ -122,12 +121,6 @@ function PhotoEditor({
     }, 500);
   };
 
-  useEffect(() => {
-    if (image) {
-      imageRef.current.cache();
-    }
-  }, [image]);
-
   return (
     <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
       <Stage
@@ -138,7 +131,6 @@ function PhotoEditor({
       >
         <Layer>
           <KonvaImage
-            ref={imageRef}
             image={image!}
             onClick={handleOnClick}
             onTap={handleOnClick}

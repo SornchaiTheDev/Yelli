@@ -1,26 +1,27 @@
+import { PhotoInterface } from 'renderer/interface';
 import Select from './Select';
 
 function Photo({
-  path,
+  photo,
   checked,
   isSelect,
   onClick,
 }: {
-  path: string;
+  photo: PhotoInterface;
   checked: boolean;
   isSelect?: boolean;
   photoSrc?: string;
-  onClick: (path: string) => void;
+  onClick: (path: PhotoInterface) => void;
 }) {
   return (
     <div
       className="relative bg-gray-200 rounded-lg overflow-hidden select-none cursor-pointer"
-      onClick={() => onClick(path)}
+      onClick={() => onClick(photo)}
     >
       {isSelect && (
         <Select className="absolute top-2 right-2" checked={checked} />
       )}
-      <img src={path} className="pointer-events-none" />
+      <img src={photo.src} className="pointer-events-none" />
     </div>
   );
 }
