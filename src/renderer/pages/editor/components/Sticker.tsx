@@ -111,7 +111,7 @@ function Sticker({
       {shapeRef.current && (
         <Transformer
           ref={transfromRef}
-          rotateAnchorOffset={20}
+          rotateAnchorOffset={40}
           anchorSize={20}
           borderDash={[4, 4]}
           anchorStroke="transparent"
