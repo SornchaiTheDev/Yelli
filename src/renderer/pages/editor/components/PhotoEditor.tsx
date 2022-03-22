@@ -118,7 +118,6 @@ function PhotoEditor({
         stickers: allStickers,
         thumbnail: toBase64(),
       });
-      console.log(toBase64());
     }, 500);
   };
 
