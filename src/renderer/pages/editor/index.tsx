@@ -20,7 +20,7 @@ function Content() {
     <div className="flex flex-col pt-2 h-screen">
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
         <Button onClick={() => navigate('/')}>Cancel</Button>
-        <Button>Print</Button>
+        <Button onClick={() => navigate("/print")}>Print</Button>
       </div>
       <div className="grid grid-cols-6 gap-2 px-2 h-full">
         {/* Photo Viwer */}
