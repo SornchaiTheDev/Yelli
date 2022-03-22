@@ -138,9 +138,7 @@ function PhotoEditor({
           {_stickers.map(({ properties, src, key }, index) => (
             <Sticker
               key={key}
-              index={key}
               src={src}
-              stageHeight={size.height}
               stickerIndex={index}
               properties={properties}
               isSelected={isSelected === index}
