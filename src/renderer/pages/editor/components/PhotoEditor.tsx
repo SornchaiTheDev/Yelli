@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, DragEvent, MouseEvent } from 'react';
+import { useState, useEffect, useRef, DragEvent } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
 import { v4 as uuid } from 'uuid';
 import {
@@ -9,13 +9,14 @@ import {
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import { KonvaEventObject } from 'konva/lib/Node';
+import balloon from '../../../../../public/stickers/balloon.png';
 
 function PhotoEditor({
   photoIndex,
   src,
   stickers,
 }: SelectedPhotoInterface): JSX.Element {
-  const { selectSticker, onFinishDecorate } = useEditorContext();
+  const { selectSticker, onFinishDecorate, selectedTool } = useEditorContext();
   const stageRef = useRef<any>(null);
 
   /* Stage size */
@@ -25,7 +26,8 @@ function PhotoEditor({
   });
 
   /* Add Image to canvas */
-  const [image, setImage] = useState<CanvasImageSource | null>(null);
+  // const [image, setImage] = useState<CanvasImageSource | null>(null);
+  const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
 
   /* sticker sample */
   const [isSelected, setIsSelected] = useState<number | null>(null);
@@ -122,19 +124,29 @@ function PhotoEditor({
     }, 500);
   };
 
+  interface Tool {
+    type: 'pen' | 'eraser';
+    thickness: number;
+    opacity: number;
+    color?: string;
+  }
   interface Lines {
+    key: string;
     points: number[];
-    tool: 'pen' | 'eraser';
+    tool: Tool;
   }
 
-  const [tool, setTool] = useState<'pen' | 'eraser'>('pen');
   const [lines, setLines] = useState<Lines[] | []>([]);
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e: KonvaEventObject<globalThis.MouseEvent>) => {
     isDrawing.current = true;
     const pos = e.target.getStage()!.getPointerPosition();
-    setLines([...lines, { tool, points: [pos!.x, pos!.y] }]);
+
+    setLines([
+      ...lines,
+      { key: uuid(), tool: selectedTool, points: [pos!.x, pos!.y] },
+    ]);
   };
 
   const handleMouseMove = (e: KonvaEventObject<globalThis.MouseEvent>) => {
@@ -175,21 +187,19 @@ function PhotoEditor({
       >
         <Layer>
           <KonvaImage
-            image={image!}
+            image={image}
             onClick={handleOnClick}
             onTap={handleOnClick}
           />
-          {lines.map((line, i) => (
+          {lines.map(({ points, tool, key }) => (
             <Line
-              key={i}
-              points={line.points}
-              stroke="rgba(0,0,0,.25)"
-              strokeWidth={100}
+              key={key}
+              points={points}
+              stroke={tool.color}
+              opacity={tool.opacity}
+              strokeWidth={tool.thickness}
               tension={0.5}
               lineCap="round"
-              globalCompositeOperation={
-                line.tool === 'eraser' ? 'destination-out' : 'source-over'
-              }
             />
           ))}
           {_stickers.map(({ properties, src, key }, index) => (

@@ -13,6 +13,11 @@ import {
 } from '../interface';
 import mock_photo from 'renderer/dummy';
 
+interface Tool {
+  type: 'pen' | 'eraser';
+  thickness: number;
+  color?: string;
+}
 interface EditorContext {
   allPhotos: PhotoInterface[];
   setAllPhotos: React.Dispatch<React.SetStateAction<PhotoInterface[]>>;
@@ -29,6 +34,8 @@ interface EditorContext {
     index: number;
     stickers: StickerInteface[];
   }) => void;
+  selectedTool: Tool;
+  setSelectedTool: React.Dispatch<React.SetStateAction<Tool>>;
 }
 
 const EditorCxt = createContext<EditorContext>({
@@ -39,6 +46,12 @@ const EditorCxt = createContext<EditorContext>({
   setSelectSticker: () => {},
   onFinishDecorate: () => {},
   handleSelectPhoto: () => {},
+  selectedTool: {
+    type: 'pen',
+    thickness: 1,
+    color: 'black',
+  },
+  setSelectedTool: () => {},
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
@@ -58,6 +71,12 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
 
   /* handle on Drop Sticker */
   const [selectSticker, setSelectSticker] = useState<string | null>(null);
+  const [selectedTool, setSelectedTool] = useState<Tool>({
+    type: 'pen',
+    thickness: 1,
+    opacity: 1,
+    color: '#ffffff',
+  });
 
   const onFinishDecorate: onFinishDecorateInterface = ({
     photoIndex,
@@ -100,6 +119,8 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         setSelectSticker,
         onFinishDecorate,
         handleSelectPhoto,
+        selectedTool,
+        setSelectedTool,
       }}
     >
       {children}

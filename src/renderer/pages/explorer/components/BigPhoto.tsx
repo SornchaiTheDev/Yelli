@@ -26,22 +26,23 @@ function BigPhoto({ path, onClick }: BigPhotoProps) {
         >
           <IoClose size="100%" />
         </div>
-        <div className="bg-white overflow-hidden rounded-xl  shadow-xl">
+        <div className="relative bg-white overflow-hidden rounded-xl  shadow-xl">
           <img
             className="rounded-t-xl"
             style={{ width: size.width / 1.5, height: size.height / 1.5 }}
             src={path}
           />
-          <div className="flex justify-end items-center w-full py-2 px-4">
+          <Link
+            to="/editor"
+            className="absolute bottom-2 right-2 px-6 py-3 rounded-full bg-yellow-500  font-bold"
+          >
+            Next
+          </Link>
+          {/* <div className="flex justify-end items-center w-full py-2 px-4">
             <div className="flex space-x-4">
-              <Link
-                to="/editor"
-                className="w-full px-6 py-3 rounded-full bg-yellow-500 font-bold"
-              >
-                Next
-              </Link>
+
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
