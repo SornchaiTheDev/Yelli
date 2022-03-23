@@ -12,6 +12,7 @@ const Index = (): JSX.Element => {
   const handleSelectPhoto = (photo: PhotoInterface) => {
     setSelectedPhoto([photo]);
     setAllPhotos([photo]);
+    setBigPreview(true);
   };
 
   return (

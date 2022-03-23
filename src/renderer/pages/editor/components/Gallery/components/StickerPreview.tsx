@@ -14,6 +14,7 @@ function StickerPreview({ sticker }: { sticker: string }) {
           setIsDragging(true);
           setSelectSticker(sticker);
         }}
+        onTouchStart={() => alert('start drag')}
         onDragEnd={() => setIsDragging(false)}
       />
     </div>
