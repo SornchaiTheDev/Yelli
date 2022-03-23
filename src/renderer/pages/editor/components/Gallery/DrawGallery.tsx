@@ -8,12 +8,11 @@ import { BiUndo, BiRedo } from 'react-icons/bi';
 function DrawGallery() {
   const [thickness, setThickness] = useState<number>(1);
   const [selectedColor, setSelectedColor] = useColor('hex', '#ffffff');
-  const [toolType, setToolType] = useState<'pen' | 'eraser'>('pen');
-  const { setSelectedTool } = useEditorContext();
+  const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
+    useEditorContext();
 
   useEffect(() => {
     setSelectedTool({
-      type: toolType,
       thickness: thickness,
       color: selectedColor.hex,
     });
@@ -24,10 +23,20 @@ function DrawGallery() {
       <div className="flex justify-center items-center w-full ">
         <h1 className="text-3xl font-bold">Draw</h1>
         <div className="flex justify-end items-center space-x-10">
-          <div className="w-2/12">
+          <div
+            className={`w-2/12 cursor-pointer ${
+              canUndo ? 'text-gray-900' : 'text-gray-400'
+            }`}
+            onClick={handleUndo}
+          >
             <BiUndo size="100%" />
           </div>
-          <div className="w-2/12">
+          <div
+            className={`w-2/12 cursor-pointer ${
+              canRedo ? 'text-gray-900' : 'text-gray-400'
+            }`}
+            onClick={handleRedo}
+          >
             <BiRedo size="100%" />
           </div>
         </div>

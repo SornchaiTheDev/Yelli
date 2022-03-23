@@ -9,14 +9,21 @@ import {
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import { KonvaEventObject } from 'konva/lib/Node';
-import balloon from '../../../../../public/stickers/balloon.png';
 
 function PhotoEditor({
   photoIndex,
   src,
   stickers,
 }: SelectedPhotoInterface): JSX.Element {
-  const { selectSticker, onFinishDecorate, selectedTool } = useEditorContext();
+  const {
+    selectSticker,
+    onFinishDecorate,
+    selectedTool,
+    lines,
+    setLines,
+    handleDrawing,
+    clearDrawing,
+  } = useEditorContext();
   const stageRef = useRef<any>(null);
 
   /* Stage size */
@@ -124,29 +131,21 @@ function PhotoEditor({
     }, 500);
   };
 
-  interface Tool {
-    type: 'pen' | 'eraser';
-    thickness: number;
-    opacity: number;
-    color?: string;
-  }
-  interface Lines {
-    key: string;
-    points: number[];
-    tool: Tool;
-  }
+  useEffect(() => {
+    clearDrawing();
+  }, []);
 
-  const [lines, setLines] = useState<Lines[] | []>([]);
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e: KonvaEventObject<globalThis.MouseEvent>) => {
     isDrawing.current = true;
     const pos = e.target.getStage()!.getPointerPosition();
 
-    setLines([
-      ...lines,
-      { key: uuid(), tool: selectedTool, points: [pos!.x, pos!.y] },
-    ]);
+    handleDrawing({
+      key: uuid(),
+      tool: selectedTool,
+      points: [pos!.x, pos!.y],
+    });
   };
 
   const handleMouseMove = (e: KonvaEventObject<globalThis.MouseEvent>) => {
@@ -196,7 +195,6 @@ function PhotoEditor({
               key={key}
               points={points}
               stroke={tool.color}
-              opacity={tool.opacity}
               strokeWidth={tool.thickness}
               tension={0.5}
               lineCap="round"

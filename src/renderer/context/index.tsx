@@ -14,9 +14,14 @@ import {
 import mock_photo from 'renderer/dummy';
 
 interface Tool {
-  type: 'pen' | 'eraser';
   thickness: number;
   color?: string;
+}
+
+interface Lines {
+  key: string;
+  points: number[];
+  tool: Tool;
 }
 interface EditorContext {
   allPhotos: PhotoInterface[];
@@ -25,6 +30,8 @@ interface EditorContext {
   onFinishDecorate: onFinishDecorateInterface;
   selectSticker: string | null;
   setSelectSticker: React.Dispatch<React.SetStateAction<string | null>>;
+  lines: Lines[];
+  setLines: React.Dispatch<React.SetStateAction<Lines[]>>;
   handleSelectPhoto: ({
     src,
     index,
@@ -36,6 +43,12 @@ interface EditorContext {
   }) => void;
   selectedTool: Tool;
   setSelectedTool: React.Dispatch<React.SetStateAction<Tool>>;
+  handleDrawing: (lines: Lines) => void;
+  handleUndo: () => void;
+  handleRedo: () => void;
+  clearDrawing: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 const EditorCxt = createContext<EditorContext>({
@@ -47,11 +60,18 @@ const EditorCxt = createContext<EditorContext>({
   onFinishDecorate: () => {},
   handleSelectPhoto: () => {},
   selectedTool: {
-    type: 'pen',
     thickness: 1,
     color: 'black',
   },
   setSelectedTool: () => {},
+  lines: [],
+  setLines: () => {},
+  handleDrawing: () => {},
+  handleUndo: () => {},
+  handleRedo: () => {},
+  clearDrawing: () => {},
+  canUndo: false,
+  canRedo: false,
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
@@ -72,12 +92,46 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
   /* handle on Drop Sticker */
   const [selectSticker, setSelectSticker] = useState<string | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool>({
-    type: 'pen',
     thickness: 1,
-    opacity: 1,
     color: '#ffffff',
   });
 
+  /* handle on Drawing */
+  const [lines, setLines] = useState<Lines[]>([]);
+  const [history, setHistory] = useState<Lines[]>([]);
+  const [index, setIndex] = useState<number>(0);
+
+  const clearDrawing = () => {
+    setLines([]);
+    setHistory([]);
+    setIndex(0);
+  };
+
+  const handleDrawing = (line: Lines) => {
+    setLines((prev) => [...prev, line]);
+    setHistory((prev) => [...prev, line]);
+    setIndex((prev) => prev + 1);
+    if (history.length > lines.length) {
+      setHistory([...lines, line]);
+    }
+  };
+
+  const handleUndo = () => {
+    if (index <= 0) return;
+    const undoLine = lines.slice(0, -1);
+    setLines(undoLine);
+    setIndex(index - 1);
+  };
+
+  const handleRedo = () => {
+    if (index >= history.length) return;
+
+    const redoLine = history[index];
+    setLines((prev) => [...prev, redoLine]);
+    setIndex(index + 1);
+  };
+
+  /* handle on Finish Decorate */
   const onFinishDecorate: onFinishDecorateInterface = ({
     photoIndex,
     stickers,
@@ -121,6 +175,14 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         handleSelectPhoto,
         selectedTool,
         setSelectedTool,
+        lines,
+        setLines,
+        handleUndo,
+        handleRedo,
+        handleDrawing,
+        clearDrawing,
+        canUndo: lines.length > 0,
+        canRedo: index < history.length,
       }}
     >
       {children}
