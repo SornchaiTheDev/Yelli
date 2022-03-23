@@ -67,7 +67,7 @@ function PhotoEditor({
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
-    handleOnClick();
+    // handleOnClick();
 
     const newStickers = _stickers.map((sticker, index) => {
       if (index === stickerIndex) {
@@ -110,6 +110,7 @@ function PhotoEditor({
 
   const handleOnStickerDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+
     stageRef.current.setPointersPositions(e);
     const properties = {
       ...stageRef.current.getPointerPosition(),
@@ -131,14 +132,15 @@ function PhotoEditor({
     }, 500);
   };
 
+  const isDrawing = useRef(false);
   useEffect(() => {
     clearDrawing();
   }, []);
 
-  const isDrawing = useRef(false);
-
-  const handleMouseDown = (e: KonvaEventObject<globalThis.MouseEvent>) => {
-    isDrawing.current = true;
+  const handleMouseDown = (
+    e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
+  ) => {
+    isDrawing.current = isSelected === null;
     const pos = e.target.getStage()!.getPointerPosition();
 
     handleDrawing({
@@ -148,9 +150,11 @@ function PhotoEditor({
     });
   };
 
-  const handleMouseMove = (e: KonvaEventObject<globalThis.MouseEvent>) => {
+  const handleMouseMove = (
+    e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
+  ) => {
     // no drawing - skipping
-    if (!isDrawing.current) {
+    if (!isDrawing.current || isSelected !== null) {
       return;
     }
     const stage = e.target.getStage();
@@ -173,13 +177,42 @@ function PhotoEditor({
     });
   };
 
+  const handleOnStickerTouchDrop = (e: any) => {
+    stageRef.current.setPointersPositions(e);
+    const properties = {
+      ...stageRef.current.getPointerPosition(),
+      scale: 0.5,
+    };
+    const currentSticker = {
+      key: uuid(),
+      src: selectSticker!,
+      properties,
+    };
+    const allStickers = [..._stickers, currentSticker];
+    setStickers(allStickers);
+    setTimeout(() => {
+      onFinishDecorate!({
+        photoIndex,
+        stickers: allStickers,
+        thumbnail: toBase64(),
+      });
+    }, 500);
+  };
+
   return (
-    <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
+    <div
+      onTouchEnd={handleOnStickerTouchDrop}
+      onDrop={handleOnStickerDrop}
+      onDragOver={(e) => e.preventDefault()}
+    >
       <Stage
         width={size.width}
         height={size.height}
         ref={stageRef}
         className="rounded-lg overflow-hidden shadow-lg"
+        onTouchStart={handleMouseDown}
+        onTouchMove={handleMouseMove}
+        onTouchEnd={handleMouseUp}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}

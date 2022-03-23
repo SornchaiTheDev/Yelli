@@ -45,3 +45,42 @@ export interface SelectedPhotoInterface {
   stickers: StickerInteface[];
   onFinishDecorate?: onFinishDecorateInterface;
 }
+
+export interface Tool {
+  thickness: number;
+  color?: string;
+}
+
+export interface Lines {
+  key: string;
+  points: number[];
+  tool: Tool;
+}
+
+export interface EditorContext {
+  allPhotos: PhotoInterface[];
+  setAllPhotos: React.Dispatch<React.SetStateAction<PhotoInterface[]>>;
+  selectedPhoto: SelectedPhotoInterface | null;
+  onFinishDecorate: onFinishDecorateInterface;
+  selectSticker: string | null;
+  setSelectSticker: React.Dispatch<React.SetStateAction<string | null>>;
+  lines: Lines[];
+  setLines: React.Dispatch<React.SetStateAction<Lines[]>>;
+  handleSelectPhoto: ({
+    src,
+    index,
+    stickers,
+  }: {
+    src: string;
+    index: number;
+    stickers: StickerInteface[];
+  }) => void;
+  selectedTool: Tool;
+  setSelectedTool: React.Dispatch<React.SetStateAction<Tool>>;
+  handleDrawing: (lines: Lines) => void;
+  handleUndo: () => void;
+  handleRedo: () => void;
+  clearDrawing: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
+}

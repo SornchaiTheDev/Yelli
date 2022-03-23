@@ -11,7 +11,6 @@ function Sticker({
   src,
   onSelect,
   onTransfromEnd,
-
   handleDeleteSticker,
 }: StickerInteface & {
   stickerIndex: number;
@@ -77,7 +76,7 @@ function Sticker({
     <>
       <KonvaImage
         image={img}
-        draggable
+        draggable={isSelected}
         offsetX={img ? img.width / 2 : 0}
         offsetY={img ? img.height / 2 : 0}
         ref={shapeRef}
