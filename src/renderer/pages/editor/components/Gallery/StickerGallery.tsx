@@ -4,33 +4,18 @@ import hny from '../../../../../../public/stickers/happy-new-year.png';
 import witchHat from '../../../../../../public/stickers/witch-hat.png';
 import StickerPreview from './components/StickerPreview';
 
-const mock_sticker = [
-  {
-    name: 'Party',
-    stickerSets: [balloon, witchHat],
-  },
-  {
-    name: 'Animals',
-    stickerSets: [crocodile],
-  },
-  {
-    name: 'Happy New Year',
-    stickerSets: [hny],
-  },
-];
+const stickerSets = [balloon, witchHat, hny, crocodile];
+
 function StickerGallery() {
   return (
-    <div className="p-4 h-2">
+    <div className="px-4">
       <h1 className="text-4xl font-bold">Stickers</h1>
-      <div className="gap-4 mt-8">
-        {mock_sticker.map(({ name, stickerSets }) => (
-          <div className="grid grid-cols-2 gap-4 mb-4" key={name}>
-            <h2 className="col-span-2 text-xl font-bold">{name}</h2>
-            {stickerSets.map((sticker) => (
-              <StickerPreview sticker={sticker} key={sticker} />
-            ))}
-          </div>
-        ))}
+      <div className="gap-4 mt-4">
+        <div className="grid grid-cols-3 gap-2 mb-2">
+          {stickerSets.map((sticker) => (
+            <StickerPreview sticker={sticker} key={sticker} />
+          ))}
+        </div>
       </div>
     </div>
   );

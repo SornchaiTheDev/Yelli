@@ -3,13 +3,13 @@ import { useEditorContext } from 'renderer/context';
 import { ColorPicker, useColor } from 'react-color-palette';
 import 'react-color-palette/lib/css/styles.css';
 import BrushTrickness from './components/BrushTrickness';
+import { BiUndo, BiRedo } from 'react-icons/bi';
 
 function DrawGallery() {
   const [thickness, setThickness] = useState<number>(1);
   const [selectedColor, setSelectedColor] = useColor('hex', '#ffffff');
   const [toolType, setToolType] = useState<'pen' | 'eraser'>('pen');
   const { setSelectedTool } = useEditorContext();
-  const sliderRef = useRef(null);
 
   useEffect(() => {
     setSelectedTool({
@@ -20,10 +20,17 @@ function DrawGallery() {
   }, [thickness, selectedColor]);
 
   return (
-    <div className="flex flex-col space-y-10 p-4 w-full h-full ">
-      <h1 className="text-4xl font-bold">Draw</h1>
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Thickness : {thickness}</h1>
+    <div className="flex flex-col space-y-3 p-4 w-full">
+      <div className="flex justify-center items-center w-full ">
+        <h1 className="text-3xl font-bold">Draw</h1>
+        <div className="flex justify-end items-center space-x-10">
+          <div className="w-2/12">
+            <BiUndo size="100%" />
+          </div>
+          <div className="w-2/12">
+            <BiRedo size="100%" />
+          </div>
+        </div>
       </div>
       <BrushTrickness
         thickness={thickness}
@@ -33,7 +40,8 @@ function DrawGallery() {
 
       <h1 className="text-xl font-semibold">Color</h1>
       <ColorPicker
-        width={270}
+        width={300}
+        height={150}
         color={selectedColor}
         alpha
         hideHEX
@@ -41,13 +49,9 @@ function DrawGallery() {
         hideRGB
         onChange={(e) => setSelectedColor(e)}
       />
-      <div>
-
-      </div>
+      <div></div>
     </div>
   );
 }
 
 export default DrawGallery;
-
-

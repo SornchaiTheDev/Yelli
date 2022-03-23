@@ -28,8 +28,8 @@ function BigPhoto({ path, onClick }: BigPhotoProps) {
         </div>
         <div className="relative bg-white overflow-hidden rounded-xl  shadow-xl">
           <img
-            className="rounded-t-xl"
-            style={{ width: size.width / 1.5, height: size.height / 1.5 }}
+            className="rounded-t-xl pointer-events-none"
+            style={{ width: size.width / 1.05, height: size.height / 1.05 }}
             src={path}
           />
           <Link
