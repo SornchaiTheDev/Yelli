@@ -38,11 +38,6 @@ function BigPhoto({ path, onClick }: BigPhotoProps) {
           >
             Next
           </Link>
-          {/* <div className="flex justify-end items-center w-full py-2 px-4">
-            <div className="flex space-x-4">
-
-            </div>
-          </div> */}
         </div>
       </div>
     </div>
