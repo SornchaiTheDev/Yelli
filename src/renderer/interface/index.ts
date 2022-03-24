@@ -83,4 +83,8 @@ export interface EditorContext {
   clearDrawing: () => void;
   canUndo: boolean;
   canRedo: boolean;
+  stageRef: React.MutableRefObject<any>;
+  _stickers: StickerInteface[];
+  setStickers: React.Dispatch<React.SetStateAction<StickerInteface[]>>;
+  handleOnStickerDrop: (e: any) => void;
 }

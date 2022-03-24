@@ -17,14 +17,17 @@ function PhotoEditor({
 }: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
+    setSelectSticker,
     onFinishDecorate,
     selectedTool,
     lines,
     setLines,
     handleDrawing,
     clearDrawing,
+    stageRef,
+    _stickers,
+    setStickers,
   } = useEditorContext();
-  const stageRef = useRef<any>(null);
 
   /* Stage size */
   const [size, setSize] = useState({
@@ -56,9 +59,6 @@ function PhotoEditor({
   useEffect(() => {
     handleImageInit();
   }, [src]);
-
-  /* Stickers that on stage now */
-  const [_stickers, setStickers] = useState<StickerInteface[]>([]);
 
   /* Set Sticker to stage  */
   useEffect(() => {
@@ -109,7 +109,7 @@ function PhotoEditor({
   };
 
   const handleOnStickerDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
+    // e.preventDefault();
 
     stageRef.current.setPointersPositions(e);
     const properties = {
@@ -177,34 +177,8 @@ function PhotoEditor({
     });
   };
 
-  const handleOnStickerTouchDrop = (e: any) => {
-    stageRef.current.setPointersPositions(e);
-    const properties = {
-      ...stageRef.current.getPointerPosition(),
-      scale: 0.5,
-    };
-    const currentSticker = {
-      key: uuid(),
-      src: selectSticker!,
-      properties,
-    };
-    const allStickers = [..._stickers, currentSticker];
-    setStickers(allStickers);
-    setTimeout(() => {
-      onFinishDecorate!({
-        photoIndex,
-        stickers: allStickers,
-        thumbnail: toBase64(),
-      });
-    }, 500);
-  };
-
   return (
-    <div
-      onTouchEnd={handleOnStickerTouchDrop}
-      onDrop={handleOnStickerDrop}
-      onDragOver={(e) => e.preventDefault()}
-    >
+    <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
       <Stage
         width={size.width}
         height={size.height}

@@ -11,7 +11,7 @@ function StickerGallery() {
     <div className="px-4">
       <h1 className="text-4xl font-bold">Stickers</h1>
       <div className="gap-4 mt-4">
-        <div className="grid grid-cols-3 gap-2 mb-2">
+        <div className="grid grid-cols-3 auto-rows-fr gap-2 mb-2">
           {stickerSets.map((sticker) => (
             <StickerPreview sticker={sticker} key={sticker} />
           ))}

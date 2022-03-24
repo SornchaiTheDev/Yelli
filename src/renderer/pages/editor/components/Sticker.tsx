@@ -21,6 +21,7 @@ function Sticker({
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
   const [img, setImg] = useState<HTMLImageElement>();
+  const [deleteX, setDeleteX] = useState(256);
 
   const DELETE_ICON =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAADQ0lEQVR4nO3du2oVURTG8f/SWGgwilZRQRsrG0UFbyAkVoIgKOm08i0sfBGfwEJFRCsRQUhhbaUheImNIicJopiYZXFympigzuy1Z8/M9ytzYF/Olz23NWcGRERERERE8rKmB1CXu18BrgJrwAMze9LwkPrL3e/4n243Pa5ecvcD7r6ySSA/3X2y6fFVta3pAdRwHBjb5O87gBOZx5JMmwMZr/hZ0bLt1N39MHALOEqaf4RDwNktPpsFPiboYw14A9w1s3cJ2vurLIG4+2ngGbA7R38BloFpM3sV3VGuQGaBMzn6CjRrZueiO9lsp1iJu48DF4CJDR8ZcDJVPw065e4zgG/4+xLw0sy+pegkyQpx9yngHrA/RXst9AWYMbPndRuqHYi7TwDzwL66bbXcV+CImS3XaSTF0c40CgOG38FU3UZSBLJxm9pntb8LbbLSKWOTZWZLwHWGO7a++gxcqxsGJDwPcfddwHlgb6o2W2LA8LD3e9MDEREREZGtJL/87u4DYE/qdgu1aGZJD/MjSrjvA9osVfIqogKpJ/lcFUg9rQjkQ0CbpUo+V62QelqxQhRIDRGBZLl/qRDJ5xpxHrId+EHCO1oKtQrsNLPVlI0mXyFm9gv4lLrdAi2kDgPi7u3tw34kZI4KpDoFUphWBdKHk8OQOWqFVNeqFdKHc5GQOSqQ6tqzQtZvnluMaLsQg/U5Jhf5G8Mu70fC5qZAqlEghWllIF0+Fwmbm1ZINa1cIV0+9A2bm1ZINWFzC/udeocLVSGFqZGwFdLhQlVIYWok+uEzXdxshc5Jgfw/BVIYBVIYBVIYBVKYVgfSxbP19gbSwUJVWGFqJMdDMLu02QqfiwL5PwqkMAqkMAqkMAqkMAqkMOFzCX+QcocKVaGFqZHwFdKhQlVoYWok19sRurDZyjIHBfLvFEhhFEhhFEhhFEhhOhVIFwpV3Qlkvagzn6OvIHPRhamRnG9pe5ixr9Tu5+oo51vaDgKvad8DMgfAMTPLcrUh2woxswXgJsNrQm2xAtzIFQZkfrGkmT0CLgFzOfut6C3DV+U9ztlpI2+Ldvcx4DJwEZiknCvBqwwvhL4Anua4mCgiIiIiIiIiIiKSxG/EtwkXAim1LgAAAABJRU5ErkJggg==';
@@ -72,6 +73,11 @@ function Sticker({
     });
   };
 
+  useEffect(() => {
+    if (transfromRef.current)
+      setDeleteX(transfromRef.current.children[0].attrs.width);
+  }, [selected]);
+
   return (
     <>
       <KonvaImage
@@ -112,10 +118,13 @@ function Sticker({
           rotationSnaps={[0, 90, 180, 270]}
           onTransform={handleOnTransform}
         >
-          <Group onClick={() => handleDeleteSticker()}>
+          <Group
+            onClick={handleDeleteSticker}
+            onTouchStart={handleDeleteSticker}
+            x={deleteX}
+            y={0}
+          >
             <Circle
-              x={img ? img.width / 2 : 0}
-              y={0}
               radius={20}
               width={30}
               height={30}
@@ -124,7 +133,7 @@ function Sticker({
             />
             <KonvaImage
               image={deleteIcon}
-              x={img ? img.width / 2 - 10 : 0}
+              x={-10}
               y={-10}
               width={20}
               height={20}

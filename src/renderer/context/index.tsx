@@ -4,6 +4,7 @@ import {
   ReactNode,
   useState,
   useEffect,
+  useRef,
 } from 'react';
 import {
   onFinishDecorateInterface,
@@ -15,6 +16,7 @@ import {
   Lines,
 } from '../interface';
 import mock_photo from 'renderer/dummy';
+import { v4 as uuid } from 'uuid';
 
 const EditorCxt = createContext<EditorContext>({
   allPhotos: [],
@@ -37,6 +39,10 @@ const EditorCxt = createContext<EditorContext>({
   clearDrawing: () => {},
   canUndo: false,
   canRedo: false,
+  stageRef: { current: null },
+  _stickers: [],
+  setStickers: () => {},
+  handleOnStickerDrop: () => {},
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
@@ -45,6 +51,9 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     ...allPhotos[0],
     photoIndex: 0,
   });
+  /* Stickers that on stage now */
+  const [_stickers, setStickers] = useState<StickerInteface[]>([]);
+  const stageRef = useRef<any>(null);
 
   /* reset Selected Photo */
   useEffect(() => {
@@ -128,14 +137,52 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     setSelectedPhoto({ src, photoIndex: index, stickers });
   };
 
+  /* convert canvas to image (base64) */
+  const toBase64 = () => {
+    const image = stageRef.current.toDataURL();
+
+    return image;
+  };
+
+  const handleOnStickerDrop = (e: any) => {
+    if (selectSticker !== null) {
+      stageRef.current.setPointersPositions(e);
+      const properties = {
+        ...stageRef.current.getPointerPosition(),
+        scale: 0.5,
+      };
+      const currentSticker = {
+        key: uuid(),
+        src: selectSticker!,
+        properties,
+      };
+      const allStickers = [..._stickers, currentSticker];
+      setStickers(allStickers);
+      const photoIndex = allPhotos.findIndex(
+        (photo) => photo.src === selectedPhoto!.src
+      );
+      setTimeout(() => {
+        onFinishDecorate!({
+          photoIndex,
+          stickers: allStickers,
+          thumbnail: toBase64(),
+        });
+      }, 500);
+      setSelectSticker(null);
+    }
+  };
+
   return (
     <EditorCxt.Provider
       value={{
+        stageRef,
         allPhotos,
         setAllPhotos,
         selectedPhoto,
         selectSticker,
         setSelectSticker,
+        _stickers,
+        setStickers,
         onFinishDecorate,
         handleSelectPhoto,
         selectedTool,
@@ -148,6 +195,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         clearDrawing,
         canUndo: lines.length > 0,
         canRedo: index < history.length,
+        handleOnStickerDrop,
       }}
     >
       {children}
