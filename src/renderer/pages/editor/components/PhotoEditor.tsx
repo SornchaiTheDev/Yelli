@@ -1,23 +1,14 @@
 import { useState, useEffect, useRef, DragEvent } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
 import { v4 as uuid } from 'uuid';
-import {
-  onTransfromEnd,
-  SelectedPhotoInterface,
-  StickerInteface,
-} from '../interface';
+import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import { KonvaEventObject } from 'konva/lib/Node';
 
-function PhotoEditor({
-  photoIndex,
-  src,
-  stickers,
-}: SelectedPhotoInterface): JSX.Element {
+function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
-    setSelectSticker,
     onFinishDecorate,
     selectedTool,
     lines,
@@ -27,6 +18,7 @@ function PhotoEditor({
     stageRef,
     _stickers,
     setStickers,
+    handleRemoveLine,
   } = useEditorContext();
 
   /* Stage size */
@@ -36,11 +28,10 @@ function PhotoEditor({
   });
 
   /* Add Image to canvas */
-  // const [image, setImage] = useState<CanvasImageSource | null>(null);
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
 
   /* sticker sample */
-  const [isSelected, setIsSelected] = useState<number | null>(null);
+  const [isSelected, setIsSelected] = useState<string | null>(null);
 
   /* handle stage size to image size */
   const handleImageInit = () => {
@@ -58,19 +49,13 @@ function PhotoEditor({
   /* set Stage size to image size */
   useEffect(() => {
     handleImageInit();
+    setStickers([]);
   }, [src]);
-
-  /* Set Sticker to stage  */
-  useEffect(() => {
-    setStickers(stickers);
-  }, [stickers]);
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
-    // handleOnClick();
-
-    const newStickers = _stickers.map((sticker, index) => {
-      if (index === stickerIndex) {
+    const newStickers = _stickers.map((sticker) => {
+      if (sticker.key === stickerIndex) {
         return {
           ...sticker,
           properties,
@@ -99,7 +84,7 @@ function PhotoEditor({
   };
 
   const handleDeleteSticker = () => {
-    const otherStickers = _stickers.filter((_, index) => index !== isSelected!);
+    const otherStickers = _stickers.filter(({ key }) => key !== isSelected!);
     setStickers(otherStickers);
     onFinishDecorate!({
       photoIndex,
@@ -109,8 +94,6 @@ function PhotoEditor({
   };
 
   const handleOnStickerDrop = (e: DragEvent<HTMLDivElement>) => {
-    // e.preventDefault();
-
     stageRef.current.setPointersPositions(e);
     const properties = {
       ...stageRef.current.getPointerPosition(),
@@ -122,6 +105,7 @@ function PhotoEditor({
       properties,
     };
     const allStickers = [..._stickers, currentSticker];
+    setIsSelected(currentSticker.key);
     setStickers(allStickers);
     setTimeout(() => {
       onFinishDecorate!({
@@ -177,6 +161,12 @@ function PhotoEditor({
     });
   };
 
+  const removeSelectedLine = (key: string) => {
+    const otherLines = lines.filter(({ key: lineKey }) => lineKey !== key);
+    setLines(otherLines);
+    handleRemoveLine(otherLines);
+  };
+
   return (
     <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
       <Stage
@@ -205,17 +195,19 @@ function PhotoEditor({
               strokeWidth={tool.thickness}
               tension={0.5}
               lineCap="round"
+              onMouseDown={() => removeSelectedLine(key)}
             />
           ))}
-          {_stickers.map(({ properties, src, key }, index) => (
+          {_stickers.map(({ properties, src, key }) => (
             <Sticker
               key={key}
               src={src}
-              stickerIndex={index}
+              stickerIndex={key}
               properties={properties}
-              isSelected={isSelected === index}
+              isSelected={isSelected === key}
               onTransfromEnd={handleTransfromEnd}
-              onSelect={() => setIsSelected(index)}
+              onSelect={() => setIsSelected(key)}
+              onLeave={handleOnClick}
               handleDeleteSticker={handleDeleteSticker}
             />
           ))}

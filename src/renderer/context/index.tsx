@@ -43,6 +43,7 @@ const EditorCxt = createContext<EditorContext>({
   _stickers: [],
   setStickers: () => {},
   handleOnStickerDrop: () => {},
+  handleRemoveLine: () => {},
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
@@ -72,36 +73,42 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
 
   /* handle on Drawing */
   const [lines, setLines] = useState<Lines[]>([]);
-  const [history, setHistory] = useState<Lines[]>([]);
+  const [history, setHistory] = useState<any[]>([[]]);
   const [index, setIndex] = useState<number>(0);
 
   const clearDrawing = () => {
     setLines([]);
-    setHistory([]);
+    setHistory([[]]);
     setIndex(0);
   };
 
   const handleDrawing = (line: Lines) => {
     setLines((prev) => [...prev, line]);
-    setHistory((prev) => [...prev, line]);
     setIndex((prev) => prev + 1);
-    if (history.length > lines.length) {
-      setHistory([...lines, line]);
+    setHistory((prev) => [...prev, [...lines, line]]);
+    if (history.length - 1 > lines.length) {
+      setHistory(() => [[], [...lines, line]]);
+      setIndex(1);
     }
   };
 
+  const handleRemoveLine = (otherLines: Lines[]) => {
+    setHistory((prev) => [...prev, otherLines]);
+    setIndex(index + 1);
+  };
+
   const handleUndo = () => {
-    if (index <= 0) return;
-    const undoLine = lines.slice(0, -1);
+    if (index === 0) return;
+    const undoLine = history[index - 1];
     setLines(undoLine);
     setIndex(index - 1);
   };
 
   const handleRedo = () => {
-    if (index >= history.length) return;
+    if (index + 1 === history.length) return;
+    const redoLine = history[index + 1];
 
-    const redoLine = history[index];
-    setLines((prev) => [...prev, redoLine]);
+    setLines(redoLine);
     setIndex(index + 1);
   };
 
@@ -193,9 +200,10 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         handleRedo,
         handleDrawing,
         clearDrawing,
-        canUndo: lines.length > 0,
-        canRedo: index < history.length,
+        canUndo: index > 0,
+        canRedo: index + 1 < history.length,
         handleOnStickerDrop,
+        handleRemoveLine,
       }}
     >
       {children}

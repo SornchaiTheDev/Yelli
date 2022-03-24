@@ -12,11 +12,13 @@ function Sticker({
   onSelect,
   onTransfromEnd,
   handleDeleteSticker,
+  onLeave,
 }: StickerInteface & {
-  stickerIndex: number;
+  stickerIndex: string;
   isSelected: boolean;
   onSelect: () => void;
   handleDeleteSticker: () => void;
+  onLeave?: () => void;
 }) {
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
@@ -81,8 +83,9 @@ function Sticker({
   return (
     <>
       <KonvaImage
+        onMouseEnter={selected}
         image={img}
-        draggable={isSelected}
+        draggable
         offsetX={img ? img.width / 2 : 0}
         offsetY={img ? img.height / 2 : 0}
         ref={shapeRef}
@@ -117,6 +120,8 @@ function Sticker({
           ]}
           rotationSnaps={[0, 90, 180, 270]}
           onTransform={handleOnTransform}
+          onMouseLeave={onLeave}
+          onTouchEnd={onLeave}
         >
           <Group
             onClick={handleDeleteSticker}
