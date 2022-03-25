@@ -168,7 +168,7 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   };
 
   const removeSelectedLine = (key: string) => {
-    if (selectedTool.type === 'pen') return;
+    if (selectedTool.type === 'pen' || !isDrawing.current) return;
     const otherLines = lines.filter(({ key: lineKey }) => lineKey !== key);
     setLines(otherLines);
     handleRemoveLine(otherLines);
