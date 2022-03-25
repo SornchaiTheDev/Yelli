@@ -35,6 +35,7 @@ const EditorCxt = createContext<EditorContext>({
   setStickers: () => {},
   handleOnStickerDrop: () => {},
   handleRemoveLine: () => {},
+  isPrinting: false,
   handlePrint: () => {},
 });
 
@@ -42,6 +43,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoInterface | null>(
     null
   );
+  const [isPrinting, setIsPrinting] = useState(false);
 
   /* Navigate hooks */
   const navigate = useNavigate();
@@ -67,6 +69,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     setLines([]);
     setHistory([[]]);
     setIndex(0);
+    setIsPrinting(false);
   };
 
   const handleDrawing = (line: Lines) => {
@@ -137,6 +140,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
 
   const handlePrint = () => {
     setSelectSticker(null);
+    setIsPrinting(true);
     setTimeout(() => {
       onFinishDecorate!({
         thumbnail: toBase64(),
@@ -168,6 +172,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         canRedo: index + 1 < history.length,
         handleOnStickerDrop,
         handleRemoveLine,
+        isPrinting,
         handlePrint,
       }}
     >

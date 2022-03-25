@@ -16,10 +16,11 @@ function BrushTrickness({
   return (
     <table className="border-collapse border-0 border-black  table-fixed ">
       <tbody>
-        {thicknessArr.map(({ size }) => (
-          <tr className="h-12">
+        {thicknessArr.map(({ section, size }) => (
+          <tr className="h-12" key={section}>
             {size.map((value) => (
               <td
+                key={value}
                 className={`w-12 ${thickness === value && 'bg-gray-200'}`}
                 onClick={() => selected(value)}
               >

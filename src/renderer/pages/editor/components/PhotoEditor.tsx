@@ -3,13 +3,11 @@ import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
 import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
-import { toBase64 } from '../utils/toBase64';
 import handleEvent from '../utils/handleEvent';
 
 function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
-    onFinishDecorate,
     lines,
     stageRef,
     _stickers,
@@ -28,6 +26,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
 
   /* Add Image to canvas */
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
+  const { isPrinting } = useEditorContext();
 
   /* Container Size use to set Stage and KonvaImage size */
   const containerRef = useRef<HTMLDivElement>(null);
@@ -116,7 +115,8 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
               src={src}
               stickerIndex={key}
               properties={properties}
-              isSelected={selectSticker === key}
+              draggable={!isPrinting}
+              isSelected={selectSticker === key && !isPrinting}
               onTransfromEnd={handleTransfromEnd}
               onSelect={() => setSelectSticker(key)}
               handleDeleteSticker={handleDeleteSticker}
