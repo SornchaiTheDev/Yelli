@@ -27,6 +27,7 @@ const EditorCxt = createContext<EditorContext>({
   onFinishDecorate: () => {},
   handleSelectPhoto: () => {},
   selectedTool: {
+    type: 'pen',
     thickness: 1,
     color: 'black',
   },
@@ -67,6 +68,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
   /* handle on Drop Sticker */
   const [selectSticker, setSelectSticker] = useState<string | null>(null);
   const [selectedTool, setSelectedTool] = useState<Tool>({
+    type: 'pen',
     thickness: 1,
     color: '#ffffff',
   });

@@ -47,6 +47,7 @@ export interface SelectedPhotoInterface {
 }
 
 export interface Tool {
+  type: 'pen' | 'erasor';
   thickness: number;
   color?: string;
 }

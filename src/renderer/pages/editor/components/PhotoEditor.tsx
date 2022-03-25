@@ -127,21 +127,22 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const handleMouseDown = (
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
-    isDrawing.current = isSelected === null;
-    const pos = e.target.getStage()!.getPointerPosition();
-
-    handleDrawing({
-      key: uuid(),
-      tool: selectedTool,
-      points: [pos!.x, pos!.y],
-    });
+    isDrawing.current = true;
+    if (selectedTool.type !== 'erasor') {
+      const pos = e.target.getStage()!.getPointerPosition();
+      handleDrawing({
+        key: uuid(),
+        tool: selectedTool,
+        points: [pos!.x, pos!.y],
+      });
+    }
   };
 
   const handleMouseMove = (
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
     // no drawing - skipping
-    if (!isDrawing.current || isSelected !== null) {
+    if (!isDrawing.current || selectedTool.type === 'erasor') {
       return;
     }
     const stage = e.target.getStage();
@@ -182,6 +183,10 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     }
   }, [containerRef]);
 
+  useEffect(() => {
+    console.log(isDrawing.current);
+  }, [isDrawing]);
+
   return (
     <div
       onDrop={handleOnStickerDrop}
@@ -217,7 +222,11 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
               strokeWidth={tool.thickness}
               tension={0.5}
               lineCap="round"
-              onMouseDown={() => removeSelectedLine(key)}
+              onMouseEnter={() =>
+                selectedTool.type === 'erasor' &&
+                isDrawing.current === true &&
+                removeSelectedLine(key)
+              }
             />
           ))}
           {_stickers.map(({ properties, src, key }) => (
