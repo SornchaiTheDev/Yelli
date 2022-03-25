@@ -67,7 +67,9 @@ function DrawGallery() {
       <BrushTrickness
         thickness={thickness}
         color={selectedColor}
-        selected={(size) => setThickness(size)}
+        selected={(size) =>
+          type === 'erasor' ? setType('pen') : setThickness(size)
+        }
       />
 
       <h1 className="text-xl font-semibold">Color</h1>
