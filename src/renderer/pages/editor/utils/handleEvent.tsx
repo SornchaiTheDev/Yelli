@@ -2,12 +2,8 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useState, useRef, DragEvent } from 'react';
 import { useEditorContext } from 'renderer/context';
 import { v4 as uuid } from 'uuid';
-import { toBase64 } from './toBase64';
 
 interface HandleEvent {
-  isSelected: string | null;
-  setIsSelected: React.Dispatch<React.SetStateAction<string | null>>;
-  handleOnClick: () => void;
   handleOnStickerDrop: (e: any) => void;
   handleDeleteSticker: () => void;
   handleMouseDown: (
@@ -23,7 +19,6 @@ interface HandleEvent {
 function handleEvent(): HandleEvent {
   const {
     selectSticker,
-    onFinishDecorate,
     selectedTool,
     lines,
     setLines,
@@ -35,21 +30,9 @@ function handleEvent(): HandleEvent {
     handleRemoveLine,
   } = useEditorContext();
 
-  /* which sticker user selected */
-  const [isSelected, setIsSelected] = useState<string | null>(null);
-
-  /* handle on Stage click */
-  const handleOnClick = () => {
-    setIsSelected(null);
-  };
-
   const handleDeleteSticker = () => {
-    const otherStickers = _stickers.filter(({ key }) => key !== isSelected!);
+    const otherStickers = _stickers.filter(({ key }) => key !== selectSticker!);
     setStickers(otherStickers);
-    handleOnClick();
-    onFinishDecorate!({
-      thumbnail: toBase64(stageRef.current),
-    });
   };
 
   const handleOnStickerDrop = (e: DragEvent<HTMLImageElement>) => {
@@ -64,13 +47,7 @@ function handleEvent(): HandleEvent {
       properties,
     };
     const allStickers = [..._stickers, currentSticker];
-    setIsSelected(currentSticker.key);
     setStickers(allStickers);
-    setTimeout(() => {
-      onFinishDecorate!({
-        thumbnail: toBase64(stageRef.current),
-      });
-    }, 500);
   };
 
   const isDrawing = useRef(false);
@@ -82,7 +59,8 @@ function handleEvent(): HandleEvent {
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
     isDrawing.current = true;
-    if (selectedTool.type !== 'erasor' || isSelected !== null) {
+    if (selectSticker !== null) return;
+    if (selectedTool.type !== 'erasor') {
       const pos = e.target.getStage()!.getPointerPosition();
       handleDrawing({
         key: uuid(),
@@ -99,7 +77,7 @@ function handleEvent(): HandleEvent {
     if (
       !isDrawing.current ||
       selectedTool.type === 'erasor' ||
-      isSelected !== null
+      selectSticker !== null
     ) {
       return;
     }
@@ -116,9 +94,6 @@ function handleEvent(): HandleEvent {
 
   const handleMouseUp = () => {
     isDrawing.current = false;
-    onFinishDecorate!({
-      thumbnail: toBase64(stageRef.current),
-    });
   };
 
   const removeSelectedLine = (key: string) => {
@@ -128,9 +103,6 @@ function handleEvent(): HandleEvent {
     handleRemoveLine(otherLines);
   };
   return {
-    isSelected,
-    setIsSelected,
-    handleOnClick,
     handleOnStickerDrop,
     handleDeleteSticker,
     handleMouseDown,

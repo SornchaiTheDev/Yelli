@@ -67,4 +67,5 @@ export interface EditorContext {
   setStickers: React.Dispatch<React.SetStateAction<StickerInteface[]>>;
   handleOnStickerDrop: (e: any) => void;
   handleRemoveLine: (otherLines: Lines[]) => void;
+  handlePrint: () => void;
 }

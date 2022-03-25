@@ -7,16 +7,21 @@ import { toBase64 } from '../utils/toBase64';
 import handleEvent from '../utils/handleEvent';
 
 function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
-  const { onFinishDecorate, lines, stageRef, _stickers, setStickers } =
-    useEditorContext();
   const {
-    isSelected,
-    setIsSelected,
+    selectSticker,
+    onFinishDecorate,
+    lines,
+    stageRef,
+    _stickers,
+    setStickers,
+    setSelectSticker,
+  } = useEditorContext();
+  const {
     handleDeleteSticker,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
-    handleOnClick,
+
     handleOnStickerDrop,
     removeSelectedLine,
   } = handleEvent();
@@ -55,9 +60,6 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
       return sticker;
     });
     setStickers(newStickers);
-    onFinishDecorate!({
-      thumbnail: toBase64(stageRef.current),
-    });
   };
 
   useEffect(() => {
@@ -91,8 +93,8 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
         <Layer>
           <KonvaImage
             image={image}
-            onClick={handleOnClick}
-            onTap={handleOnClick}
+            onClick={() => setSelectSticker(null)}
+            onTap={() => setSelectSticker(null)}
             width={containerSize.width}
             height={containerSize.height}
           />
@@ -114,9 +116,9 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
               src={src}
               stickerIndex={key}
               properties={properties}
-              isSelected={isSelected === key}
+              isSelected={selectSticker === key}
               onTransfromEnd={handleTransfromEnd}
-              onSelect={() => setIsSelected(key)}
+              onSelect={() => setSelectSticker(key)}
               handleDeleteSticker={handleDeleteSticker}
             />
           ))}

@@ -7,15 +7,15 @@ import Print from './pages/print';
 
 export default function App() {
   return (
-    <EditorContext>
-      <Router>
+    <Router>
+      <EditorContext>
         <Routes>
           <Route path="/" element={<PhotoExplorer />} />
           {/* <Route path="/options" element={<Options />} /> */}
           <Route path="/editor" element={<Editor />} />
           <Route path="/print" element={<Print />} />
         </Routes>
-      </Router>
-    </EditorContext>
+      </EditorContext>
+    </Router>
   );
 }

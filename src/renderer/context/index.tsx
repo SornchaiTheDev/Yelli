@@ -8,6 +8,7 @@ import {
   Lines,
 } from '../interface';
 import { v4 as uuid } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 const EditorCxt = createContext<EditorContext>({
   selectedPhoto: null,
@@ -34,12 +35,17 @@ const EditorCxt = createContext<EditorContext>({
   setStickers: () => {},
   handleOnStickerDrop: () => {},
   handleRemoveLine: () => {},
+  handlePrint: () => {},
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoInterface | null>(
     null
   );
+
+  /* Navigate hooks */
+  const navigate = useNavigate();
+
   /* Stickers that on stage now */
   const [_stickers, setStickers] = useState<StickerInteface[]>([]);
   const stageRef = useRef<any>(null);
@@ -129,6 +135,16 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     }
   };
 
+  const handlePrint = () => {
+    setSelectSticker(null);
+    setTimeout(() => {
+      onFinishDecorate!({
+        thumbnail: toBase64(),
+      });
+      navigate('/print');
+    }, 500);
+  };
+
   return (
     <EditorCxt.Provider
       value={{
@@ -152,6 +168,7 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         canRedo: index + 1 < history.length,
         handleOnStickerDrop,
         handleRemoveLine,
+        handlePrint,
       }}
     >
       {children}

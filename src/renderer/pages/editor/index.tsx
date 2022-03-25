@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import { useEditorContext } from '../../context';
@@ -6,7 +7,7 @@ import DrawGallery from './components/Gallery/DrawGallery';
 import StickerGallery from './components/Gallery/StickerGallery';
 
 function Content() {
-  const { selectedPhoto } = useEditorContext();
+  const { selectedPhoto, handlePrint } = useEditorContext();
   const navigate = useNavigate();
 
   return (
@@ -14,8 +15,14 @@ function Content() {
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
         <Button onClick={() => navigate('/')}>Cancel</Button>
         <div>
-          <Button onClick={() => navigate('/print')}>Upload</Button>
-          <Button onClick={() => navigate('/print')}>Print</Button>
+          <Button
+            onClick={() => {
+              handlePrint();
+            }}
+          >
+            Upload
+          </Button>
+          <Button onClick={handlePrint}>Print</Button>
         </div>
       </div>
       <div className="grid grid-cols-10 gap-2 px-2 h-full">
