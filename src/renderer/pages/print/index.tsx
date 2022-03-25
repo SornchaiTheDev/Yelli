@@ -2,8 +2,10 @@ import QRCode from 'qrcode.react';
 import { Link } from 'react-router-dom';
 import Photo from 'renderer/components/Photo';
 import { useEditorContext } from 'renderer/context';
+import { useEffect } from 'react';
 function Print() {
-  const { allPhotos } = useEditorContext();
+  const { selectedPhoto } = useEditorContext();
+
   return (
     <div className="flex w-full h-screen justify-around items-center ">
       <div className="flex flex-col justify-center items-center space-y-6 ">
@@ -24,7 +26,10 @@ function Print() {
         </Link>
       </div>
       <div className="w-1/2">
-        <Photo className="drop-shadow-xl" path={allPhotos[0].thumbnail!} />
+        <Photo
+          className="drop-shadow-xl"
+          path={selectedPhoto!.thumbnail as string}
+        />
 
         {/* <Photo className='origin' path="https://images.unsplash.com/photo-1577537500263-da8814d8e040?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" /> */}
       </div>

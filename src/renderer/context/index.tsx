@@ -1,31 +1,20 @@
-import {
-  createContext,
-  useContext,
-  ReactNode,
-  useState,
-  useEffect,
-  useRef,
-} from 'react';
+import { createContext, useContext, ReactNode, useState, useRef } from 'react';
 import {
   onFinishDecorateInterface,
-  SelectedPhotoInterface,
   PhotoInterface,
   StickerInteface,
   EditorContext,
   Tool,
   Lines,
 } from '../interface';
-import mock_photo from 'renderer/dummy';
 import { v4 as uuid } from 'uuid';
 
 const EditorCxt = createContext<EditorContext>({
-  allPhotos: [],
-  setAllPhotos: () => {},
   selectedPhoto: null,
+  setSelectedPhoto: () => {},
   selectSticker: null,
   setSelectSticker: () => {},
   onFinishDecorate: () => {},
-  handleSelectPhoto: () => {},
   selectedTool: {
     type: 'pen',
     thickness: 1,
@@ -48,22 +37,12 @@ const EditorCxt = createContext<EditorContext>({
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
-  const [allPhotos, setAllPhotos] = useState<PhotoInterface[]>(mock_photo);
-  const [selectedPhoto, setSelectedPhoto] = useState<SelectedPhotoInterface>({
-    ...allPhotos[0],
-    photoIndex: 0,
-  });
+  const [selectedPhoto, setSelectedPhoto] = useState<PhotoInterface | null>(
+    null
+  );
   /* Stickers that on stage now */
   const [_stickers, setStickers] = useState<StickerInteface[]>([]);
   const stageRef = useRef<any>(null);
-
-  /* reset Selected Photo */
-  useEffect(() => {
-    setSelectedPhoto({
-      ...allPhotos[0],
-      photoIndex: 0,
-    });
-  }, [allPhotos]);
 
   /* handle on Drop Sticker */
   const [selectSticker, setSelectSticker] = useState<string | null>(null);
@@ -115,35 +94,8 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
   };
 
   /* handle on Finish Decorate */
-  const onFinishDecorate: onFinishDecorateInterface = ({
-    photoIndex,
-    stickers,
-    thumbnail,
-  }) => {
-    const saveToAllPhotos = allPhotos.map((photo, index) => {
-      if (index === photoIndex) {
-        return {
-          ...photo,
-          thumbnail: thumbnail,
-          stickers,
-        };
-      }
-      return photo;
-    });
-
-    setAllPhotos(saveToAllPhotos);
-  };
-
-  const handleSelectPhoto = ({
-    src,
-    index,
-    stickers,
-  }: {
-    src: string;
-    index: number;
-    stickers: StickerInteface[];
-  }) => {
-    setSelectedPhoto({ src, photoIndex: index, stickers });
+  const onFinishDecorate: onFinishDecorateInterface = ({ thumbnail }) => {
+    setSelectedPhoto({ ...selectedPhoto!, thumbnail });
   };
 
   /* convert canvas to image (base64) */
@@ -167,13 +119,9 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
       };
       const allStickers = [..._stickers, currentSticker];
       setStickers(allStickers);
-      const photoIndex = allPhotos.findIndex(
-        (photo) => photo.src === selectedPhoto!.src
-      );
+
       setTimeout(() => {
         onFinishDecorate!({
-          photoIndex,
-          stickers: allStickers,
           thumbnail: toBase64(),
         });
       }, 500);
@@ -185,15 +133,13 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     <EditorCxt.Provider
       value={{
         stageRef,
-        allPhotos,
-        setAllPhotos,
         selectedPhoto,
+        setSelectedPhoto,
         selectSticker,
         setSelectSticker,
         _stickers,
         setStickers,
         onFinishDecorate,
-        handleSelectPhoto,
         selectedTool,
         setSelectedTool,
         lines,

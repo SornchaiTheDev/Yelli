@@ -5,13 +5,13 @@ import { useEditorContext } from 'renderer/context';
 import { PhotoInterface } from 'renderer/interface';
 import BigPhoto from './components/BigPhoto';
 const Index = (): JSX.Element => {
-  const [selectedPhoto, setSelectedPhoto] = useState<PhotoInterface[]>([]);
+  const [previewPhoto, setpreviewPhoto] = useState<PhotoInterface | null>(null);
   const [bigPreview, setBigPreview] = useState(false);
-  const { setAllPhotos } = useEditorContext();
+  const { setSelectedPhoto } = useEditorContext();
 
   const handleSelectPhoto = (photo: PhotoInterface) => {
-    setSelectedPhoto([photo]);
-    setAllPhotos([photo]);
+    setpreviewPhoto(photo);
+    setSelectedPhoto({ ...photo, thumbnail: photo.src });
     setBigPreview(true);
   };
 
@@ -19,7 +19,7 @@ const Index = (): JSX.Element => {
     <>
       {bigPreview && (
         <BigPhoto
-          path={selectedPhoto[0].src}
+          path={previewPhoto!.src}
           onClick={() => setBigPreview(false)}
         />
       )}
@@ -29,12 +29,7 @@ const Index = (): JSX.Element => {
         </div>
         <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10">
           {mockPhoto.map((photo) => (
-            <Photo
-              key={photo.src}
-              checked={selectedPhoto.includes(photo)}
-              photo={photo}
-              onClick={handleSelectPhoto}
-            />
+            <Photo key={photo.src} photo={photo} onClick={handleSelectPhoto} />
           ))}
         </div>
       </div>

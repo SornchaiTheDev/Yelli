@@ -40,7 +40,6 @@ export interface PhotoInterface {
 }
 
 export interface SelectedPhotoInterface {
-  photoIndex: number;
   src: string;
   onFinishDecorate?: onFinishDecorateInterface;
 }

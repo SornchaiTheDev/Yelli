@@ -6,7 +6,7 @@ import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import { KonvaEventObject } from 'konva/lib/Node';
 
-function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
+function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
     onFinishDecorate,
@@ -21,12 +21,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     handleRemoveLine,
   } = useEditorContext();
 
-  /* Stage size */
-  const [size, setSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
   /* Add Image to canvas */
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
 
@@ -37,10 +31,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const handleImageInit = () => {
     const img = new Image();
 
-    img.addEventListener('load', () => {
-      const { width, height } = img;
-      setSize({ width: width, height });
-    });
     img.crossOrigin = 'Anonymous';
     img.src = src as string;
     setImage(img);
@@ -65,8 +55,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     });
     setStickers(newStickers);
     onFinishDecorate!({
-      photoIndex,
-      stickers: newStickers,
       thumbnail: toBase64(),
     });
   };
@@ -88,8 +76,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     setStickers(otherStickers);
     handleOnClick();
     onFinishDecorate!({
-      photoIndex,
-      stickers: otherStickers,
       thumbnail: toBase64(),
     });
   };
@@ -110,8 +96,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     setStickers(allStickers);
     setTimeout(() => {
       onFinishDecorate!({
-        photoIndex,
-        stickers: allStickers,
         thumbnail: toBase64(),
       });
     }, 500);
@@ -161,8 +145,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const handleMouseUp = () => {
     isDrawing.current = false;
     onFinishDecorate!({
-      photoIndex,
-      stickers: _stickers,
       thumbnail: toBase64(),
     });
   };

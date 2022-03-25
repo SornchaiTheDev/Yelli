@@ -22,26 +22,14 @@ export interface StickerInteface {
 }
 
 export type onFinishDecorateInterface = ({
-  photoIndex,
-  stickers,
   thumbnail,
 }: {
-  photoIndex: number;
-  stickers: StickerInteface[];
-  thumbnail?: string;
+  thumbnail: string;
 }) => void;
 
 export interface PhotoInterface {
   src: string;
   thumbnail?: string;
-  stickers: StickerInteface[];
-  onFinishDecorate?: onFinishDecorateInterface;
-  photoIndex?: number;
-}
-
-export interface SelectedPhotoInterface {
-  photoIndex: number;
-  src: string;
   stickers: StickerInteface[];
   onFinishDecorate?: onFinishDecorateInterface;
 }
@@ -59,23 +47,13 @@ export interface Lines {
 }
 
 export interface EditorContext {
-  allPhotos: PhotoInterface[];
-  setAllPhotos: React.Dispatch<React.SetStateAction<PhotoInterface[]>>;
-  selectedPhoto: SelectedPhotoInterface | null;
+  selectedPhoto: PhotoInterface | null;
+  setSelectedPhoto: React.Dispatch<React.SetStateAction<PhotoInterface | null>>;
   onFinishDecorate: onFinishDecorateInterface;
   selectSticker: string | null;
   setSelectSticker: React.Dispatch<React.SetStateAction<string | null>>;
   lines: Lines[];
   setLines: React.Dispatch<React.SetStateAction<Lines[]>>;
-  handleSelectPhoto: ({
-    src,
-    index,
-    stickers,
-  }: {
-    src: string;
-    index: number;
-    stickers: StickerInteface[];
-  }) => void;
   selectedTool: Tool;
   setSelectedTool: React.Dispatch<React.SetStateAction<Tool>>;
   handleDrawing: (lines: Lines) => void;
