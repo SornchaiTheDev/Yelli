@@ -12,13 +12,11 @@ function Sticker({
   onSelect,
   onTransfromEnd,
   handleDeleteSticker,
-  onLeave,
 }: StickerInteface & {
   stickerIndex: string;
   isSelected: boolean;
   onSelect: () => void;
   handleDeleteSticker: () => void;
-  onLeave?: () => void;
 }) {
   const transfromRef = useRef<any>(null);
   const shapeRef = useRef<any>(null);
@@ -109,7 +107,7 @@ function Sticker({
           rotateAnchorOffset={40}
           anchorSize={20}
           borderDash={[4, 4]}
-          anchorStroke="transparent"
+          // anchorStroke="transparent"
           anchorCornerRadius={0}
           visible={isSelected}
           enabledAnchors={[
@@ -120,8 +118,6 @@ function Sticker({
           ]}
           rotationSnaps={[0, 90, 180, 270]}
           onTransform={handleOnTransform}
-          onMouseLeave={onLeave}
-          onTouchEnd={onLeave}
         >
           <Group
             onClick={handleDeleteSticker}

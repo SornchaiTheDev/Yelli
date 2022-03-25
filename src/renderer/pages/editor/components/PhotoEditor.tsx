@@ -31,10 +31,8 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   /* Add Image to canvas */
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
 
-  /* sticker sample */
+  /* which sticker user selected */
   const [isSelected, setIsSelected] = useState<string | null>(null);
-
-  // const { width, height } = usewindow();
 
   /* handle stage size to image size */
   const handleImageInit = () => {
@@ -89,6 +87,7 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const handleDeleteSticker = () => {
     const otherStickers = _stickers.filter(({ key }) => key !== isSelected!);
     setStickers(otherStickers);
+    handleOnClick();
     onFinishDecorate!({
       photoIndex,
       stickers: otherStickers,
@@ -128,7 +127,7 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
     isDrawing.current = true;
-    if (selectedTool.type !== 'erasor') {
+    if (selectedTool.type !== 'erasor' || isSelected !== null) {
       const pos = e.target.getStage()!.getPointerPosition();
       handleDrawing({
         key: uuid(),
@@ -142,7 +141,11 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
     // no drawing - skipping
-    if (!isDrawing.current || selectedTool.type === 'erasor') {
+    if (
+      !isDrawing.current ||
+      selectedTool.type === 'erasor' ||
+      isSelected !== null
+    ) {
       return;
     }
     const stage = e.target.getStage();
@@ -166,6 +169,7 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   };
 
   const removeSelectedLine = (key: string) => {
+    if (selectedTool.type === 'pen') return;
     const otherLines = lines.filter(({ key: lineKey }) => lineKey !== key);
     setLines(otherLines);
     handleRemoveLine(otherLines);
@@ -222,11 +226,8 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
               strokeWidth={tool.thickness}
               tension={0.5}
               lineCap="round"
-              onMouseEnter={() =>
-                selectedTool.type === 'erasor' &&
-                isDrawing.current === true &&
-                removeSelectedLine(key)
-              }
+              onMouseEnter={() => removeSelectedLine(key)}
+              onTouchMove={() => removeSelectedLine(key)}
             />
           ))}
           {_stickers.map(({ properties, src, key }) => (
@@ -238,7 +239,6 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
               isSelected={isSelected === key}
               onTransfromEnd={handleTransfromEnd}
               onSelect={() => setIsSelected(key)}
-              onLeave={handleOnClick}
               handleDeleteSticker={handleDeleteSticker}
             />
           ))}

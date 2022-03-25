@@ -63,6 +63,7 @@ function DrawGallery() {
           <BiEraser size="100%" />
         </div>
       </div>
+
       <BrushTrickness
         thickness={thickness}
         color={selectedColor}
@@ -80,6 +81,7 @@ function DrawGallery() {
         hideRGB
         onChange={(e) => setSelectedColor(e)}
       />
+
       <div></div>
     </div>
   );
