@@ -10,8 +10,8 @@ function BrushTrickness({
   selected: (size: number) => void;
 }) {
   const thicknessArr = [
-    { section: 1, size: [1, 5, 10, 15] },
-    { section: 2, size: [20, 25, 30, 40] },
+    { section: 1, size: [5, 10, 15, 20] },
+    { section: 2, size: [25, 30, 35, 40] },
   ];
   return (
     <table className="border-collapse border-0 border-black  table-fixed ">
