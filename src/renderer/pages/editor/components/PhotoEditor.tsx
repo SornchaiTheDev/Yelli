@@ -5,7 +5,6 @@ import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import { KonvaEventObject } from 'konva/lib/Node';
-import usewindow from 'renderer/hooks/usewindow';
 
 function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const {
