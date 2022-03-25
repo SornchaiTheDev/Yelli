@@ -88,6 +88,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
+        onMouseLeave={handleMouseUp}
       >
         <Layer>
           <KonvaImage
