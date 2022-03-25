@@ -1,13 +1,11 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useEditorContext } from '../../../../../context';
 
 function StickerPreview({ sticker }: { sticker: string }) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const { setSelectSticker, selectSticker, handleOnStickerDrop } =
-    useEditorContext();
+  const { setSelectSticker, handleOnStickerDrop } = useEditorContext();
 
   const stickerRef = useRef<HTMLImageElement | null>(null);
-  // const [isDrag, setIsDrag] = useState(false);
   const [stickerPos, setStickerPos] = useState({ x: 0, y: 0 });
 
   const startDragSticker = (e: any) => {
@@ -15,8 +13,8 @@ function StickerPreview({ sticker }: { sticker: string }) {
     if (e.type === 'touchstart') event = e.touches[0];
     setIsDragging(true);
     setSelectSticker(sticker);
-    const left = stickerRef.current!.offsetLeft -100 - event.clientX;
-    const top = stickerRef.current!.offsetTop -100 - event.clientY;
+    const left = stickerRef.current!.offsetLeft - 100 - event.clientX;
+    const top = stickerRef.current!.offsetTop - 100 - event.clientY;
     setStickerPos({ x: left, y: top });
   };
 

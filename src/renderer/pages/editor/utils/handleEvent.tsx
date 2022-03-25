@@ -1,5 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, DragEvent } from 'react';
 import { useEditorContext } from 'renderer/context';
 import { v4 as uuid } from 'uuid';
 import { toBase64 } from './toBase64';
@@ -52,7 +52,7 @@ function handleEvent(): HandleEvent {
     });
   };
 
-  const handleOnStickerDrop = (e: any) => {
+  const handleOnStickerDrop = (e: DragEvent<HTMLImageElement>) => {
     stageRef.current.setPointersPositions(e);
     const properties = {
       ...stageRef.current.getPointerPosition(),

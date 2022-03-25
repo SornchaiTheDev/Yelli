@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, DragEvent } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
 import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
