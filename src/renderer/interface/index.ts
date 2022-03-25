@@ -1,3 +1,9 @@
+declare global {
+  interface Window {
+    electron: any;
+  }
+}
+
 export interface StickerProperties {
   x: number;
   y: number;

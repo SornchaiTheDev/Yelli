@@ -4,6 +4,7 @@ import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import handleEvent from '../utils/handleEvent';
+import bannerPath from '../../../../../public/banner.png';
 
 function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
   const {
@@ -26,6 +27,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
 
   /* Add Image to canvas */
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
+  const [banner, setBanner] = useState<HTMLImageElement | undefined>(undefined);
   const { isPrinting } = useEditorContext();
 
   /* Container Size use to set Stage and KonvaImage size */
@@ -33,17 +35,18 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   /* create img element for KonvaImage */
-  const handleImageInit = () => {
+  const handleImage = (path: string) => {
     const img = new Image();
 
     img.crossOrigin = 'Anonymous';
-    img.src = src as string;
-    setImage(img);
+    img.src = path;
+    return img;
   };
 
   /* set Stage size to image size */
   useEffect(() => {
-    handleImageInit();
+    setImage(handleImage(src));
+    setBanner(handleImage(bannerPath));
     setStickers([]);
   }, [src]);
 
@@ -97,6 +100,13 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
             onTap={() => setSelectSticker(null)}
             width={containerSize.width}
             height={containerSize.height}
+          />
+          <KonvaImage
+            image={banner}
+            width={containerSize.width}
+            y={
+              containerSize.height - (banner !== undefined ? banner!.height : 0)
+            }
           />
           {lines.map(({ points, tool, key }) => (
             <Line
