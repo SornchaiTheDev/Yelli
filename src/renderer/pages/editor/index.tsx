@@ -37,14 +37,13 @@ function Content() {
           </div>
         </div>
 
-        <div className="col-span-8 w-full h-full flex justify-center items-center ">
+        <div className="col-span-8 self-center">
           {/* Photo Editor */}
           <PhotoEditor
             photoIndex={allPhotos.findIndex(
               (photo) => photo.src === selectedPhoto!.src
             )}
             src={selectedPhoto!.src}
-            stickers={selectedPhoto!.stickers}
           />
 
           {/* <div className="flex flex-col justify-center space-y-8">

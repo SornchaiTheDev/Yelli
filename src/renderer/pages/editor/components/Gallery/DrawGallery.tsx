@@ -4,12 +4,14 @@ import { ColorPicker, useColor } from 'react-color-palette';
 import 'react-color-palette/lib/css/styles.css';
 import BrushTrickness from './components/BrushTrickness';
 import { BiUndo, BiRedo } from 'react-icons/bi';
+import usewindow from 'renderer/hooks/usewindow';
 
 function DrawGallery() {
   const [thickness, setThickness] = useState<number>(1);
   const [selectedColor, setSelectedColor] = useColor('hex', '#ffffff');
   const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
     useEditorContext();
+  const { width, height } = usewindow();
 
   useEffect(() => {
     setSelectedTool({
@@ -49,7 +51,7 @@ function DrawGallery() {
 
       <h1 className="text-xl font-semibold">Color</h1>
       <ColorPicker
-        width={300}
+        width={width / 7}
         height={150}
         color={selectedColor}
         alpha

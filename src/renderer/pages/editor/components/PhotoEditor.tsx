@@ -5,6 +5,7 @@ import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import { KonvaEventObject } from 'konva/lib/Node';
+import usewindow from 'renderer/hooks/usewindow';
 
 function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   const {
@@ -33,13 +34,15 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
   /* sticker sample */
   const [isSelected, setIsSelected] = useState<string | null>(null);
 
+  // const { width, height } = usewindow();
+
   /* handle stage size to image size */
   const handleImageInit = () => {
     const img = new Image();
 
     img.addEventListener('load', () => {
       const { width, height } = img;
-      setSize({ width, height });
+      setSize({ width: width, height });
     });
     img.crossOrigin = 'Anonymous';
     img.src = src as string;
@@ -167,13 +170,30 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
     handleRemoveLine(otherLines);
   };
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (containerRef.current !== null) {
+      setContainerSize({
+        width: containerRef.current.getBoundingClientRect().width,
+        height: (containerRef.current.getBoundingClientRect().width * 2) / 3,
+      });
+    }
+  }, [containerRef]);
+
   return (
-    <div onDrop={handleOnStickerDrop} onDragOver={(e) => e.preventDefault()}>
+    <div
+      onDrop={handleOnStickerDrop}
+      className="w-full flex justify-center items-center"
+      onDragOver={(e) => e.preventDefault()}
+      ref={containerRef}
+    >
       <Stage
-        width={size.width}
-        height={size.height}
-        ref={stageRef}
+        width={containerSize.width}
+        height={containerSize.height}
         className="rounded-lg overflow-hidden shadow-lg"
+        ref={stageRef}
         onTouchStart={handleMouseDown}
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
@@ -186,6 +206,8 @@ function PhotoEditor({ photoIndex, src }: SelectedPhotoInterface): JSX.Element {
             image={image}
             onClick={handleOnClick}
             onTap={handleOnClick}
+            width={containerSize.width}
+            height={containerSize.height}
           />
           {lines.map(({ points, tool, key }) => (
             <Line
