@@ -236,6 +236,7 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@lottiefiles/react-lottie-player": "^3.4.4",
     "chokidar": "^3.5.3",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.6",

@@ -38,8 +38,20 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
   watcher.on('add', (file) => {
     const re = new RegExp(photosDir + '/', 'g');
     const fileName = file.replace(re, '');
-    const tmpfile = `${tmpDir}/${fileName}`;
+    const tmpfile = path.join(tmpDir, fileName);
     sharp(file).resize(900, 600).toFile(tmpfile);
+  });
+
+  const tmpWatcher = chokidar.watch(tmpDir, {
+    ignored: /(^|[\/\\])\../, // ignore dotfiles
+    depth: 0,
+    persistent: true,
+  });
+
+  tmpWatcher.on('add', (file) => {
+    const re = new RegExp(tmpDir + '/', 'g');
+    const fileName = file.replace(re, '');
+
     mainWindow.webContents.send('files:new', {
       thumbnail: path.join('photos://tmp', fileName),
       src: path.join('photos://src', fileName),
