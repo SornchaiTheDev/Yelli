@@ -9,12 +9,12 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, ipcRenderer } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, protocol } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { getFiles } from './files';
+import { getFiles, createTmpDir, createThumbnail, file } from './files';
 
 export default class AppUpdater {
   constructor() {
@@ -25,17 +25,6 @@ export default class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
-ipcMain.on('files:get', async (event, arg) => {
-  const files = await getFiles(arg);
-  event.reply('files:receive', files);
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -128,14 +117,34 @@ app.on('window-all-closed', () => {
   }
 });
 
+ipcMain.handle('files:listen', async () => {
+  const files = await getFiles();
+  return files;
+});
+
 app
   .whenReady()
-  .then(() => {
-    createWindow();
+  .then(async () => {
+    createWindow().then(() => createThumbnail(mainWindow!));
+    protocol.registerFileProtocol('photos', (request, callback) => {
+      const path = request.url.replace(/photos:/, '');
+
+      try {
+        return callback(file(path));
+      } catch (err) {
+        return callback('err');
+      }
+    });
+
+    createTmpDir();
+
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
-      if (mainWindow === null) createWindow();
+
+      if (mainWindow === null) {
+        createWindow();
+      }
     });
   })
   .catch(console.log);

@@ -24,7 +24,7 @@ function BigPhoto({ path, onClick }: BigPhotoProps) {
           ref={imageRef}
           className="relative rounded-xl pointer-events-none"
           src={path}
-          style={{ width: '70%' }}
+          style={{ width: '100%' }}
         />
         <Link
           to="/editor"

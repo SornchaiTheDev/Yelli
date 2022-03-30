@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import mockPhoto from '../../dummy';
 import Photo from './components/Photo';
 import { useEditorContext } from 'renderer/context';
 import { PhotoInterface } from 'renderer/interface';
@@ -18,17 +17,20 @@ const Index = (): JSX.Element => {
   };
 
   useEffect(() => {
-    window.electron.getFiles('./public/mock_photo');
-    window.electron.listenFiles('files:receive', (arg: any) => {
-      setAllPhotos(arg);
-    });
+    // window.electron.files.listenFiles((event, data) => {
+    //   console.log(data);
+    // });
+    console.log('useEffect');
+    window.electron.files
+      .listenFiles()
+      .then((res: PhotoInterface[]) => setAllPhotos(res));
   }, []);
 
   return (
     <>
       {bigPreview && (
         <BigPhoto
-          path={previewPhoto!.src}
+          path={previewPhoto!.thumbnail!}
           onClick={() => setBigPreview(false)}
         />
       )}
@@ -38,7 +40,11 @@ const Index = (): JSX.Element => {
         </div>
         <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10">
           {allPhotos.map((photo) => (
-            <Photo key={photo.src} photo={photo} onClick={handleSelectPhoto} />
+            <Photo
+              key={photo.thumbnail}
+              photo={photo}
+              onClick={handleSelectPhoto}
+            />
           ))}
         </div>
       </div>

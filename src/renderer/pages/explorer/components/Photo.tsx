@@ -13,7 +13,7 @@ function Photo({
       className="relative bg-gray-200 rounded-lg overflow-hidden select-none cursor-pointer"
       onClick={() => onClick(photo)}
     >
-      <img src={photo.src} className="pointer-events-none" />
+      <img src={photo.thumbnail} className="pointer-events-none" />
     </div>
   );
 }
