@@ -2,7 +2,6 @@ import QRCode from 'qrcode.react';
 import { Link } from 'react-router-dom';
 import Photo from 'renderer/components/Photo';
 import { useEditorContext } from 'renderer/context';
-import { useEffect } from 'react';
 function Print() {
   const { selectedPhoto } = useEditorContext();
 

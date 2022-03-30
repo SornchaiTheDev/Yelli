@@ -53,12 +53,11 @@ const getFiles = () => {
       .filter((file) => file !== '.DS_Store');
 
     const returnFiles = thumbnailDir.map((data, index) => {
-      // gm(srcDir[index]);
       return {
         thumbnail: path.join('photos://tmp', data),
         src: path.join('photos://src', srcDir[index]),
+        createdTime: fs.statSync(path.join(photosDir, srcDir[index])).ctimeMs,
         stickers: [],
-        // dimention : {width : }
       };
     });
 

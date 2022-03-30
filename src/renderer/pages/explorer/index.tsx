@@ -17,14 +17,15 @@ const Index = (): JSX.Element => {
   };
 
   useEffect(() => {
-    // window.electron.files.listenFiles((event, data) => {
-    //   console.log(data);
-    // });
     console.log('useEffect');
     window.electron.files
       .listenFiles()
       .then((res: PhotoInterface[]) => setAllPhotos(res));
   }, []);
+
+  useEffect(() => {
+    console.log(allPhotos);
+  }, [allPhotos]);
 
   return (
     <>
@@ -38,14 +39,16 @@ const Index = (): JSX.Element => {
         <div className="flex justify-between items-center w-full ">
           <h1 className="text-3xl font-bold">Select Your Image</h1>
         </div>
-        <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10">
-          {allPhotos.map((photo) => (
-            <Photo
-              key={photo.thumbnail}
-              photo={photo}
-              onClick={handleSelectPhoto}
-            />
-          ))}
+        <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10 px-2">
+          {allPhotos
+            .sort((a, b) => a.createdTime - b.createdTime)
+            .map((photo) => (
+              <Photo
+                key={photo.thumbnail}
+                photo={photo}
+                onClick={handleSelectPhoto}
+              />
+            ))}
         </div>
       </div>
     </>
