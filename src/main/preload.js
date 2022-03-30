@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('electron', {
   },
   files: {
     listenFiles: (callback) => ipcRenderer.invoke('files:listen'),
+    newFiles: (callBack) => ipcRenderer.on('files:new', callBack),
   },
 });

@@ -38,7 +38,14 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
   watcher.on('add', (file) => {
     const re = new RegExp(photosDir + '/', 'g');
     const fileName = file.replace(re, '');
-    sharp(file).resize(900, 600).toFile(`${tmpDir}/${fileName}`);
+    const tmpfile = `${tmpDir}/${fileName}`;
+    sharp(file).resize(900, 600).toFile(tmpfile);
+    mainWindow.webContents.send('files:new', {
+      thumbnail: path.join('photos://tmp', fileName),
+      src: path.join('photos://src', fileName),
+      createdTime: fs.statSync(path.join(photosDir, fileName)).ctimeMs,
+      stickers: [],
+    });
   });
 };
 
