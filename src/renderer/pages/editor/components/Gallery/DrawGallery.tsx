@@ -45,7 +45,7 @@ function DrawGallery() {
           </div>
         </div>
       </div>
-      <div className="flex justify-center items-center space-x-4 py-2">
+      {/* <div className="flex justify-center items-center space-x-4 py-2">
         <div
           className={`w-3/12 cursor-pointer ${
             type === 'pen' && 'bg-gray-200'
@@ -62,7 +62,7 @@ function DrawGallery() {
         >
           <BiEraser size="100%" />
         </div>
-      </div>
+      </div> */}
 
       <BrushTrickness
         thickness={thickness}
