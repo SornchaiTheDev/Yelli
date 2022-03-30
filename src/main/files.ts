@@ -3,6 +3,7 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import chokidar from 'chokidar';
 import sharp from 'sharp';
+import gm from 'gm';
 
 const photosDir: string = path.join(app.getPath('documents'), 'photos');
 let tmpDir: string;
@@ -51,11 +52,15 @@ const getFiles = () => {
       .readdirSync(tmpDir)
       .filter((file) => file !== '.DS_Store');
 
-    const returnFiles = thumbnailDir.map((data, index) => ({
-      thumbnail: path.join('photos://tmp', data),
-      src: path.join('photos://src', srcDir[index]),
-      stickers: [],
-    }));
+    const returnFiles = thumbnailDir.map((data, index) => {
+      // gm(srcDir[index]);
+      return {
+        thumbnail: path.join('photos://tmp', data),
+        src: path.join('photos://src', srcDir[index]),
+        stickers: [],
+        // dimention : {width : }
+      };
+    });
 
     return returnFiles;
   }

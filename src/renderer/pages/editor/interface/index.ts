@@ -41,5 +41,6 @@ export interface PhotoInterface {
 
 export interface SelectedPhotoInterface {
   src: string;
+  bannerHeight: number;
   onFinishDecorate?: onFinishDecorateInterface;
 }

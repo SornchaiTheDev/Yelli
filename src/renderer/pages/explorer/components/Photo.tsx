@@ -1,5 +1,4 @@
 import { PhotoInterface } from 'renderer/interface';
-import Select from './Select';
 
 function Photo({
   photo,

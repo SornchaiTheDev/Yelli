@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
 import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
 import Sticker from './Sticker';
@@ -6,7 +6,10 @@ import { useEditorContext } from '../../../context';
 import handleEvent from '../utils/handleEvent';
 import bannerPath from '../../../../../public/banner.png';
 
-function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
+function PhotoEditor({
+  src,
+  bannerHeight,
+}: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
     lines,
@@ -20,7 +23,6 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
-
     handleOnStickerDrop,
     removeSelectedLine,
   } = handleEvent();
@@ -37,8 +39,6 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
   /* create img element for KonvaImage */
   const handleImage = (path: string) => {
     const img = new Image();
-
-    img.crossOrigin = 'Anonymous';
     img.src = path;
     return img;
   };
@@ -47,6 +47,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
   useEffect(() => {
     setImage(handleImage(src));
     setBanner(handleImage(bannerPath));
+    // setBannerOffset(bannerInit.height);
     setStickers([]);
   }, [src]);
 
@@ -71,7 +72,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
         height: (containerRef.current.getBoundingClientRect().width * 2) / 3,
       });
     }
-  }, [containerRef]);
+  }, [containerRef.current]);
 
   return (
     <div
@@ -104,9 +105,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
           <KonvaImage
             image={banner}
             width={containerSize.width}
-            y={
-              containerSize.height - (banner !== undefined ? banner!.height : 0)
-            }
+            y={containerSize.height - bannerHeight}
           />
           {lines.map(({ points, tool, key }) => (
             <Line
@@ -120,6 +119,7 @@ function PhotoEditor({ src }: SelectedPhotoInterface): JSX.Element {
               onTouchMove={() => removeSelectedLine(key)}
             />
           ))}
+
           {_stickers.map(({ properties, src, key }) => (
             <Sticker
               key={key}

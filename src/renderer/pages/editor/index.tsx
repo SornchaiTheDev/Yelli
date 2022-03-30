@@ -38,7 +38,7 @@ function Content() {
 
         <div className="col-span-8 self-center">
           {/* Photo Editor */}
-          <PhotoEditor src={selectedPhoto!.src} />
+          <PhotoEditor src={selectedPhoto!.src} bannerHeight={101} />
         </div>
       </div>
     </div>
