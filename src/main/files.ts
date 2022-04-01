@@ -3,7 +3,6 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import chokidar from 'chokidar';
 import sharp from 'sharp';
-import gm from 'gm';
 
 const photosDir: string = path.join(app.getPath('documents'), 'photos');
 let tmpDir: string;
@@ -102,7 +101,7 @@ const getFile = () => {
   return hour;
 };
 
-const getFirstFile = () => {
+const timeButtons = () => {
   const directory = fs.readdirSync(photosDir);
 
   const files = directory.filter((file) => {
@@ -116,14 +115,20 @@ const getFirstFile = () => {
     return astat - bstat;
   });
 
-  const ctime = fs.statSync(path.join(photosDir, sorted[0])).ctime;
-  return { file: sorted[0], ctime };
+  const first_ctime = fs
+    .statSync(path.join(photosDir, sorted[0]))
+    .ctime.getHours();
+  const last_ctime = fs
+    .statSync(path.join(photosDir, sorted[sorted.length - 1]))
+    .ctime.getHours();
+  return { first_ctime, last_ctime };
 };
 
 const getByTime = (time: number) => {
   const files = fs
     .readdirSync(photosDir)
     .filter((file) => file !== '.DS_Store')
+    .filter((file) => fs.statSync(path.join(photosDir, file)).isFile())
     .filter((file) => {
       const file_timed = fs
         .statSync(path.join(photosDir, file))
@@ -147,5 +152,5 @@ export {
   file,
   getByTime,
   getFile,
-  getFirstFile,
+  timeButtons,
 };

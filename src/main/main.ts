@@ -20,8 +20,7 @@ import {
   createThumbnail,
   file,
   getByTime,
-  getFile,
-  getFirstFile,
+  timeButtons,
 } from './files';
 
 export default class AppUpdater {
@@ -135,8 +134,8 @@ ipcMain.handle('files:getbytime', (event: Event, time: number) => {
   return files;
 });
 
-ipcMain.handle('files:firstFile', () => {
-  return getFirstFile();
+ipcMain.handle('files:timeButtons', () => {
+  return timeButtons();
 });
 
 app
