@@ -102,9 +102,27 @@ const getFile = () => {
   return hour;
 };
 
+const getFirstFile = () => {
+  const directory = fs.readdirSync(photosDir);
+
+  const files = directory.filter((file) => {
+    if (file !== '.DS_Store')
+      return fs.statSync(path.join(photosDir, file)).isFile();
+  });
+
+  const sorted = files.sort((a, b) => {
+    const astat = fs.statSync(path.join(photosDir, a)).ctimeMs,
+      bstat = fs.statSync(path.join(photosDir, b)).ctimeMs;
+    return astat - bstat;
+  });
+
+  const ctime = fs.statSync(path.join(photosDir, sorted[0])).ctime;
+  return { file: sorted[0], ctime };
+};
+
 const getByTime = (time: number) => {
   const files = fs
-    .readdirSync(tmpDir)
+    .readdirSync(photosDir)
     .filter((file) => file !== '.DS_Store')
     .filter((file) => {
       const file_timed = fs
@@ -122,4 +140,12 @@ const getByTime = (time: number) => {
   return files;
 };
 
-export { getFiles, createTmpDir, createThumbnail, file, getByTime, getFile };
+export {
+  getFiles,
+  createTmpDir,
+  createThumbnail,
+  file,
+  getByTime,
+  getFile,
+  getFirstFile,
+};

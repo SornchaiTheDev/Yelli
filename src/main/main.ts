@@ -21,6 +21,7 @@ import {
   file,
   getByTime,
   getFile,
+  getFirstFile,
 } from './files';
 
 export default class AppUpdater {
@@ -129,14 +130,13 @@ ipcMain.handle('files:listen', async () => {
   return files;
 });
 
-ipcMain.handle('files:getbytime', async (event: Event, time: number) => {
-  const files = await getByTime(time);
+ipcMain.handle('files:getbytime', (event: Event, time: number) => {
+  const files = getByTime(time);
   return files;
 });
 
-ipcMain.handle('file:first', async () => {
-  const file = await getFile();
-  return file;
+ipcMain.handle('files:firstFile', () => {
+  return getFirstFile();
 });
 
 app
