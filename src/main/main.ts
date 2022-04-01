@@ -129,7 +129,7 @@ ipcMain.handle('files:listen', async () => {
   return files;
 });
 
-ipcMain.handle('files:getbytime', (event: Event, time: number) => {
+ipcMain.handle('files:getbytime', (_e: Event, time: number) => {
   const files = getByTime(time);
   return files;
 });

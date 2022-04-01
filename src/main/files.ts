@@ -105,8 +105,8 @@ const timeButtons = () => {
   const directory = fs.readdirSync(photosDir);
 
   const files = directory.filter((file) => {
-    if (file !== '.DS_Store')
-      return fs.statSync(path.join(photosDir, file)).isFile();
+    if (file === '.DS_Store') return false;
+    return fs.statSync(path.join(photosDir, file)).isFile();
   });
 
   const sorted = files.sort((a, b) => {
@@ -118,9 +118,11 @@ const timeButtons = () => {
   const first_ctime = fs
     .statSync(path.join(photosDir, sorted[0]))
     .ctime.getHours();
-  const last_ctime = fs
+  let last_ctime = fs
     .statSync(path.join(photosDir, sorted[sorted.length - 1]))
     .ctime.getHours();
+  /* when time over 23:59 (next day) */
+  last_ctime = first_ctime > last_ctime ? 25 + last_ctime : last_ctime;
   return { first_ctime, last_ctime };
 };
 
