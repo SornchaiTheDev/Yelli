@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import { useEditorContext } from '../../context';
