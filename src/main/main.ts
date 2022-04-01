@@ -14,7 +14,14 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { getFiles, createTmpDir, createThumbnail, file } from './files';
+import {
+  getFiles,
+  createTmpDir,
+  createThumbnail,
+  file,
+  getByTime,
+  getFile,
+} from './files';
 
 export default class AppUpdater {
   constructor() {
@@ -120,6 +127,16 @@ app.on('window-all-closed', () => {
 ipcMain.handle('files:listen', async () => {
   const files = await getFiles();
   return files;
+});
+
+ipcMain.handle('files:getbytime', async (event: Event, time: number) => {
+  const files = await getByTime(time);
+  return files;
+});
+
+ipcMain.handle('file:first', async () => {
+  const file = await getFile();
+  return file;
 });
 
 app
