@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Photo from './components/Photo';
 import { useEditorContext } from 'renderer/context';
 import { PhotoInterface } from 'renderer/interface';
@@ -11,6 +11,7 @@ const Index = (): JSX.Element => {
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
   const [time, setTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAFK, setIsAFK] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const handleSelectPhoto = (photo: PhotoInterface) => {
@@ -26,26 +27,55 @@ const Index = (): JSX.Element => {
       });
   }, []);
 
-  useEffect(() => {
+  const getPhotos = () => {
     setIsLoading(true);
 
     window.electron.files.getByTime(time).then((res: any) => {
-      setAllPhotos(res);
+      setTimeout(() => {
+        setAllPhotos(res);
+      }, 500);
       setIsLoading(false);
     });
-  }, [time]);
+  };
 
   useEffect(() => {
-    setIsLoading(true);
+    if (isAFK && time !== null) getPhotos();
+  }, [time, isAFK]);
+
+  useEffect(() => {
     if (time === null) return;
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {
-      if (file.createdTime.getHours() === time) {
+      if (file.createdTime.getHours() === time && isAFK) {
         setAllPhotos((prev) => [file, ...prev]);
       }
-      setIsLoading(false);
     });
-    return () => window.electron.files.unListenFiles();
-  }, [time]);
+    return () => {
+      window.electron.files.unListenFiles();
+    };
+  }, [time, isAFK]);
+
+  const photoViewer = useRef<HTMLDivElement | null>(null);
+  const [scrollY, setScrollY] = useState<number>(0);
+
+  const onScroll = () => {
+    setScrollY(photoViewer.current!.scrollTop);
+    if (photoViewer.current!.scrollTop > 0) setIsAFK(false);
+  };
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (scrollY === 0) {
+      return setIsAFK(true);
+    }
+    timeout = setTimeout(() => {
+      if (photoViewer.current!.scrollTop === scrollY) {
+        photoViewer.current!.scrollTop = 0;
+        setIsAFK(true);
+      }
+    }, 20000);
+
+    return () => clearTimeout(timeout);
+  }, [scrollY]);
 
   return (
     <>
@@ -54,7 +84,11 @@ const Index = (): JSX.Element => {
         {isLoading ? (
           <Loading />
         ) : (
-          <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10 px-2">
+          <div
+            className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10 px-2"
+            ref={photoViewer}
+            onScroll={onScroll}
+          >
             {allPhotos
               .sort((a, b) => b.createdTime.getTime() - a.createdTime.getTime())
               .map((photo) => (
