@@ -1,9 +1,18 @@
+import { useEffect } from 'react';
 import QRCode from 'qrcode.react';
 import { Link } from 'react-router-dom';
 import Photo from 'renderer/components/Photo';
 import { useEditorContext } from 'renderer/context';
+import { v1 as uuid } from 'uuid';
 function Print() {
   const { selectedPhoto } = useEditorContext();
+
+  const photoName = uuid().slice(0, 8) + selectedPhoto?.src.slice(-4);
+
+  useEffect(() => {
+    // console.log(photoName);
+    window.electron.print(selectedPhoto, photoName);
+  }, []);
 
   return (
     <div className="flex w-full h-screen justify-around items-center ">
@@ -15,7 +24,7 @@ function Print() {
         <QRCode value="https://sornchaithedev.com" size={300} />
         <h4 className="text-lg">or</h4>
         <div className="px-4 py-2 border-2">
-          <h3 className="text-2xl">https://pip.pics/sdwfv</h3>
+          <h3 className="text-2xl">https://pip.pics/</h3>
         </div>
         <Link
           to="/"
@@ -29,8 +38,6 @@ function Print() {
           className="drop-shadow-xl"
           path={selectedPhoto!.thumbnail as string}
         />
-
-        {/* <Photo className='origin' path="https://images.unsplash.com/photo-1577537500263-da8814d8e040?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" /> */}
       </div>
     </div>
   );

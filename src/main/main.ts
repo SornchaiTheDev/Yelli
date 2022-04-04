@@ -22,6 +22,10 @@ import {
   getByTime,
   timeButtons,
 } from './files';
+import fs from 'fs';
+import os from 'os';
+import { exec } from 'child_process';
+import { PhotoInterface } from 'renderer/pages/editor/interface';
 
 export default class AppUpdater {
   constructor() {
@@ -42,7 +46,7 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDevelopment) {
-  require('electron-debug')();
+  // require('electron-debug')();
 }
 
 const installExtensions = async () => {
@@ -109,7 +113,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
@@ -162,5 +166,32 @@ app
         createWindow();
       }
     });
+
+    ipcMain.handle(
+      'printing',
+      (_e: Event, photo: PhotoInterface, photoName: string) => {
+        const photosDir: string = path.join(app.getPath('documents'), 'photos');
+        const filePath = path.join(photosDir, 'print', photoName);
+        const irfanviewPath =
+          'C:\\Program Files (x86)\\IrfanView\\i_view64.exe';
+        const printer = 'Dai_Nippon_Printing_DS_RX1_3';
+
+        fs.writeFileSync(
+          filePath,
+          photo.thumbnail!.replace(/^data:image\/png;base64,/, ''),
+          'base64'
+        );
+
+        switch (os.platform()) {
+          case 'linux':
+          case 'darwin':
+            exec(`lpr ${filePath} -P ${printer}`);
+            break;
+          case 'win32':
+            exec(`${irfanviewPath} ${filePath} /print=${printer}`);
+            break;
+        }
+      }
+    );
   })
   .catch(console.log);

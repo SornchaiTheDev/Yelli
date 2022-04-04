@@ -104,6 +104,8 @@ const getFile = () => {
 const timeButtons = () => {
   const directory = fs.readdirSync(photosDir);
 
+  if (directory.length === 0) return 'no-photos';
+
   const files = directory.filter((file) => {
     if (file === '.DS_Store') return false;
     return fs.statSync(path.join(photosDir, file)).isFile();

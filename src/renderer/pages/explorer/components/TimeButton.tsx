@@ -21,13 +21,9 @@ function TimeButton({
 
   useEffect(() => {
     window.electron.files.timeButtons().then((ctime: Ctime) => {
-      setTime(ctime);
+      if (ctime !== undefined) setTime(ctime);
     });
   }, []);
-
-  useEffect(() => {
-    console.log(time);
-  }, [time]);
 
   return (
     <div className="w-full overflow-x-scroll">
@@ -41,7 +37,7 @@ function TimeButton({
                 key={tiktok}
                 onClick={() => onClick(tiktok)}
                 className={
-                  'bg-yellow-500 px-4 py-2 rounded-full flex items-center space-x-2 cursor-pointer ' +
+                  'bg-yellow-500 px-4 py-2 rounded-full flex items-center space-x-2 cursor-pointer shadow-md ' +
                   (tiktok === selectedTime && selected)
                 }
               >
