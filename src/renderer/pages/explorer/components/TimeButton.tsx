@@ -9,29 +9,21 @@ interface Ctime {
 function TimeButton({
   selectedTime,
   onClick,
+  cTime,
 }: {
   selectedTime: number | null;
   onClick: (time: number) => void;
+  cTime: Ctime;
 }) {
   const selected = selectedTime === null ? '' : 'border-4 border-gray-900';
-  const [time, setTime] = useState<Ctime>({
-    first_ctime: 0,
-    last_ctime: 0,
-  });
-
-  useEffect(() => {
-    window.electron.files.timeButtons().then((ctime: Ctime) => {
-      if (ctime !== undefined) setTime(ctime);
-    });
-  }, []);
 
   return (
     <div className="w-full overflow-x-scroll">
       <div className="flex space-x-2 h-full py-2">
-        {new Array(time.last_ctime - time.first_ctime + 1)
+        {new Array(cTime.last_ctime - cTime.first_ctime + 1)
           .fill(0)
           .map((_, index) => {
-            const tiktok = (time.first_ctime + index) % 24;
+            const tiktok = (cTime.first_ctime + index) % 24;
             return (
               <div
                 key={tiktok}

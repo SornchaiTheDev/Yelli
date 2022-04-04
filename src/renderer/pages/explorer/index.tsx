@@ -6,10 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import Loading from './components/Loading';
 import TimeButton from './components/TimeButton';
 
+interface Ctime {
+  first_ctime: number;
+  last_ctime: number;
+}
+
 const Index = (): JSX.Element => {
   const { setSelectedPhoto } = useEditorContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
   const [time, setTime] = useState<number | null>(null);
+  const [cTime, setCTime] = useState<Ctime>({ first_ctime: 0, last_ctime: 0 });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAFK, setIsAFK] = useState<boolean>(true);
   const navigate = useNavigate();
@@ -19,12 +25,25 @@ const Index = (): JSX.Element => {
     navigate('/editor');
   };
 
-  useEffect(() => {
+  const makeTimeButtons = () => {
     window.electron.files
       .timeButtons()
-      .then(({ last_ctime }: { first_ctime: number; last_ctime: number }) => {
-        setTime(last_ctime);
-      });
+      .then(
+        ({
+          first_ctime,
+          last_ctime,
+        }: {
+          first_ctime: number;
+          last_ctime: number;
+        }) => {
+          setTime(last_ctime);
+          setCTime({ first_ctime, last_ctime });
+        }
+      );
+  };
+
+  useEffect(() => {
+    makeTimeButtons();
   }, []);
 
   const getPhotos = () => {
@@ -45,6 +64,7 @@ const Index = (): JSX.Element => {
   useEffect(() => {
     if (time === null) return;
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {
+      if (file.createdTime.getHours() !== time) makeTimeButtons();
       if (file.createdTime.getHours() === time && isAFK) {
         setAllPhotos((prev) => [file, ...prev]);
       }
@@ -80,7 +100,11 @@ const Index = (): JSX.Element => {
   return (
     <>
       <div className="px-10 pt-10 flex flex-col space-y-2 h-screen">
-        <TimeButton selectedTime={time} onClick={(select) => setTime(select)} />
+        <TimeButton
+          cTime={cTime}
+          selectedTime={time}
+          onClick={(select) => setTime(select)}
+        />
         {isLoading ? (
           <Loading />
         ) : (
