@@ -37,7 +37,7 @@ export interface PhotoInterface {
   src: string;
   thumbnail?: string;
   stickers: StickerInteface[];
-  createdTime: number;
+  createdTime: Date;
   onFinishDecorate?: onFinishDecorateInterface;
 }
 

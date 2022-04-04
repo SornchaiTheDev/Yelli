@@ -54,7 +54,7 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
     mainWindow.webContents.send('files:new', {
       thumbnail: path.join('photos://tmp', fileName),
       src: path.join('photos://src', fileName),
-      createdTime: fs.statSync(path.join(photosDir, fileName)).ctimeMs,
+      createdTime: fs.statSync(path.join(photosDir, fileName)).ctime,
       stickers: [],
     });
   });
@@ -74,7 +74,7 @@ const getFiles = () => {
       return {
         thumbnail: path.join('photos://tmp', data),
         src: path.join('photos://src', srcDir[index]),
-        createdTime: fs.statSync(path.join(photosDir, srcDir[index])).ctimeMs,
+        createdTime: fs.statSync(path.join(photosDir, srcDir[index])).ctime,
         stickers: [],
       };
     });
@@ -89,16 +89,6 @@ const file = (file: string) => {
   const fileName = file.slice(5);
   if (type === 'tmp') return path.join(tmpDir, fileName);
   return path.join(photosDir, fileName);
-};
-
-const getFile = () => {
-  const files = fs.readdirSync(photosDir).sort((a, b) => {
-    const first = fs.statSync(path.join(photosDir, a)).ctimeMs;
-    const second = fs.statSync(path.join(photosDir, b)).ctimeMs;
-    return first - second;
-  });
-  const hour = fs.statSync(path.join(photosDir, files[0])).ctime.getHours();
-  return hour;
 };
 
 const timeButtons = () => {
@@ -142,7 +132,7 @@ const getByTime = (time: number) => {
     .map((file) => ({
       thumbnail: path.join('photos://tmp', file),
       src: path.join('photos://src', file),
-      createdTime: fs.statSync(path.join(photosDir, file)).ctimeMs,
+      createdTime: fs.statSync(path.join(photosDir, file)).ctime,
       stickers: [],
     }));
 
@@ -155,6 +145,5 @@ export {
   createThumbnail,
   file,
   getByTime,
-  getFile,
   timeButtons,
 };

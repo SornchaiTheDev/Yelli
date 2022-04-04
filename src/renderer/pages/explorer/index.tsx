@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Photo from './components/Photo';
 import { useEditorContext } from 'renderer/context';
 import { PhotoInterface } from 'renderer/interface';
@@ -9,25 +9,13 @@ import TimeButton from './components/TimeButton';
 const Index = (): JSX.Element => {
   const { setSelectedPhoto } = useEditorContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
-  const [time, setTime] = useState<number>(22);
+  const [time, setTime] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const handleSelectPhoto = (photo: PhotoInterface) => {
     setSelectedPhoto({ ...photo, thumbnail: photo.src });
     navigate('/editor');
-  };
-
-  const getPhotos = async () => {
-    setIsLoading(true);
-    const photos = await window.electron.files.listenFiles();
-    setAllPhotos(photos);
-    setIsLoading(false);
-    window.electron.files.newFiles((_: never, file: PhotoInterface) => {
-      setTimeout(() => {
-        setAllPhotos((prev) => [...prev, file]);
-      }, 500);
-    });
   };
 
   useEffect(() => {
@@ -40,10 +28,23 @@ const Index = (): JSX.Element => {
 
   useEffect(() => {
     setIsLoading(true);
+
     window.electron.files.getByTime(time).then((res: any) => {
       setAllPhotos(res);
       setIsLoading(false);
     });
+  }, [time]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    if (time === null) return;
+    window.electron.files.listenFiles((_: never, file: PhotoInterface) => {
+      if (file.createdTime.getHours() === time) {
+        setAllPhotos((prev) => [file, ...prev]);
+      }
+      setIsLoading(false);
+    });
+    return () => window.electron.files.unListenFiles();
   }, [time]);
 
   return (
@@ -55,7 +56,7 @@ const Index = (): JSX.Element => {
         ) : (
           <div className="grid grid-cols-4 auto-rows-min place-items-center gap-6  h-full overflow-auto pb-10 px-2">
             {allPhotos
-              .sort((a, b) => b.createdTime - a.createdTime)
+              .sort((a, b) => b.createdTime.getTime() - a.createdTime.getTime())
               .map((photo) => (
                 <Photo
                   key={photo.thumbnail}

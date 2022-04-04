@@ -135,6 +135,7 @@ ipcMain.handle('files:listen', async () => {
 
 ipcMain.handle('files:getbytime', (_e: Event, time: number) => {
   const files = getByTime(time);
+
   return files;
 });
 

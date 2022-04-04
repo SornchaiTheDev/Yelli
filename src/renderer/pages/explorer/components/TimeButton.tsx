@@ -10,7 +10,7 @@ function TimeButton({
   selectedTime,
   onClick,
 }: {
-  selectedTime: number;
+  selectedTime: number | null;
   onClick: (time: number) => void;
 }) {
   const selected = selectedTime === null ? '' : 'border-4 border-gray-900';
