@@ -7,6 +7,6 @@ contextBridge.exposeInMainWorld('electron', {
     getByTime: (time) => ipcRenderer.invoke('files:getbytime', time),
     timeButtons: (photo) => ipcRenderer.invoke('files:timeButtons'),
   },
-  print: (photo, photoName) =>
-    ipcRenderer.invoke('printing', (photo, photoName)),
+  upload: (photo) => ipcRenderer.invoke('uploading', photo),
+  print: (file) => ipcRenderer.invoke('printing', file),
 });

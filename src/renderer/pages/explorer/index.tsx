@@ -33,8 +33,8 @@ const Index = (): JSX.Element => {
     window.electron.files.getByTime(time).then((res: any) => {
       setTimeout(() => {
         setAllPhotos(res);
+        setIsLoading(false);
       }, 500);
-      setIsLoading(false);
     });
   };
 

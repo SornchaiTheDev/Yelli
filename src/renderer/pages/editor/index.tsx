@@ -19,9 +19,8 @@ function Content() {
               handlePrint();
             }}
           >
-            Upload
+            Done
           </Button>
-          <Button onClick={handlePrint}>Print</Button>
         </div>
       </div>
       <div className="grid grid-cols-10 gap-2 px-2 h-full">

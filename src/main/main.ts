@@ -25,6 +25,7 @@ import {
 import fs from 'fs';
 import os from 'os';
 import { exec } from 'child_process';
+import crypto from 'crypto';
 import { PhotoInterface } from 'renderer/pages/editor/interface';
 
 export default class AppUpdater {
@@ -168,31 +169,36 @@ app
       }
     });
 
-    ipcMain.handle(
-      'printing',
-      (_e: Event, photo: PhotoInterface, photoName: string) => {
-        const photosDir: string = path.join(app.getPath('documents'), 'photos');
-        const filePath = path.join(photosDir, 'print', photoName);
-        const irfanviewPath =
-          'C:\\Program Files (x86)\\IrfanView\\i_view64.exe';
-        const printer = 'Dai_Nippon_Printing_DS_RX1_3';
-
-        fs.writeFileSync(
-          filePath,
-          photo.thumbnail!.replace(/^data:image\/png;base64,/, ''),
-          'base64'
-        );
-
-        switch (os.platform()) {
-          case 'linux':
-          case 'darwin':
-            exec(`lpr ${filePath} -P ${printer}`);
-            break;
-          case 'win32':
-            exec(`${irfanviewPath} ${filePath} /print=${printer}`);
-            break;
-        }
+    ipcMain.handle('printing', (_e: Event, file: string) => {
+      const irfanviewPath = 'C:\\Program Files (x86)\\IrfanView\\i_view64.exe';
+      const printer = 'Dai_Nippon_Printing_DS_RX1_3';
+      switch (os.platform()) {
+        case 'linux':
+        case 'darwin':
+          exec(`lpr ${file} -P ${printer}`);
+          break;
+        case 'win32':
+          exec(`${irfanviewPath} ${file} /print=${printer}`);
+          break;
       }
-    );
+    });
+
+    ipcMain.handle('uploading', (_e: Event, photo: PhotoInterface) => {
+      const photosDir: string = path.join(app.getPath('documents'), 'photos');
+      const photoName = crypto
+        .randomBytes(6)
+        .toString('base64')
+        .replace(/\//g, '-');
+      const ext = photo.src.slice(-4);
+      const filePath = path.join(photosDir, 'print', photoName + ext);
+
+      fs.writeFileSync(
+        filePath,
+        photo.thumbnail!.replace(/^data:image\/png;base64,/, ''),
+        'base64'
+      );
+
+      return { name: photoName, path: filePath };
+    });
   })
   .catch(console.log);

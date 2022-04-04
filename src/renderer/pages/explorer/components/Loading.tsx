@@ -4,7 +4,7 @@ function Loading() {
       {new Array(12).fill(0).map((_, i) => (
         <div
           key={i}
-          className="relative bg-gray-300 rounded-lg overflow-hidden select-none cursor-pointer w-full h-64 animate-pulse"
+          className="relative bg-gray-300 rounded-lg overflow-hidden select-none cursor-pointer w-full h-72 animate-pulse"
         ></div>
       ))}
     </div>
