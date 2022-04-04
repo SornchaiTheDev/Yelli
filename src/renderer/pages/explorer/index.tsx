@@ -36,7 +36,7 @@ const Index = (): JSX.Element => {
           first_ctime: number;
           last_ctime: number;
         }) => {
-          setTime(last_ctime);
+          if (isAFK) setTime(last_ctime);
           setCTime({ first_ctime, last_ctime });
         }
       );
@@ -58,7 +58,7 @@ const Index = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (isAFK && time !== null) getPhotos();
+    if (isAFK) getPhotos();
   }, [time, isAFK]);
 
   useEffect(() => {
@@ -78,6 +78,7 @@ const Index = (): JSX.Element => {
   const [scrollY, setScrollY] = useState<number>(0);
 
   const onScroll = () => {
+    if (time !== cTime.last_ctime) return;
     setScrollY(photoViewer.current!.scrollTop);
     if (photoViewer.current!.scrollTop > 0) setIsAFK(false);
   };
@@ -97,13 +98,18 @@ const Index = (): JSX.Element => {
     return () => clearTimeout(timeout);
   }, [scrollY]);
 
+  const handleTimeButton = (select: number) => {
+    photoViewer.current!.scrollTop = 0;
+    setTime(select);
+  };
+
   return (
     <>
       <div className="px-10 pt-10 flex flex-col space-y-2 h-screen">
         <TimeButton
           cTime={cTime}
           selectedTime={time}
-          onClick={(select) => setTime(select)}
+          onClick={handleTimeButton}
         />
         {isLoading ? (
           <Loading />
