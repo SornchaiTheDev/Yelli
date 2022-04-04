@@ -10,9 +10,7 @@ export default function App() {
     <Router>
       <EditorContext>
         <Routes>
-          {/* <Route path="/" element={<Print />} /> */}
           <Route path="/" element={<PhotoExplorer />} />
-          {/* <Route path="/options" element={<Options />} /> */}
           <Route path="/editor" element={<Editor />} />
           <Route path="/print" element={<Print />} />
         </Routes>

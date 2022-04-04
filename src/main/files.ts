@@ -5,26 +5,11 @@ import chokidar from 'chokidar';
 import sharp from 'sharp';
 
 const photosDir: string = path.join(app.getPath('documents'), 'photos');
-let tmpDir: string;
+let thumbDir: string;
 
-const isHasTmpDir = () => {
-  const directory = fs.readdirSync(photosDir);
-
-  const condition = directory.map((file) => {
-    const stat = fs.lstatSync(path.join(photosDir, file));
-    if (stat.isDirectory()) tmpDir = path.join(photosDir, file);
-    return stat.isDirectory();
-  });
-
-  return condition.some((file) => file === true);
-};
-
-const createTmpDir = async () => {
-  if (isHasTmpDir()) return;
-
-  if (!fs.existsSync(photosDir)) await fs.mkdirSync(photosDir);
-  const thumbnailDir = await fs.mkdtempSync(path.join(photosDir, 'thumb-'));
-  tmpDir = thumbnailDir;
+const createTmpDir = () => {
+  const thumbnailDir = fs.mkdtempSync(path.join(photosDir, 'thumb-'));
+  thumbDir = thumbnailDir;
   return thumbnailDir;
 };
 
@@ -37,18 +22,18 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
   watcher.on('add', (file) => {
     const re = new RegExp(photosDir + '/', 'g');
     const fileName = file.replace(re, '');
-    const tmpfile = path.join(tmpDir, fileName);
+    const tmpfile = path.join(thumbDir, fileName);
     sharp(file).resize(900, 600).toFile(tmpfile);
   });
 
-  const tmpWatcher = chokidar.watch(tmpDir, {
+  const tmpWatcher = chokidar.watch(thumbDir, {
     ignored: /(^|[\/\\])\../, // ignore dotfiles
     depth: 0,
     persistent: true,
   });
 
   tmpWatcher.on('add', (file) => {
-    const re = new RegExp(tmpDir + '/', 'g');
+    const re = new RegExp(thumbDir + '/', 'g');
     const fileName = file.replace(re, '');
 
     mainWindow.webContents.send('files:new', {
@@ -61,13 +46,15 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
 };
 
 const getFiles = () => {
-  const isDirExist = fs.existsSync(tmpDir);
-  if (isDirExist) {
+  const isThumbDirExist = fs
+    .readdirSync(photosDir)
+    .filter((file) => file.includes('thumb-'));
+  if (isThumbDirExist) {
     const srcDir = fs
       .readdirSync(photosDir)
       .filter((file) => file !== '.DS_Store');
     const thumbnailDir = fs
-      .readdirSync(tmpDir)
+      .readdirSync(thumbDir)
       .filter((file) => file !== '.DS_Store');
 
     const returnFiles = thumbnailDir.map((data, index) => {
@@ -87,14 +74,17 @@ const getFiles = () => {
 const file = (file: string) => {
   const type = file.slice(1, 4);
   const fileName = file.slice(5);
-  if (type === 'tmp') return path.join(tmpDir, fileName);
+  if (type === 'tmp') return path.join(thumbDir, fileName);
   return path.join(photosDir, fileName);
 };
 
 const timeButtons = () => {
+  const isPhotosDirExist = fs.readdirSync(photosDir).length > 2;
+
+  if (!isPhotosDirExist) return 'no-photos';
   const directory = fs.readdirSync(photosDir);
 
-  if (directory.length === 0) return 'no-photos';
+  if (directory.length === 1) return 'no-photos';
 
   const files = directory.filter((file) => {
     if (file === '.DS_Store') return false;

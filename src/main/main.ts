@@ -144,10 +144,40 @@ ipcMain.handle('files:timeButtons', () => {
   return timeButtons();
 });
 
+const initialProcess = () => {
+  const photosDir: string = path.join(app.getPath('documents'), 'photos');
+
+  /* check photos folder exist */
+
+  let isPhotosDirExist = fs
+    .readdirSync(app.getPath('documents'))
+    .find((file) => file === 'photos');
+
+  if (!isPhotosDirExist) fs.mkdirSync(photosDir);
+
+  let isPrintDirExist = fs
+    .readdirSync(photosDir)
+    .find((file) => file === 'print');
+
+  let isThumbDirExist = fs
+    .readdirSync(photosDir)
+    .filter((file) => file.includes('thumb-')).length;
+
+  if (!isPrintDirExist) fs.mkdirSync(path.join(photosDir, 'print'));
+  if (!isThumbDirExist) createTmpDir();
+  createThumbnail(mainWindow!);
+
+  mainWindow!.webContents.send('init:success', { status: 'success' });
+  console.log('send success');
+};
+
 app
   .whenReady()
   .then(async () => {
-    createWindow().then(() => createThumbnail(mainWindow!));
+    await createWindow();
+
+    initialProcess();
+
     protocol.registerFileProtocol('photos', (request, callback) => {
       const path = request.url.replace(/photos:/, '');
 
@@ -157,8 +187,6 @@ app
         return callback('err');
       }
     });
-
-    createTmpDir();
 
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

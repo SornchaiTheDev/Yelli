@@ -15,7 +15,10 @@ const Index = (): JSX.Element => {
   const { setSelectedPhoto } = useEditorContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
   const [time, setTime] = useState<number | null>(null);
-  const [cTime, setCTime] = useState<Ctime>({ first_ctime: 0, last_ctime: 0 });
+  const [cTime, setCTime] = useState<Ctime | null>({
+    first_ctime: 0,
+    last_ctime: 0,
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAFK, setIsAFK] = useState<boolean>(true);
   const navigate = useNavigate();
@@ -26,20 +29,11 @@ const Index = (): JSX.Element => {
   };
 
   const makeTimeButtons = () => {
-    window.electron.files
-      .timeButtons()
-      .then(
-        ({
-          first_ctime,
-          last_ctime,
-        }: {
-          first_ctime: number;
-          last_ctime: number;
-        }) => {
-          if (isAFK) setTime(last_ctime);
-          setCTime({ first_ctime, last_ctime });
-        }
-      );
+    window.electron.files.timeButtons().then((res: any) => {
+      if (res === 'no-photos') return setCTime(null);
+      if (isAFK) setTime(res.last_ctime);
+      setCTime(res);
+    });
   };
 
   useEffect(() => {
@@ -62,9 +56,9 @@ const Index = (): JSX.Element => {
   }, [time, isAFK]);
 
   useEffect(() => {
-    if (time === null) return;
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {
-      if (file.createdTime.getHours() !== time) makeTimeButtons();
+      if (time === null || file.createdTime.getHours() !== time)
+        makeTimeButtons();
       if (file.createdTime.getHours() === time && isAFK) {
         setAllPhotos((prev) => [file, ...prev]);
       }
@@ -78,7 +72,7 @@ const Index = (): JSX.Element => {
   const [scrollY, setScrollY] = useState<number>(0);
 
   const onScroll = () => {
-    if (time !== cTime.last_ctime) return;
+    if (time !== cTime!.last_ctime) return;
     setScrollY(photoViewer.current!.scrollTop);
     if (photoViewer.current!.scrollTop > 0) setIsAFK(false);
   };
@@ -103,14 +97,27 @@ const Index = (): JSX.Element => {
     setTime(select);
   };
 
+  const [isInitialize, setIsInitialize] = useState<boolean>(false);
+
+  useEffect(() => {
+    window.electron.initialize((e: Event, res: { status: string }) => {
+      console.log('work');
+      if (res.status === 'success') setIsInitialize(true);
+    });
+  }, []);
+
+  if (!isInitialize) return <h1>Loading...</h1>;
+
   return (
     <>
       <div className="px-10 pt-10 flex flex-col space-y-2 h-screen">
-        <TimeButton
-          cTime={cTime}
-          selectedTime={time}
-          onClick={handleTimeButton}
-        />
+        {cTime !== null && (
+          <TimeButton
+            cTime={cTime}
+            selectedTime={time}
+            onClick={handleTimeButton}
+          />
+        )}
         {isLoading ? (
           <Loading />
         ) : (
