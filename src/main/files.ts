@@ -106,7 +106,7 @@ const timeButtons = () => {
     .statSync(path.join(photosDir, sorted[sorted.length - 1]))
     .ctime.getHours();
   /* when time over 23:59 (next day) */
-  last_ctime = first_ctime > last_ctime ? 25 + last_ctime : last_ctime;
+  last_ctime = first_ctime > last_ctime ? 24 + last_ctime : last_ctime;
   return { first_ctime, last_ctime };
 };
 

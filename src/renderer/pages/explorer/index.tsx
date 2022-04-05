@@ -31,7 +31,7 @@ const Index = (): JSX.Element => {
   const makeTimeButtons = () => {
     window.electron.files.timeButtons().then((res: any) => {
       if (res === 'no-photos') return setCTime(null);
-      if (isAFK) setTime(res.last_ctime);
+      if (isAFK) setTime(res.last_ctime % 24);
       setCTime(res);
     });
   };
@@ -93,7 +93,7 @@ const Index = (): JSX.Element => {
   }, [scrollY]);
 
   const handleTimeButton = (select: number) => {
-    photoViewer.current!.scrollTop = 0;
+    if (photoViewer.current) photoViewer.current!.scrollTop = 0;
     setTime(select);
   };
 
