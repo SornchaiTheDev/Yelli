@@ -8,7 +8,7 @@ const photosDir: string = path.join(app.getPath('documents'), 'photos');
 let thumbDir: string = path.join(
   app.getPath('documents'),
   'photos',
-  'thumb-dWum5y'
+  'thumb-nny8ru'
 );
 
 const createTmpDir = () => {

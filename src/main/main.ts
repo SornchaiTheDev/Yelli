@@ -27,6 +27,7 @@ import os from 'os';
 import { exec } from 'child_process';
 import crypto from 'crypto';
 import { PhotoInterface } from 'renderer/pages/editor/interface';
+import { initialProcess } from './initialize';
 
 export default class AppUpdater {
   constructor() {
@@ -144,39 +145,17 @@ ipcMain.handle('files:timeButtons', () => {
   return timeButtons();
 });
 
-const initialProcess = (mainWindow: BrowserWindow) => {
-  const photosDir: string = path.join(app.getPath('documents'), 'photos');
-
-  /* check photos folder exist */
-
-  let isPhotosDirExist = fs
-    .readdirSync(app.getPath('documents'))
-    .find((file) => file === 'photos');
-
-  if (!isPhotosDirExist) fs.mkdirSync(photosDir);
-
-  let isPrintDirExist = fs
-    .readdirSync(photosDir)
-    .find((file) => file === 'print');
-
-  let isThumbDirExist = fs
-    .readdirSync(photosDir)
-    .filter((file) => file.includes('thumb-')).length;
-
-  if (!isPrintDirExist) fs.mkdirSync(path.join(photosDir, 'print'));
-  if (!isThumbDirExist) createTmpDir();
-  createThumbnail(mainWindow!);
-
-  mainWindow!.webContents.send('init:success', { status: 'success' });
-  console.log('send success');
-};
+ipcMain.handle('initialize', () => {
+  initialProcess();
+  return 'initialize-success';
+});
 
 app
   .whenReady()
   .then(async () => {
     await createWindow();
 
-    initialProcess(mainWindow!);
+    createThumbnail(mainWindow!);
 
     protocol.registerFileProtocol('photos', (request, callback) => {
       const path = request.url.replace(/photos:/, '');

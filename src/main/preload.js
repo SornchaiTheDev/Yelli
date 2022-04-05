@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('electron', {
-  // initialize: (callBack) => ipcRenderer.on('init:success', callBack),
+  initialize: () => ipcRenderer.invoke('initialize'),
   files: {
     listenFiles: (callBack) => ipcRenderer.on('files:new', callBack),
     unListenFiles: () => ipcRenderer.removeAllListeners('files:new'),
