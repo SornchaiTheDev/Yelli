@@ -21,7 +21,7 @@ function Print() {
   }, []);
 
   useEffect(() => {
-    if (countdown === 0) return navigate('/');
+    if (countdown === 0) return navigate('/explorer');
     const timeout = setTimeout(() => {
       if (countdown > 0) setCountdown((prev) => prev - 1);
     }, 1000);
