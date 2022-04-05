@@ -76,4 +76,6 @@ export interface EditorContext {
   handleRemoveLine: (otherLines: Lines[]) => void;
   isPrinting: boolean;
   handlePrint: () => void;
+  thumbDir: string | null;
+  setThumbDir: React.Dispatch<React.SetStateAction<string | null>>;
 }

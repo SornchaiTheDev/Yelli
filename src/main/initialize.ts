@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { createTmpDir } from './files';
@@ -20,7 +20,7 @@ export const initialProcess = () => {
 
   let isThumbDirExist = fs
     .readdirSync(photosDir)
-    .filter((file) => file.includes('thumb-')).length;
+    .filter((file) => file.includes('thumbnails')).length;
 
   if (!isPrintDirExist) fs.mkdirSync(path.join(photosDir, 'print'));
   if (!isThumbDirExist) createTmpDir();

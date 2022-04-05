@@ -37,9 +37,12 @@ const EditorCxt = createContext<EditorContext>({
   handleRemoveLine: () => {},
   isPrinting: false,
   handlePrint: () => {},
+  thumbDir: null,
+  setThumbDir: () => {},
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
+  const [thumbDir, setThumbDir] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoInterface | null>(
     null
   );
@@ -174,6 +177,8 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
         handleRemoveLine,
         isPrinting,
         handlePrint,
+        thumbDir,
+        setThumbDir,
       }}
     >
       {children}

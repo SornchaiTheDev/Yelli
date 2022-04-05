@@ -5,15 +5,14 @@ import chokidar from 'chokidar';
 import sharp from 'sharp';
 
 const photosDir: string = path.join(app.getPath('documents'), 'photos');
-let thumbDir: string = path.join(
+const thumbDir: string = path.join(
   app.getPath('documents'),
   'photos',
-  'thumb-nny8ru'
+  'thumbnails'
 );
 
 const createTmpDir = () => {
-  const thumbnailDir = fs.mkdtempSync(path.join(photosDir, 'thumb-'));
-  thumbDir = thumbnailDir;
+  const thumbnailDir = fs.mkdirSync(path.join(photosDir, 'thumbnails'));
   return thumbnailDir;
 };
 
@@ -52,7 +51,7 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
 const getFiles = () => {
   const isThumbDirExist = fs
     .readdirSync(photosDir)
-    .filter((file) => file.includes('thumb-'));
+    .filter((file) => file.includes('thumbnails'));
   if (isThumbDirExist) {
     const srcDir = fs
       .readdirSync(photosDir)

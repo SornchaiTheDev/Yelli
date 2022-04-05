@@ -21,7 +21,7 @@ const Index = (): JSX.Element => {
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAFK, setIsAFK] = useState<boolean>(true);
-  const [isInitialize, setInitialize] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const handleSelectPhoto = (photo: PhotoInterface) => {
@@ -39,9 +39,6 @@ const Index = (): JSX.Element => {
 
   useEffect(() => {
     makeTimeButtons();
-    window.electron.initialize().then((status: string) => {
-      if (status === 'initialize-success') setInitialize(true);
-    });
   }, []);
 
   const getPhotos = () => {
@@ -100,8 +97,6 @@ const Index = (): JSX.Element => {
     if (photoViewer.current) photoViewer.current!.scrollTop = 0;
     setTime(select);
   };
-
-  if (!isInitialize) return <h1>Loading...</h1>;
 
   return (
     <>
