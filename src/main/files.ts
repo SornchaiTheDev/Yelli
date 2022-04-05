@@ -5,7 +5,11 @@ import chokidar from 'chokidar';
 import sharp from 'sharp';
 
 const photosDir: string = path.join(app.getPath('documents'), 'photos');
-let thumbDir: string;
+let thumbDir: string = path.join(
+  app.getPath('documents'),
+  'photos',
+  'thumb-dWum5y'
+);
 
 const createTmpDir = () => {
   const thumbnailDir = fs.mkdtempSync(path.join(photosDir, 'thumb-'));
@@ -79,14 +83,12 @@ const file = (file: string) => {
 };
 
 const timeButtons = () => {
-  const isPhotosDirExist = fs.readdirSync(photosDir).length > 2;
+  const isPhotosDirExist =
+    fs.readdirSync(photosDir).filter((file) => file !== '.DS_Store').length > 2;
 
   if (!isPhotosDirExist) return 'no-photos';
-  const directory = fs.readdirSync(photosDir);
 
-  if (directory.length === 1) return 'no-photos';
-
-  const files = directory.filter((file) => {
+  const files = fs.readdirSync(photosDir).filter((file) => {
     if (file === '.DS_Store') return false;
     return fs.statSync(path.join(photosDir, file)).isFile();
   });
@@ -109,6 +111,7 @@ const timeButtons = () => {
 };
 
 const getByTime = (time: number) => {
+  console.log('getByTime called');
   const files = fs
     .readdirSync(photosDir)
     .filter((file) => file !== '.DS_Store')

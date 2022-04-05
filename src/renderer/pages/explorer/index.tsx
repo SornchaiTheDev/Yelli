@@ -97,16 +97,7 @@ const Index = (): JSX.Element => {
     setTime(select);
   };
 
-  const [isInitialize, setIsInitialize] = useState<boolean>(false);
-
-  useEffect(() => {
-    window.electron.initialize((e: Event, res: { status: string }) => {
-      console.log('work');
-      if (res.status === 'success') setIsInitialize(true);
-    });
-  }, []);
-
-  if (!isInitialize) return <h1>Loading...</h1>;
+  // if (!isInitialize) return <h1>Loading...</h1>;
 
   return (
     <>

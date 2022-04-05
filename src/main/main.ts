@@ -144,7 +144,7 @@ ipcMain.handle('files:timeButtons', () => {
   return timeButtons();
 });
 
-const initialProcess = () => {
+const initialProcess = (mainWindow: BrowserWindow) => {
   const photosDir: string = path.join(app.getPath('documents'), 'photos');
 
   /* check photos folder exist */
@@ -176,7 +176,7 @@ app
   .then(async () => {
     await createWindow();
 
-    initialProcess();
+    initialProcess(mainWindow!);
 
     protocol.registerFileProtocol('photos', (request, callback) => {
       const path = request.url.replace(/photos:/, '');
