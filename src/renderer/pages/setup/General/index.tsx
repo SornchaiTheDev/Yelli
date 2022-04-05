@@ -7,11 +7,19 @@
  *
  *
  */
+import { useState, useEffect } from 'react';
 import { BsFolder, BsPrinter } from 'react-icons/bs';
 function General() {
+  const [printers, setPrinters] = useState([]);
+
+  useEffect(() => {
+    window.electron
+      .getPrinters()
+      .then((printers: any) => setPrinters(printers));
+  }, []);
   return (
     <>
-      <div className="flex flex-col w-3/4 space-y-4 px-4">
+      <div className="flex flex-col w-3/4 space-y-4 px-4 mb-24">
         <h1 className="text-md font-medium">Photos Location</h1>
         <div className="flex items-center w-full space-x-4">
           <input
@@ -37,22 +45,26 @@ function General() {
         </div>
         <h1 className="text-md font-medium">Printer</h1>
         <div className="grid grid-cols-3 gap-4">
-          <div className="flex items-center space-x-4 bg-yellow-500 p-2 rounded-lg">
-            <BsPrinter />
-            <h1>DS-RX1</h1>
-          </div>
-          <div className="flex items-center space-x-4 p-2 rounded-lg hover:bg-gray-200 cursor-pointer">
-            <BsPrinter />
-            <h1>Epson L360</h1>
-          </div>
-        </div>
-      </div>
-      <div className="fixed bottom-0 bg-white flex space-x-2 w-full px-4 py-4">
-        <div className="bg-yellow-500 rounded-lg flex justify-center px-4 py-2">
-          <h1 className="text-md font-medium">Save Changes</h1>
-        </div>
-        <div className="bg-gray-300 rounded-lg flex justify-center px-4 py-2">
-          <h1 className="text-md font-medium">Cancel</h1>
+          {printers.map(
+            ({
+              displayName,
+              isDefault,
+            }: {
+              displayName: string;
+              isDefault: boolean;
+            }) => (
+              <div
+                className={`flex items-center space-x-4 p-2 rounded-lg cursor-pointer ${
+                  isDefault ? 'bg-yellow-500' : 'hover:bg-gray-200'
+                }`}
+              >
+                <div>
+                  <BsPrinter className="block" />
+                </div>
+                <h1>{displayName}</h1>
+              </div>
+            )
+          )}
         </div>
       </div>
     </>

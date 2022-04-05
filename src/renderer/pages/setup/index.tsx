@@ -8,6 +8,7 @@ function Setup() {
     { name: 'Theme', icon: <BsPalette /> },
   ];
   const [selected, setSelected] = useState<string>('General');
+
   return (
     <div className="grid grid-cols-5 h-screen w-full">
       <div className="col-span-1 flex flex-col justify-start items-start w-full h-full space-y-2 px-2 border-r-2 pt-4">

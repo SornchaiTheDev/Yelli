@@ -150,6 +150,10 @@ ipcMain.handle('initialize', () => {
   return 'initialize-success';
 });
 
+ipcMain.handle('getPrinters', async () => {
+  return mainWindow?.webContents.getPrinters();
+});
+
 app
   .whenReady()
   .then(async () => {
