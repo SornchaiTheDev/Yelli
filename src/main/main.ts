@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, ipcMain, shell, protocol } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, protocol, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -152,6 +152,9 @@ ipcMain.handle('initialize', () => {
 
 ipcMain.handle('getPrinters', async () => {
   return mainWindow?.webContents.getPrinters();
+});
+ipcMain.handle('files:choose', () => {
+  return dialog.showOpenDialog({ properties: ['openDirectory'] });
 });
 
 app

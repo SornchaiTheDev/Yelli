@@ -11,12 +11,22 @@ import { useState, useEffect } from 'react';
 import { BsFolder, BsPrinter } from 'react-icons/bs';
 function General() {
   const [printers, setPrinters] = useState([]);
+  const [photosDir, setPhotosDir] = useState<string>('');
+  const [selectedPrinter, setSelectedPrinter] = useState<string>('');
 
   useEffect(() => {
     window.electron
       .getPrinters()
       .then((printers: any) => setPrinters(printers));
   }, []);
+
+  const handlePhotosDirSelect = () => {
+    window.electron.files
+      .choose()
+      .then(({ filePaths }: { filePaths: string[] }) => {
+        setPhotosDir(filePaths[0]);
+      });
+  };
   return (
     <>
       <div className="flex flex-col w-3/4 space-y-4 px-4 mb-24">
@@ -25,9 +35,10 @@ function General() {
           <input
             type="text"
             className="text-sm rounded-lg w-full"
-            value="/Users/imdev/documents/photos"
+            onChange={(e) => setPhotosDir(e.target.value)}
+            value={photosDir}
           />
-          <BsFolder />
+          <BsFolder onClick={handlePhotosDirSelect} />
         </div>
         <h1 className="text-md font-medium">Languages</h1>
         <select className="rounded-lg w-fit">

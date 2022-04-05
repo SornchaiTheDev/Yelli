@@ -7,8 +7,9 @@ contextBridge.exposeInMainWorld('electron', {
     unListenFiles: () => ipcRenderer.removeAllListeners('files:new'),
     getByTime: (time) => ipcRenderer.invoke('files:getbytime', time),
     timeButtons: (photo) => ipcRenderer.invoke('files:timeButtons'),
+    choose: () => ipcRenderer.invoke('files:choose'),
   },
   upload: (photo) => ipcRenderer.invoke('uploading', photo),
-  getPrinters : () => ipcRenderer.invoke("getPrinters"),
+  getPrinters: () => ipcRenderer.invoke('getPrinters'),
   print: (file) => ipcRenderer.invoke('printing', file),
 });
