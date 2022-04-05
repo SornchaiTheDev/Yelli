@@ -5,11 +5,24 @@ import {
   BrowserWindow,
   MenuItemConstructorOptions,
 } from 'electron';
+import path from 'path';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
   submenu?: DarwinMenuItemConstructorOptions[] | Menu;
 }
+
+const createPreferenceWindow = () => {
+  const win = new BrowserWindow({
+    alwaysOnTop: true,
+    width: 900,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+    },
+  });
+  win.loadURL(`http://localhost:${1212}/index.html#/preference`);
+};
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -35,8 +48,9 @@ export default class MenuBuilder {
       label: 'Yelli',
       submenu: [
         {
-          label: 'About ElectronReact',
-          selector: 'orderFrontStandardAboutPanel:',
+          label: 'Preference',
+          accelerator: 'Command+,',
+          click: createPreferenceWindow,
         },
 
         { type: 'separator' },

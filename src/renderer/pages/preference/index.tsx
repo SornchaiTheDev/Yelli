@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BsGear, BsPalette } from 'react-icons/bs';
 import General from './General';
 import Themes from './Themes';
-function Setup() {
+function Preference() {
   const menu = [
     { name: 'General', icon: <BsGear /> },
     { name: 'Theme', icon: <BsPalette /> },
@@ -35,4 +35,4 @@ function Setup() {
   );
 }
 
-export default Setup;
+export default Preference;

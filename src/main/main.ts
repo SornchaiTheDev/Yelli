@@ -28,6 +28,7 @@ import { exec } from 'child_process';
 import crypto from 'crypto';
 import { PhotoInterface } from 'renderer/pages/editor/interface';
 import { initialProcess } from './initialize';
+import Store from 'electron-store';
 
 export default class AppUpdater {
   constructor() {
@@ -79,8 +80,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 900,
-    height: 600,
+    width: 1270,
+    height: 720,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -153,8 +154,22 @@ ipcMain.handle('initialize', () => {
 ipcMain.handle('getPrinters', async () => {
   return mainWindow?.webContents.getPrinters();
 });
+
 ipcMain.handle('files:choose', () => {
   return dialog.showOpenDialog({ properties: ['openDirectory'] });
+});
+
+ipcMain.handle(
+  'setting:set',
+  (_e: Event, arg: { key: string; value: string }) => {
+    const { key, value } = arg;
+    const store = new Store();
+    store.set(key, value);
+  }
+);
+ipcMain.handle('setting:get', (_e: Event, key: string) => {
+  const store = new Store();
+  return store.get(key);
 });
 
 app
