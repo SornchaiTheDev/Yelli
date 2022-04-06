@@ -16,7 +16,6 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import {
   getFiles,
-  createTmpDir,
   createThumbnail,
   file,
   getByTime,
@@ -49,7 +48,7 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDevelopment) {
-  require('electron-debug')();
+  // require('electron-debug')();
 }
 
 const installExtensions = async () => {

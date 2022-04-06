@@ -16,7 +16,7 @@ const createTmpDir = () => {
 
 const createThumbnail = (mainWindow: BrowserWindow) => {
   const watcher = chokidar.watch(photosDir, {
-    ignored: /(^|[\/\\])\../, // ignore dotfiles
+    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
     depth: 0,
     persistent: true,
   });
@@ -28,7 +28,7 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
   });
 
   const tmpWatcher = chokidar.watch(thumbDir, {
-    ignored: /(^|[\/\\])\../, // ignore dotfiles
+    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
     depth: 0,
     persistent: true,
   });
@@ -47,29 +47,22 @@ const createThumbnail = (mainWindow: BrowserWindow) => {
 };
 
 const getFiles = () => {
-  const isThumbDirExist = fs
+  const srcDir = fs
     .readdirSync(photosDir)
-    .filter((file) => file.includes('thumbnails'));
-  if (isThumbDirExist) {
-    const srcDir = fs
-      .readdirSync(photosDir)
-      .filter((file) => file !== '.DS_Store');
-    const thumbnailDir = fs
-      .readdirSync(thumbDir)
-      .filter((file) => file !== '.DS_Store');
+    .filter((file) => !['.DS_Store', 'Icon\r'].includes(file));
+  const thumbnailDir = fs
+    .readdirSync(thumbDir)
+    .filter((file) => !['.DS_Store', 'Icon\r'].includes(file));
+  const returnFiles = thumbnailDir.map((data, index) => {
+    return {
+      thumbnail: path.join('photos://tmp', data),
+      src: path.join('photos://src', srcDir[index]),
+      createdTime: fs.statSync(path.join(photosDir, srcDir[index])).ctime,
+      stickers: [],
+    };
+  });
 
-    const returnFiles = thumbnailDir.map((data, index) => {
-      return {
-        thumbnail: path.join('photos://tmp', data),
-        src: path.join('photos://src', srcDir[index]),
-        createdTime: fs.statSync(path.join(photosDir, srcDir[index])).ctime,
-        stickers: [],
-      };
-    });
-
-    return returnFiles;
-  }
-  return null;
+  return returnFiles;
 };
 
 const file = (file: string) => {
@@ -81,13 +74,14 @@ const file = (file: string) => {
 
 const timeButtons = () => {
   const isPhotosDirExist =
-    fs.readdirSync(photosDir).filter((file) => file !== '.DS_Store').length > 2;
+    fs
+      .readdirSync(photosDir)
+      .filter((file) => !['.DS_Store', 'Icon\r'].includes(file)).length > 2;
 
   if (!isPhotosDirExist) return 'no-photos';
 
   const files = fs.readdirSync(photosDir).filter((file) => {
-    if (file === '.DS_Store') return false;
-    if (file === 'Icon\r') return false;
+    if (['.DS_Store', 'Icon\r'].includes(file)) return false;
     return fs.statSync(path.join(photosDir, file)).isFile();
   });
 
@@ -109,10 +103,9 @@ const timeButtons = () => {
 };
 
 const getByTime = (time: number) => {
-  console.log('photosDir :', photosDir);
   const files = fs
     .readdirSync(photosDir)
-    .filter((file) => file !== '.DS_Store')
+    .filter((file) => !['.DS_Store', 'Icon\r'].includes(file))
     .filter((file) => fs.statSync(path.join(photosDir, file)).isFile())
     .filter((file) => {
       const file_timed = fs
