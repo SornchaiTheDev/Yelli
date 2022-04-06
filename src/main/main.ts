@@ -151,10 +151,6 @@ ipcMain.handle('initialize', () => {
   return 'initialize-success';
 });
 
-ipcMain.handle('getPrinters', async () => {
-  return mainWindow?.webContents.getPrinters();
-});
-
 ipcMain.handle('files:choose', () => {
   return dialog.showOpenDialog({ properties: ['openDirectory'] });
 });

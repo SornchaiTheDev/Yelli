@@ -30,7 +30,8 @@ function General() {
   useEffect(() => {
     window.electron
       .getPrinters()
-      .then((printers: any) => setPrinters(printers));
+      .then((printers: any) => setPrinters(printers))
+      .catch((err: string) => console.error(err));
     getPreference();
   }, []);
 
