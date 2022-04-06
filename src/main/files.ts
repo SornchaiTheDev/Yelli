@@ -3,13 +3,11 @@ import path from 'path';
 import { app, BrowserWindow } from 'electron';
 import chokidar from 'chokidar';
 import sharp from 'sharp';
+import Store from 'electron-store';
+const store = new Store();
 
-const photosDir: string = path.join(app.getPath('documents'), 'photos');
-const thumbDir: string = path.join(
-  app.getPath('documents'),
-  'photos',
-  'thumbnails'
-);
+const photosDir: string = store.get('photosDir') as string;
+const thumbDir: string = path.join(photosDir, 'thumbnails');
 
 const createTmpDir = () => {
   const thumbnailDir = fs.mkdirSync(path.join(photosDir, 'thumbnails'));
@@ -89,6 +87,7 @@ const timeButtons = () => {
 
   const files = fs.readdirSync(photosDir).filter((file) => {
     if (file === '.DS_Store') return false;
+    if (file === 'Icon\r') return false;
     return fs.statSync(path.join(photosDir, file)).isFile();
   });
 
@@ -110,7 +109,7 @@ const timeButtons = () => {
 };
 
 const getByTime = (time: number) => {
-  console.log('getByTime called');
+  console.log('photosDir :', photosDir);
   const files = fs
     .readdirSync(photosDir)
     .filter((file) => file !== '.DS_Store')

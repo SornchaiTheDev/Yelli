@@ -2,17 +2,17 @@ import { app } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { createTmpDir } from './files';
+import Store from 'electron-store';
 
 export const initialProcess = () => {
-  const photosDir: string = path.join(app.getPath('documents'), 'photos');
+  const store = new Store();
+  let photosDir: string = store.get('photosDir') as string;
 
   /* check photos folder exist */
-
-  let isPhotosDirExist = fs
-    .readdirSync(app.getPath('documents'))
-    .find((file) => file === 'photos');
-
-  if (!isPhotosDirExist) fs.mkdirSync(photosDir);
+  if (photosDir === undefined) {
+    photosDir = path.join(app.getPath('documents'), 'photos');
+    fs.mkdirSync(photosDir);
+  }
 
   let isPrintDirExist = fs
     .readdirSync(photosDir)

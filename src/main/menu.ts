@@ -38,6 +38,13 @@ export default class MenuBuilder {
         { type: 'separator' },
 
         {
+          label: 'Reload',
+          accelerator: 'Command+R',
+          click: () => this.mainWindow.webContents.reload(),
+        },
+        { type: 'separator' },
+
+        {
           label: 'Quit',
           accelerator: 'Command+Q',
           click: () => {
