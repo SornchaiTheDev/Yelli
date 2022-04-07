@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld('electron', {
   getPrinters: () => ipcRenderer.invoke('getPrinters'),
   print: (file) => ipcRenderer.invoke('printing', file),
   files: {
+    onPhotosDirChange: (callBack) =>
+      ipcRenderer.on('initialize-watcher', callBack),
     listenFiles: (callBack) => ipcRenderer.on('files:new', callBack),
     unListenFiles: () => ipcRenderer.removeAllListeners('files:new'),
     getByTime: (time) => ipcRenderer.invoke('files:getbytime', time),

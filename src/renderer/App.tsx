@@ -14,7 +14,6 @@ import Print from './pages/print';
 import Preference from './pages/preference';
 
 export default function App() {
-  console.log(global.location);
   return (
     <HashRouter>
       <EditorContext>

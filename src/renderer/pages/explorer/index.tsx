@@ -31,7 +31,6 @@ const Index = (): JSX.Element => {
 
   const makeTimeButtons = () => {
     window.electron.files.timeButtons().then((res: any) => {
-      console.log(res);
       if (res === 'no-photos') return setCTime(null);
       if (isAFK) setTime(res.last_ctime % 24);
       setCTime(res);
@@ -56,6 +55,12 @@ const Index = (): JSX.Element => {
   useEffect(() => {
     if (isAFK) getPhotos();
   }, [time, isAFK]);
+
+  useEffect(() => {
+    window.electron.files.onPhotosDirChange(() => {
+      setAllPhotos([]);
+    });
+  }, []);
 
   useEffect(() => {
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {

@@ -49,9 +49,11 @@ function General() {
     window.electron.files
       .choose()
       .then(({ filePaths }: { filePaths: string[] }) => {
-        const path = filePaths[0];
-        setPhotosDir(path);
-        store.set('photosDir', path);
+        if (filePaths.length > 0) {
+          const path = filePaths[0];
+          setPhotosDir(path);
+          store.set('photosDir', path);
+        }
       });
   };
 

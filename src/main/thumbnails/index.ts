@@ -11,6 +11,7 @@ const createThumbnail = (
   photosDir: string,
   thumbDir: string
 ) => {
+  mainWindow.webContents.send('initialize-watcher');
   photosWatcher = chokidar.watch(photosDir, {
     ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
     depth: 0,

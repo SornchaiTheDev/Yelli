@@ -43,7 +43,7 @@ const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
 
 if (isDevelopment) {
-  // require('electron-debug')();
+  require('electron-debug')();
 }
 
 const installExtensions = async () => {
@@ -150,7 +150,9 @@ ipcMain.handle('initialize', () => {
 });
 
 ipcMain.handle('files:choose', () => {
-  return dialog.showOpenDialog({ properties: ['openDirectory'] });
+  return dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory'],
+  });
 });
 
 ipcMain.handle(
