@@ -1,52 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
-import chokidar from 'chokidar';
-import sharp from 'sharp';
-import Store from 'electron-store';
-const store = new Store();
 
-const photosDir: string = store.get('photosDir') as string;
-const thumbDir: string = path.join(photosDir, 'thumbnails');
-
-const createTmpDir = () => {
+const createTmpDir = (photosDir: string) => {
   const thumbnailDir = fs.mkdirSync(path.join(photosDir, 'thumbnails'));
   return thumbnailDir;
 };
 
-const createThumbnail = (mainWindow: BrowserWindow) => {
-  const watcher = chokidar.watch(photosDir, {
-    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
-    depth: 0,
-    persistent: true,
-  });
-  watcher.on('add', (file) => {
-    const re = new RegExp(photosDir + '/', 'g');
-    const fileName = file.replace(re, '');
-    const tmpfile = path.join(thumbDir, fileName);
-    sharp(file).resize(900, 600).toFile(tmpfile);
-  });
-
-  const tmpWatcher = chokidar.watch(thumbDir, {
-    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
-    depth: 0,
-    persistent: true,
-  });
-
-  tmpWatcher.on('add', (file) => {
-    const re = new RegExp(thumbDir + '/', 'g');
-    const fileName = file.replace(re, '');
-
-    mainWindow.webContents.send('files:new', {
-      thumbnail: path.join('photos://tmp', fileName),
-      src: path.join('photos://src', fileName),
-      createdTime: fs.statSync(path.join(photosDir, fileName)).ctime,
-      stickers: [],
-    });
-  });
-};
-
-const getFiles = () => {
+const getFiles = (photosDir: string, thumbDir: string) => {
   const srcDir = fs
     .readdirSync(photosDir)
     .filter((file) => !['.DS_Store', 'Icon\r'].includes(file));
@@ -65,14 +25,14 @@ const getFiles = () => {
   return returnFiles;
 };
 
-const file = (file: string) => {
+const file = (file: string, photosDir: string, thumbDir: string) => {
   const type = file.slice(1, 4);
   const fileName = file.slice(5);
   if (type === 'tmp') return path.join(thumbDir, fileName);
   return path.join(photosDir, fileName);
 };
 
-const timeButtons = () => {
+const timeButtons = (photosDir: string) => {
   const isPhotosDirExist =
     fs
       .readdirSync(photosDir)
@@ -102,7 +62,7 @@ const timeButtons = () => {
   return { first_ctime, last_ctime };
 };
 
-const getByTime = (time: number) => {
+const getByTime = (time: number, photosDir: string) => {
   const files = fs
     .readdirSync(photosDir)
     .filter((file) => !['.DS_Store', 'Icon\r'].includes(file))
@@ -123,11 +83,4 @@ const getByTime = (time: number) => {
   return files;
 };
 
-export {
-  getFiles,
-  createTmpDir,
-  createThumbnail,
-  file,
-  getByTime,
-  timeButtons,
-};
+export { getFiles, createTmpDir, file, getByTime, timeButtons };

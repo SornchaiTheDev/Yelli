@@ -14,19 +14,14 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import {
-  getFiles,
-  createThumbnail,
-  file,
-  getByTime,
-  timeButtons,
-} from './files';
+import { getFiles, file, getByTime, timeButtons } from './files';
 import fs from 'fs';
 import os from 'os';
 import { exec } from 'child_process';
 import crypto from 'crypto';
 import { PhotoInterface } from 'renderer/pages/editor/interface';
 import { initialProcess } from './initialize';
+import { removeThumbnailListener } from './thumbnails';
 import Store from 'electron-store';
 
 export default class AppUpdater {
@@ -130,23 +125,27 @@ app.on('window-all-closed', () => {
   }
 });
 
+const store = new Store();
+let photosDir: string = store.get('photosDir') as string;
+let thumbDir: string = path.join(photosDir, 'thumbnails');
+
 ipcMain.handle('files:listen', async () => {
-  const files = await getFiles();
+  const files = await getFiles(photosDir, thumbDir);
   return files;
 });
 
 ipcMain.handle('files:getbytime', (_e: Event, time: number) => {
-  const files = getByTime(time);
+  const files = getByTime(time, photosDir);
 
   return files;
 });
 
 ipcMain.handle('files:timeButtons', () => {
-  return timeButtons();
+  return timeButtons(photosDir);
 });
 
 ipcMain.handle('initialize', () => {
-  initialProcess();
+  initialProcess(mainWindow!);
   return 'initialize-success';
 });
 
@@ -160,6 +159,12 @@ ipcMain.handle(
     const { key, value } = arg;
     const store = new Store();
     store.set(key, value);
+    if (key === 'photosDir') {
+      removeThumbnailListener();
+      initialProcess(mainWindow!);
+      photosDir = value;
+      thumbDir = path.join(photosDir, 'thumbnails');
+    }
   }
 );
 ipcMain.handle('setting:get', (_e: Event, key: string) => {
@@ -172,13 +177,11 @@ app
   .then(async () => {
     await createWindow();
 
-    createThumbnail(mainWindow!);
-
     protocol.registerFileProtocol('photos', (request, callback) => {
       const path = request.url.replace(/photos:/, '');
 
       try {
-        return callback(file(path));
+        return callback(file(path, photosDir, thumbDir));
       } catch (err) {
         return callback('err');
       }
