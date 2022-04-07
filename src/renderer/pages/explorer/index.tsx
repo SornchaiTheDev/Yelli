@@ -60,6 +60,7 @@ const Index = (): JSX.Element => {
     window.electron.files.onPhotosDirChange(() => {
       setAllPhotos([]);
     });
+    return () => window.electron.files.unsubscribePhotosDirChange();
   }, []);
 
   useEffect(() => {

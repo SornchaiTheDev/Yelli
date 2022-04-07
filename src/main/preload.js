@@ -8,6 +8,8 @@ contextBridge.exposeInMainWorld('electron', {
   files: {
     onPhotosDirChange: (callBack) =>
       ipcRenderer.on('initialize-watcher', callBack),
+    unsubscribePhotosDirChange: () =>
+      ipcRenderer.removeAllListeners('initialize-watcher'),
     listenFiles: (callBack) => ipcRenderer.on('files:new', callBack),
     unListenFiles: () => ipcRenderer.removeAllListeners('files:new'),
     getByTime: (time) => ipcRenderer.invoke('files:getbytime', time),
