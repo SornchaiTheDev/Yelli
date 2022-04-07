@@ -7,19 +7,22 @@ import Store from 'electron-store';
 
 export const initialProcess = (mainWindow: BrowserWindow) => {
   const store = new Store();
-  let photosDir: string = store.get('photosDir') as string;
-  let thumbDir = path.join(photosDir, 'thumbnails');
+  let photosDir: string =
+    (store.get('photosDir') as string) ||
+    path.join(app.getPath('documents'), 'photos');
 
   /* check photos folder exist */
-  if (photosDir === undefined) {
-    photosDir = path.join(app.getPath('documents'), 'photos');
+
+  if (!fs.existsSync(photosDir)) {
     fs.mkdirSync(photosDir);
+    store.set('photosDir', photosDir);
   }
 
   let isPrintDirExist = fs
     .readdirSync(photosDir)
     .find((file) => file === 'print');
 
+  let thumbDir = path.join(photosDir, 'thumbnails');
   let isThumbDirExist = fs
     .readdirSync(photosDir)
     .filter((file) => file.includes('thumbnails')).length;

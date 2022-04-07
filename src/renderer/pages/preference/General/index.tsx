@@ -11,11 +11,12 @@ import React, { useState, useEffect } from 'react';
 import { BsFolder, BsPrinter } from 'react-icons/bs';
 import Store from '../../../utils/store';
 import { useTranslation } from 'react-i18next';
+import { PrinterInfo } from 'electron';
 
 function General() {
-  const [printers, setPrinters] = useState<[]>([]);
-  const [photosDir, setPhotosDir] = useState<string | undefined>(undefined);
-  const [remains, setRemains] = useState<string | undefined>(undefined);
+  const [printers, setPrinters] = useState<PrinterInfo[]>([]);
+  const [photosDir, setPhotosDir] = useState<string>('');
+  const [remains, setRemains] = useState<string>('');
   const [selectedPrinter, setSelectedPrinter] = useState<string | undefined>(
     undefined
   );
@@ -25,32 +26,37 @@ function General() {
   const store = new Store();
 
   const getPreference = () => {
-    store.get('photosDir').then((res) => setPhotosDir(res));
-    store.get('printer').then((res) => setSelectedPrinter(res));
-    store.get('remains').then((res) => setRemains(res));
+    store
+      .get('photosDir')
+      .then((res) => res !== undefined && setPhotosDir(res));
+    store
+      .get('printer')
+      .then((res) => res !== undefined && setSelectedPrinter(res));
+    store.get('remains').then((res) => res !== undefined && setRemains(res));
     store.get('language').then((res) => {
-      setLanguage(res);
-      i18n.changeLanguage(res);
+      if (res !== undefined) {
+        setLanguage(res);
+        i18n.changeLanguage(res);
+      }
     });
   };
 
   useEffect(() => {
     window.electron
       .getPrinters()
-      .then((printers: any) => setPrinters(printers))
+      .then((printers: PrinterInfo[]) => {
+        store.get('printer').then((res) => {
+          const defaultPrinter = printers.find(({ isDefault }) => isDefault);
+          if (res === undefined && defaultPrinter) {
+            store.set('printer', defaultPrinter.name);
+            setSelectedPrinter(defaultPrinter.name);
+          }
+        });
+        setPrinters(printers);
+      })
       .catch((err: string) => console.error(err));
     getPreference();
   }, []);
-
-  useEffect(() => {
-    if (printers.length > 0 && selectedPrinter === undefined) {
-      const selected: { displayName: string } = printers.filter(
-        ({ isDefault }) => isDefault
-      )[0];
-      setSelectedPrinter(selected.displayName);
-      store.set('printer', selected.displayName);
-    }
-  }, [printers]);
 
   const handlePhotosDirSelect = () => {
     window.electron.files
@@ -124,18 +130,18 @@ function General() {
         <h1 className="text-md font-medium">{t('setting.general.printers')}</h1>
         <div className="grid grid-cols-3 gap-4">
           {printers.map(
-            ({ displayName }: { displayName: string; isDefault: boolean }) => {
+            ({ name, displayName }: { name: string; displayName: string }) => {
               return (
                 <div
                   key={displayName}
                   className={`flex items-center space-x-4 p-2 rounded-lg cursor-pointer ${
-                    selectedPrinter === displayName
+                    selectedPrinter === name
                       ? 'bg-yellow-500'
                       : 'hover:bg-gray-200'
                   }`}
                   onClick={() => {
-                    setSelectedPrinter(displayName);
-                    store.set('printer', displayName);
+                    setSelectedPrinter(name);
+                    store.set('printer', name);
                   }}
                 >
                   <div>
