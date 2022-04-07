@@ -12,6 +12,7 @@ import { BsFolder, BsPrinter } from 'react-icons/bs';
 import Store from '../../../utils/store';
 import { useTranslation } from 'react-i18next';
 import { PrinterInfo } from 'electron';
+import theme from '../../../theme.json';
 
 function General() {
   const [printers, setPrinters] = useState<PrinterInfo[]>([]);
@@ -134,6 +135,10 @@ function General() {
               return (
                 <div
                   key={displayName}
+                  style={{
+                    backgroundColor:
+                      selectedPrinter === name ? theme.primary : '',
+                  }}
                   className={`flex items-center space-x-4 p-2 rounded-lg cursor-pointer ${
                     selectedPrinter === name
                       ? 'bg-yellow-500'

@@ -17,8 +17,8 @@ function Content() {
   }, [selectedPhoto]);
 
   return (
-    <div className="flex flex-col pt-2 h-screen">
-      <div className="w-full pl-6 pt-2 flex justify-between items-center">
+    <div className="flex flex-col h-screen">
+      <div className="w-full pl-6 py-2 flex justify-between items-center">
         <Button onClick={() => navigate('/')}>{t('editor.btn.cancel')}</Button>
         <div>
           <Button
@@ -32,7 +32,7 @@ function Content() {
       </div>
       <div className="grid grid-cols-10 gap-2 px-2 h-full">
         {/* Photo Viwer */}
-        <div className="col-span-2 flex flex-col w-full rounded-lg shadow-xl">
+        <div className="col-span-2 flex flex-col w-full rounded-lg shadow-xl bg-white">
           <div className="flex-1 my-6   overflow-scroll px-6">
             <div className="h-2">
               <DrawGallery />

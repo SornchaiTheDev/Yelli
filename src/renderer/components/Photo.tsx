@@ -1,5 +1,6 @@
 import { BiPrinter } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
+import theme from '../theme.json';
 
 function Photo({
   path,
@@ -20,7 +21,8 @@ function Photo({
     >
       <div className="absolute flex justify-center items-center w-full h-full">
         <div
-          className="w-48 h-48 flex flex-col justify-center items-center rounded-full p-10 bg-yellow-500 cursor-pointer"
+          style={{ backgroundColor: theme.primary , color : theme.text }}
+          className="w-48 h-48 flex flex-col justify-center items-center rounded-full p-10 cursor-pointer"
           onClick={onClick}
         >
           <div className="w-3/4">

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-
+import theme from '../theme.json';
 function Button({
   children,
   onClick,
@@ -10,7 +10,8 @@ function Button({
   return (
     <button
       onClick={onClick}
-      className="text-xl font-bold outline-none rounded-full px-4 py-2 bg-yellow-500 mr-2"
+      style={{ backgroundColor: theme.primary, color: theme.text }}
+      className="text-xl font-bold outline-none rounded-full px-4 py-2 mr-2"
     >
       {children}
     </button>

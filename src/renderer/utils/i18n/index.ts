@@ -12,7 +12,6 @@ i18n.use(initReactI18next).init({
             done: 'Done',
           },
           draw: 'Draw',
-          colors: 'Colors',
           stickers: 'Stickers',
         },
         print: {
@@ -50,7 +49,6 @@ i18n.use(initReactI18next).init({
             done: 'เสร็จสิ้น',
           },
           draw: 'วาด',
-          colors: 'สี',
           stickers: 'สติกเกอร์',
         },
         print: {

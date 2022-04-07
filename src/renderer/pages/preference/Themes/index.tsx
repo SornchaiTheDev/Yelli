@@ -27,8 +27,8 @@ function Themes() {
         </div>
         <h1 className="font-medium">{t('setting.theme.text')}</h1>
         <div className="flex items-center space-x-2  relative w-fit">
-          <input type="text" className="rounded-lg" value="#e5e7eb" />
-          <div className="absolute w-6 h-6 bg-[#e5e7eb] right-2"></div>
+          <input type="text" className="rounded-lg" value="#2e2e2e" />
+          <div className="absolute w-6 h-6 bg-[#2e2e2e] right-2"></div>
         </div>
       </div>
     </>
