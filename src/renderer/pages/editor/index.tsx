@@ -4,22 +4,24 @@ import { useEditorContext } from '../../context';
 import { useNavigate } from 'react-router-dom';
 import DrawGallery from './components/Gallery/DrawGallery';
 import StickerGallery from './components/Gallery/StickerGallery';
+import { useTranslation } from 'react-i18next';
 
 function Content() {
   const { selectedPhoto, handlePrint } = useEditorContext();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col pt-2 h-screen">
       <div className="w-full pl-6 pt-2 flex justify-between items-center">
-        <Button onClick={() => navigate('/')}>Cancel</Button>
+        <Button onClick={() => navigate('/')}>{t('editor.btn.cancel')}</Button>
         <div>
           <Button
             onClick={() => {
               handlePrint();
             }}
           >
-            Done
+            {t('editor.btn.done')}
           </Button>
         </div>
       </div>

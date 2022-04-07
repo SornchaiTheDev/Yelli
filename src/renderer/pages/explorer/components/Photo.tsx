@@ -1,4 +1,4 @@
-import { PhotoInterface } from 'renderer/interface';
+import { PhotoInterface } from 'renderer/utils/interface';
 
 function Photo({
   photo,

@@ -1,15 +1,17 @@
 /**
  *
  * todos
- * 1. get photos from location
- * 2. choose languages
- * 3. set quotas
+ * - [x] get photos from location
+ * - [ ] choose languages
+ * - [ ] set quotas
  *
  *
  */
 import React, { useState, useEffect } from 'react';
 import { BsFolder, BsPrinter } from 'react-icons/bs';
-import Store from '../../../store';
+import Store from '../../../utils/store';
+import { useTranslation } from 'react-i18next';
+
 function General() {
   const [printers, setPrinters] = useState<[]>([]);
   const [photosDir, setPhotosDir] = useState<string | undefined>(undefined);
@@ -18,13 +20,18 @@ function General() {
     undefined
   );
   const [language, setLanguage] = useState<string>('en');
+  const { t, i18n } = useTranslation();
+
   const store = new Store();
 
   const getPreference = () => {
     store.get('photosDir').then((res) => setPhotosDir(res));
     store.get('printer').then((res) => setSelectedPrinter(res));
     store.get('remains').then((res) => setRemains(res));
-    store.get('language').then((res) => setLanguage(res));
+    store.get('language').then((res) => {
+      setLanguage(res);
+      i18n.changeLanguage(res);
+    });
   };
 
   useEffect(() => {
@@ -60,6 +67,7 @@ function General() {
   const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const lang: string = e.target.value;
     setLanguage(lang);
+    i18n.changeLanguage(lang);
     store.set('language', lang);
   };
 
@@ -71,8 +79,13 @@ function General() {
   return (
     <>
       <title>Preferences</title>
+      <h1 className="text-2xl font-semibold mb-4 px-4 pt-4">
+        {t('setting.general.title')}
+      </h1>
       <div className="flex flex-col w-3/4 space-y-4 px-4">
-        <h1 className="text-md font-medium">Photos Location</h1>
+        <h1 className="text-md font-medium">
+          {t('setting.general.photosDir')}
+        </h1>
         <div
           className="flex items-center w-full space-x-4 relative"
           onClick={handlePhotosDirSelect}
@@ -87,7 +100,7 @@ function General() {
             <BsFolder />
           </div>
         </div>
-        <h1 className="text-md font-medium">Languages</h1>
+        <h1 className="text-md font-medium">{t('setting.general.language')}</h1>
         <select
           className="rounded-lg w-fit text-sm font-semibold bg-gray-50"
           onChange={handleLangChange}
@@ -96,7 +109,7 @@ function General() {
           <option value="th">ภาษาไทย</option>
           <option value="en">English</option>
         </select>
-        <h1 className="text-md font-medium">Print Remains</h1>
+        <h1 className="text-md font-medium">{t('setting.general.remains')}</h1>
         <div className="flex items-center w-fit space-x-4  relative">
           <input
             onChange={handleRemains}
@@ -108,7 +121,7 @@ function General() {
             <BsPrinter />
           </div>
         </div>
-        <h1 className="text-md font-medium">Printer</h1>
+        <h1 className="text-md font-medium">{t('setting.general.printers')}</h1>
         <div className="grid grid-cols-3 gap-4">
           {printers.map(
             ({ displayName }: { displayName: string; isDefault: boolean }) => {

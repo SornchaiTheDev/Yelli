@@ -3,9 +3,9 @@ import { useEditorContext } from 'renderer/context';
 import { ColorPicker, useColor } from 'react-color-palette';
 import 'react-color-palette/lib/css/styles.css';
 import BrushTrickness from './components/BrushTrickness';
-import { BiUndo, BiRedo, BiPen, BiEraser } from 'react-icons/bi';
+import { BiUndo, BiRedo } from 'react-icons/bi';
 import usewindow from 'renderer/hooks/usewindow';
-
+import { useTranslation } from 'react-i18next';
 function DrawGallery() {
   const [thickness, setThickness] = useState<number>(1);
   const [selectedColor, setSelectedColor] = useColor('hex', '#ffffff');
@@ -13,6 +13,8 @@ function DrawGallery() {
   const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
     useEditorContext();
   const { width, height } = usewindow();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     setSelectedTool({
@@ -25,7 +27,7 @@ function DrawGallery() {
   return (
     <div className="flex flex-col space-y-3 p-4 w-full">
       <div className="flex justify-center items-center w-full ">
-        <h1 className="text-3xl font-bold">Draw</h1>
+        <h1 className="text-3xl font-bold">{t('editor.draw')}</h1>
         <div className="flex justify-end items-center space-x-10">
           <div
             className={`w-2/12 cursor-pointer ${
@@ -45,24 +47,6 @@ function DrawGallery() {
           </div>
         </div>
       </div>
-      {/* <div className="flex justify-center items-center space-x-4 py-2">
-        <div
-          className={`w-3/12 cursor-pointer ${
-            type === 'pen' && 'bg-gray-200'
-          } p-4 rounded-lg`}
-          onClick={() => setType('pen')}
-        >
-          <BiPen size="100%" />
-        </div>
-        <div
-          className={`w-3/12 cursor-pointer ${
-            type === 'erasor' && 'bg-gray-200'
-          } p-4 rounded-lg`}
-          onClick={() => setType('erasor')}
-        >
-          <BiEraser size="100%" />
-        </div>
-      </div> */}
 
       <BrushTrickness
         thickness={thickness}
@@ -76,7 +60,7 @@ function DrawGallery() {
         }}
       />
 
-      <h1 className="text-xl font-semibold">Color</h1>
+      <h1 className="text-xl font-semibold">{t('editor.colors')}</h1>
       <ColorPicker
         width={width / 7}
         height={150}

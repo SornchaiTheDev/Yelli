@@ -1,4 +1,6 @@
 import { BiPrinter } from 'react-icons/bi';
+import { useTranslation } from 'react-i18next';
+
 function Photo({
   path,
   onClick,
@@ -8,6 +10,8 @@ function Photo({
   onClick?: () => void;
   className?: string;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`bg-gray-200 rounded-lg overflow-hidden select-none flex-shrink-0 relative ${
@@ -22,7 +26,7 @@ function Photo({
           <div className="w-3/4">
             <BiPrinter size="100%" />
           </div>
-          <h1 className="text-2xl font-bold">Print</h1>
+          <h1 className="text-2xl font-bold">{t('print.btn.print')}</h1>
         </div>
       </div>
       <img src={path} className="pointer-events-none" />

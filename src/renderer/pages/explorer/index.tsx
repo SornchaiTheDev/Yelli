@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Photo from './components/Photo';
 import { useEditorContext } from 'renderer/context';
-import { PhotoInterface } from 'renderer/interface';
+import { PhotoInterface } from 'renderer/utils/interface';
 import { useNavigate } from 'react-router-dom';
 import Loading from './components/Loading';
 import TimeButton from './components/TimeButton';

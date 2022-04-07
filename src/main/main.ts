@@ -161,6 +161,9 @@ ipcMain.handle(
     const { key, value } = arg;
     const store = new Store();
     store.set(key, value);
+    if (key === 'language') {
+      mainWindow!.webContents.reload();
+    }
     if (key === 'photosDir') {
       removeThumbnailListener();
       initialProcess(mainWindow!);

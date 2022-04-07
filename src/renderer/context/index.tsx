@@ -1,4 +1,11 @@
-import { createContext, useContext, ReactNode, useState, useRef } from 'react';
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useRef,
+  useEffect,
+} from 'react';
 import {
   onFinishDecorateInterface,
   PhotoInterface,
@@ -6,10 +13,11 @@ import {
   EditorContext,
   Tool,
   Lines,
-} from '../interface';
+} from '../utils/interface';
 import { v4 as uuid } from 'uuid';
 import { useNavigate } from 'react-router-dom';
-
+import i18n from 'renderer/utils/i18n';
+import Store from 'renderer/utils/store';
 const EditorCxt = createContext<EditorContext>({
   selectedPhoto: null,
   setSelectedPhoto: () => {},
@@ -47,6 +55,17 @@ const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
     null
   );
   const [isPrinting, setIsPrinting] = useState(false);
+
+  /* Languages */
+  const handleAppLang = async () => {
+    const store = new Store();
+    const lang = (await store.get('language')) as 'th' | 'en';
+    i18n.changeLanguage(lang);
+  };
+
+  useEffect(() => {
+    handleAppLang();
+  }, []);
 
   /* Navigate hooks */
   const navigate = useNavigate();
