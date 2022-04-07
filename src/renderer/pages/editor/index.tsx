@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import { useEditorContext } from '../../context';
@@ -10,6 +11,10 @@ function Content() {
   const { selectedPhoto, handlePrint } = useEditorContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (selectedPhoto === null) navigate('/explorer');
+  }, [selectedPhoto]);
 
   return (
     <div className="flex flex-col pt-2 h-screen">
@@ -38,7 +43,9 @@ function Content() {
 
         <div className="col-span-8 self-center">
           {/* Photo Editor */}
-          <PhotoEditor src={selectedPhoto!.src} bannerHeight={101} />
+          {selectedPhoto && (
+            <PhotoEditor src={selectedPhoto!.src} bannerHeight={101} />
+          )}
         </div>
       </div>
     </div>
