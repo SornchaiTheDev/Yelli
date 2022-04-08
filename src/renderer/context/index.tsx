@@ -18,6 +18,7 @@ import { v4 as uuid } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import i18n from 'renderer/utils/i18n';
 import Store from 'renderer/utils/store';
+
 const EditorCxt = createContext<EditorContext>({
   selectedPhoto: null,
   setSelectedPhoto: () => {},

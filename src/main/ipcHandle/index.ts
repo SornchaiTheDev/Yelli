@@ -44,7 +44,7 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
       const { key, value } = arg;
       const store = new Store();
       store.set(key, value);
-      if (key === 'language') {
+      if (['language', 'theme'].includes(key)) {
         mainWindow!.webContents.reload();
       }
       if (key === 'photosDir') {

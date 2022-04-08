@@ -1,3 +1,5 @@
+import { Theme } from 'renderer/utils/interface/theme';
+
 declare global {
   interface Window {
     electron: any;

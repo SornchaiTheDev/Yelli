@@ -1,3 +1,4 @@
+import { useThemeContext } from 'renderer/context/ThemeContext';
 function Photo({
   path,
   onClick,
@@ -7,9 +8,11 @@ function Photo({
   onClick?: () => void;
   className?: string;
 }) {
+  const { theme } = useThemeContext();
   return (
     <div
-      className={`bg-gray-200 rounded-lg overflow-hidden select-none cursor-pointer flex-shrink-0 ${
+      style={{ backgroundColor: theme.secondary.color }}
+      className={`rounded-lg overflow-hidden select-none cursor-pointer flex-shrink-0 ${
         className !== undefined ? className : ''
       }`}
       onClick={onClick}

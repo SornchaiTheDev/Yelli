@@ -4,18 +4,19 @@ import hny from '../../../../../../public/stickers/happy-new-year.png';
 import witchHat from '../../../../../../public/stickers/witch-hat.png';
 import StickerPreview from './components/StickerPreview';
 import { useTranslation } from 'react-i18next';
-import theme from '../../../../theme.json';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 
 const stickerSets = [balloon, witchHat, hny, crocodile];
 
 function StickerGallery() {
   const { t } = useTranslation();
+  const { theme } = useThemeContext();
   return (
     <div className="px-4">
       <h1
         className="text-3xl font-bold"
         style={{
-          color: theme.text,
+          color: theme.text.color,
         }}
       >
         {t('editor.stickers')}

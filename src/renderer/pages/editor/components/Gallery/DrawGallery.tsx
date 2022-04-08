@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useEditorContext } from 'renderer/context';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 import { ColorPicker, useColor } from 'react-color-palette';
 import 'react-color-palette/lib/css/styles.css';
 import BrushTrickness from './components/BrushTrickness';
 import { BiUndo, BiRedo } from 'react-icons/bi';
 import usewindow from 'renderer/hooks/usewindow';
 import { useTranslation } from 'react-i18next';
-import theme from '../../../../theme.json';
+
 function DrawGallery() {
   const [thickness, setThickness] = useState<number>(1);
   const [selectedColor, setSelectedColor] = useColor('hex', '#ffffff');
@@ -14,6 +15,7 @@ function DrawGallery() {
   const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
     useEditorContext();
   const { width, height } = usewindow();
+  const { theme } = useThemeContext();
 
   const { t } = useTranslation();
 
@@ -31,24 +33,26 @@ function DrawGallery() {
         <h1
           className="text-3xl font-bold"
           style={{
-            color: theme.text,
+            color: theme.text.color,
           }}
         >
           {t('editor.draw')}
         </h1>
         <div className="flex justify-end items-center space-x-10">
           <div
-            className={`w-2/12 cursor-pointer ${
-              canUndo ? 'text-gray-900' : 'text-gray-400'
-            }`}
+            style={{
+              color: canUndo ? theme.primary.color : theme.secondary.color,
+            }}
+            className="w-2/12 cursor-pointer"
             onClick={handleUndo}
           >
             <BiUndo size="100%" />
           </div>
           <div
-            className={`w-2/12 cursor-pointer ${
-              canRedo ? 'text-gray-900' : 'text-gray-400'
-            }`}
+            style={{
+              color: canRedo ? theme.primary.color : theme.secondary.color,
+            }}
+            className="w-2/12 cursor-pointer"
             onClick={handleRedo}
           >
             <BiRedo size="100%" />

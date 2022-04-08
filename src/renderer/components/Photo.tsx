@@ -1,6 +1,6 @@
 import { BiPrinter } from 'react-icons/bi';
 import { useTranslation } from 'react-i18next';
-import theme from '../theme.json';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 
 function Photo({
   path,
@@ -11,6 +11,7 @@ function Photo({
   onClick?: () => void;
   className?: string;
 }) {
+  const { theme } = useThemeContext();
   const { t } = useTranslation();
 
   return (
@@ -21,7 +22,10 @@ function Photo({
     >
       <div className="absolute flex justify-center items-center w-full h-full">
         <div
-          style={{ backgroundColor: theme.primary , color : theme.text }}
+          style={{
+            backgroundColor: theme.primary.color,
+            color: theme.text.color,
+          }}
           className="w-48 h-48 flex flex-col justify-center items-center rounded-full p-10 cursor-pointer"
           onClick={onClick}
         >

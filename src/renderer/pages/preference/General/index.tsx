@@ -2,17 +2,17 @@
  *
  * todos
  * - [x] get photos from location
- * - [ ] choose languages
+ * - [x] choose languages
  * - [ ] set quotas
- *
+ * - [x] select printer
  *
  */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BsFolder, BsPrinter } from 'react-icons/bs';
 import Store from '../../../utils/store';
 import { useTranslation } from 'react-i18next';
 import { PrinterInfo } from 'electron';
-import theme from '../../../theme.json';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 
 function General() {
   const [printers, setPrinters] = useState<PrinterInfo[]>([]);
@@ -23,6 +23,7 @@ function General() {
   );
   const [language, setLanguage] = useState<string>('en');
   const { t, i18n } = useTranslation();
+  const { theme } = useThemeContext();
 
   const store = new Store();
 
@@ -137,7 +138,7 @@ function General() {
                   key={displayName}
                   style={{
                     backgroundColor:
-                      selectedPrinter === name ? theme.primary : '',
+                      selectedPrinter === name ? theme.primary.color : '',
                   }}
                   className={`flex items-center space-x-4 p-2 rounded-lg cursor-pointer ${
                     selectedPrinter === name

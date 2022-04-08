@@ -1,4 +1,5 @@
 import { PhotoInterface } from 'renderer/utils/interface';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 
 function Photo({
   photo,
@@ -7,9 +8,11 @@ function Photo({
   photo: PhotoInterface;
   onClick: (path: PhotoInterface) => void;
 }) {
+  const { theme } = useThemeContext();
   return (
     <div
-      className="relative bg-gray-200 rounded-lg overflow-hidden select-none cursor-pointer"
+      style={{ backgroundColor: theme.secondary.color }}
+      className="relative rounded-lg overflow-hidden select-none cursor-pointer"
       onClick={() => onClick(photo)}
     >
       <img src={photo.thumbnail} className="pointer-events-none" />

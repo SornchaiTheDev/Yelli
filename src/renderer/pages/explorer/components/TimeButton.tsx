@@ -1,7 +1,5 @@
 import { BiTime } from 'react-icons/bi';
-import { useEffect, useState } from 'react';
-import theme from '../../../theme.json';
-
+import { useThemeContext } from 'renderer/context/ThemeContext';
 interface Ctime {
   first_ctime: number;
   last_ctime: number;
@@ -16,6 +14,7 @@ function TimeButton({
   onClick: (time: number) => void;
   cTime: Ctime;
 }) {
+  const { theme } = useThemeContext();
   const selected = selectedTime === null ? '' : 'border-4 border-gray-900';
 
   return (
@@ -29,7 +28,7 @@ function TimeButton({
               <div
                 key={tiktok}
                 onClick={() => onClick(tiktok)}
-                style={{ backgroundColor: theme.primary }}
+                style={{ backgroundColor: theme.primary.color }}
                 className={
                   'px-4 py-2 rounded-full flex items-center space-x-2 cursor-pointer shadow-md ' +
                   (tiktok === selectedTime && selected)
@@ -37,12 +36,12 @@ function TimeButton({
               >
                 <BiTime
                   style={{
-                    color: theme.text,
+                    color: theme.text.color,
                   }}
                 />
                 <h2
                   style={{
-                    color: theme.text,
+                    color: theme.text.color,
                   }}
                   className="text-lg font-bold"
                 >

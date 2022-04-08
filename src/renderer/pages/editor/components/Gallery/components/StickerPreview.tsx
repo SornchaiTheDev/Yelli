@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react';
-import { useEditorContext } from '../../../../../context';
+import { useThemeContext } from 'renderer/context/ThemeContext';
+import { useEditorContext } from 'renderer/context';
 
 function StickerPreview({ sticker }: { sticker: string }) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const { setSelectSticker, handleOnStickerDrop } = useEditorContext();
+  const { theme } = useThemeContext();
 
   const stickerRef = useRef<HTMLImageElement | null>(null);
   const [stickerPos, setStickerPos] = useState({ x: 0, y: 0 });
@@ -44,7 +46,10 @@ function StickerPreview({ sticker }: { sticker: string }) {
 
   return (
     <>
-      <div className="p-4 bg-gray-100 rounded-lg">
+      <div
+        style={{ backgroundColor: theme.secondary.color }}
+        className="p-4 rounded-lg"
+      >
         <img
           className="select-none"
           ref={stickerRef}

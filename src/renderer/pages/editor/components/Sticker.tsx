@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from 'react';
 import { Transformer, Image as KonvaImage, Group, Circle } from 'react-konva';
 import { StickerInteface, StickerProperties } from '../interface';
 import useImage from 'use-image';
-import { useEditorContext } from 'renderer/context';
 
 function Sticker({
   draggable,

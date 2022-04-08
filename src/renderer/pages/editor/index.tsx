@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
-import { useEditorContext } from '../../context';
+import { useEditorContext } from 'renderer/context';
 import { useNavigate } from 'react-router-dom';
 import DrawGallery from './components/Gallery/DrawGallery';
 import StickerGallery from './components/Gallery/StickerGallery';
