@@ -41,7 +41,7 @@ function Preference() {
       </div>
       <div
         className="col-span-4"
-        style={{ backgroundColor: theme.secondary.color }}
+        style={{ backgroundColor: theme.background.color }}
       >
         {selected === 'General' && <General />}
         {selected === 'Theme' && <Themes />}

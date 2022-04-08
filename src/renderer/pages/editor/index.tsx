@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import { useEditorContext } from 'renderer/context';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import DrawGallery from './components/Gallery/DrawGallery';
 import StickerGallery from './components/Gallery/StickerGallery';
@@ -9,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 function Content() {
   const { selectedPhoto, handlePrint } = useEditorContext();
+  const { theme } = useThemeContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -17,7 +19,10 @@ function Content() {
   }, [selectedPhoto]);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div
+      className="flex flex-col h-screen"
+      style={{ backgroundColor: theme.background.color }}
+    >
       <div className="w-full pl-6 py-2 flex justify-between items-center">
         <Button onClick={() => navigate('/')}>{t('editor.btn.cancel')}</Button>
         <div>

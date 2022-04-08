@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Photo from './components/Photo';
 import { useEditorContext } from 'renderer/context';
+import { useThemeContext } from 'renderer/context/ThemeContext';
 import { PhotoInterface } from 'renderer/utils/interface';
 import { useNavigate } from 'react-router-dom';
 import Loading from './components/Loading';
@@ -13,6 +14,7 @@ interface Ctime {
 
 const Index = (): JSX.Element => {
   const { setSelectedPhoto } = useEditorContext();
+  const { theme } = useThemeContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
   const [time, setTime] = useState<number | null>(null);
   const [cTime, setCTime] = useState<Ctime | null>({
@@ -107,7 +109,10 @@ const Index = (): JSX.Element => {
 
   return (
     <>
-      <div className="px-10 pt-10 flex flex-col space-y-2 h-screen">
+      <div
+        className="px-10 pt-10 flex flex-col space-y-2 h-screen"
+        style={{ backgroundColor: theme.background.color }}
+      >
         {cTime !== null && (
           <TimeButton
             cTime={cTime}

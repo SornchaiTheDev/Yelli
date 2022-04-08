@@ -41,8 +41,11 @@ function Print() {
   };
 
   return (
-    <div className="flex flex-col w-full h-screen justify-center items-center">
-      <div className="flex w-full justify-center items-start space-x-4">
+    <div
+      className="flex flex-col w-full h-screen justify-center items-center"
+      style={{ backgroundColor: theme.background.color }}
+    >
+      <div className="flex w-full justify-center items-start space-x-4 px-4">
         <div className="flex flex-col justify-center items-center">
           <Photo
             onClick={onPrint}
@@ -50,7 +53,7 @@ function Print() {
             path={selectedPhoto!.thumbnail as string}
           />
         </div>
-        <div className="flex flex-col justify-center h-full items-center space-y-10 px-4">
+        <div className="flex flex-col justify-center h-full items-center space-y-10 px-4 bg-white rounded-lg">
           <h1
             className="text-3xl font-bold text-center py-2"
             style={{ color: theme.text.color }}
@@ -65,7 +68,10 @@ function Print() {
           </h2>
           <QRCode value={`https://pip.pics/${photo?.name}`} size={300} />
 
-          <div className="px-4 py-2 border-2 rounded-md" style={{backgroundColor : theme.secondary.color}}>
+          <div
+            className="px-4 py-2 border-2 rounded-md"
+            style={{ backgroundColor: theme.secondary.color }}
+          >
             <h3 className="text-2xl">https://pip.pics/{photo?.name}</h3>
           </div>
 
