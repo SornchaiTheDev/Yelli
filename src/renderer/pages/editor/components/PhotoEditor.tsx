@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line } from 'react-konva';
-import { onTransfromEnd, SelectedPhotoInterface } from '../interface';
+import {
+  onTransfromEnd,
+  SelectedPhotoInterface,
+} from 'renderer/utils/interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import handleEvent from '../utils/handleEvent';

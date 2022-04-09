@@ -1,16 +1,21 @@
-import balloon from '../../../../../../public/stickers/balloon.png';
-import crocodile from '../../../../../../public/stickers/crocodile.png';
-import hny from '../../../../../../public/stickers/happy-new-year.png';
-import witchHat from '../../../../../../public/stickers/witch-hat.png';
+import { useState, useEffect } from 'react';
 import StickerPreview from './components/StickerPreview';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'renderer/context/ThemeContext';
-
-const stickerSets = [balloon, witchHat, hny, crocodile];
+interface StickerInterface {
+  src: string;
+}
 
 function StickerGallery() {
   const { t } = useTranslation();
   const { theme } = useThemeContext();
+  const [stickers, setStickers] = useState<StickerInterface[]>([]);
+
+  useEffect(() => {
+    window.electron.stickers
+      .get()
+      .then((_stickers: StickerInterface[]) => setStickers(_stickers));
+  }, []);
   return (
     <div className="p-4 border-4 border-gray-300 rounded-lg mt-4">
       <h1
@@ -23,8 +28,8 @@ function StickerGallery() {
       </h1>
       <div className="gap-4 mt-4">
         <div className="grid grid-cols-3 auto-rows-fr gap-2 mb-2">
-          {stickerSets.map((sticker) => (
-            <StickerPreview sticker={sticker} key={sticker} />
+          {stickers.map(({ src }) => (
+            <StickerPreview sticker={src} key={src} />
           ))}
         </div>
       </div>

@@ -13,11 +13,17 @@ export interface StickerProperties {
   rotation: number;
 }
 
+export interface SelectedPhotoInterface {
+  src: string;
+  bannerHeight: number;
+  onFinishDecorate?: onFinishDecorateInterface;
+}
+
 export type onTransfromEnd = ({
   stickerIndex,
   properties,
 }: {
-  stickerIndex: number | 'drop';
+  stickerIndex: string;
   properties: StickerProperties;
 }) => void;
 

@@ -25,13 +25,6 @@ const getFiles = (photosDir: string, thumbDir: string) => {
   return returnFiles;
 };
 
-const file = (file: string, photosDir: string, thumbDir: string) => {
-  const type = file.slice(1, 4);
-  const fileName = file.slice(5);
-  if (type === 'tmp') return path.join(thumbDir, fileName);
-  return path.join(photosDir, fileName);
-};
-
 const timeButtons = (photosDir: string) => {
   const isPhotosDirExist =
     fs
@@ -83,4 +76,4 @@ const getByTime = (time: number, photosDir: string) => {
   return files;
 };
 
-export { getFiles, createTmpDir, file, getByTime, timeButtons };
+export { getFiles, createTmpDir, getByTime, timeButtons };

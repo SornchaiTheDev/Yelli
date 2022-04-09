@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { BsGear, BsPalette } from 'react-icons/bs';
+import { BsGear, BsPalette, BsHeart } from 'react-icons/bs';
 import General from './General';
 import Themes from './Themes';
+import Stickers from './Stickers';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'renderer/context/ThemeContext';
 
@@ -11,6 +12,7 @@ function Preference() {
   const menu = [
     { name: 'General', icon: <BsGear color={theme.text.color} /> },
     { name: 'Theme', icon: <BsPalette color={theme.text.color} /> },
+    { name: 'Sticker', icon: <BsHeart color={theme.text.color} /> },
   ];
 
   const { t } = useTranslation();
@@ -45,6 +47,7 @@ function Preference() {
       >
         {selected === 'General' && <General />}
         {selected === 'Theme' && <Themes />}
+        {selected === 'Sticker' && <Stickers />}
       </div>
     </div>
   );

@@ -14,7 +14,6 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { file } from './files';
 import ipcHandle from './ipcHandle';
 import Store from 'electron-store';
 import { initialProcess } from './initialize';
@@ -134,7 +133,7 @@ app
     // store.clear();
 
     protocol.registerFileProtocol('photos', (request, callback) => {
-      const photoPath = request.url.replace(/photos:/, '');
+      const photoPath = request.url.replace(/photos:\//, '');
       const store = new Store();
 
       const photosDir: string =
@@ -142,8 +141,28 @@ app
         path.join(app.getPath('documents'), 'photos');
       const thumbDir: string = path.join(photosDir, 'thumbnails');
 
+      const file = (file: string, photosDir: string, thumbDir: string) => {
+        const type = file.slice(0, 3);
+        const fileName = file.slice(4);
+
+        if (type === 'tmp') return path.join(thumbDir, fileName);
+        return path.join(photosDir, fileName);
+      };
+
       try {
         return callback(file(photoPath, photosDir, thumbDir));
+      } catch (err) {
+        return callback('err');
+      }
+    });
+
+    protocol.registerFileProtocol('sticker', (request, callback) => {
+      const sticker = request.url.replace(/sticker:\//, '');
+
+      const stickerPath = path.join(app.getAppPath(), 'stickers', sticker);
+
+      try {
+        return callback(stickerPath);
       } catch (err) {
         return callback('err');
       }

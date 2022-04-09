@@ -2,16 +2,15 @@ import Store from 'electron-store';
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'path';
 import { getFiles, getByTime, timeButtons } from '../files';
-import fs from 'fs';
+import fs, { mkdirSync } from 'fs';
 import os from 'os';
 import { exec } from 'child_process';
 import crypto from 'crypto';
-import { PhotoInterface } from 'renderer/pages/editor/interface';
+import { PhotoInterface } from 'renderer/utils/interface/index';
 import { initialProcess } from '../initialize';
 import { removeThumbnailListener } from '../thumbnails';
 
 const ipcHandle = (mainWindow: BrowserWindow) => {
-  console.log('ipcHandle');
   const store = new Store();
   let photosDir: string =
     (store.get('photosDir') as string) ||
@@ -32,10 +31,47 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
     return timeButtons(photosDir);
   });
 
-  ipcMain.handle('files:choose', () => {
+  ipcMain.handle('files:choose', (_e: Event, type: 'dir' | 'file') => {
     return dialog.showOpenDialog({
-      properties: ['openDirectory', 'createDirectory'],
+      properties:
+        type === 'dir'
+          ? ['openDirectory', 'createDirectory']
+          : ['openFile', 'multiSelections'],
     });
+  });
+
+  ipcMain.handle('sticker:import', (_e: Event, stickers: string[]) => {
+    const appPath = app.getAppPath();
+    const stickerPath = path.join(appPath, 'stickers');
+    if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
+    const stickerSrc = stickers.map((src: string) => {
+      const ext = path.extname(src);
+      const name =
+        crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
+      fs.copyFileSync(src, path.join(stickerPath, name));
+      return { src: `sticker://${name}` };
+    });
+    return stickerSrc;
+  });
+
+  ipcMain.handle('sticker:remove', (_e: Event, sticker: string) => {
+    const appPath = app.getAppPath();
+    const stickerPath = path.join(appPath, 'stickers');
+    const stickerName = sticker.split('://')[1];
+    fs.unlinkSync(path.join(stickerPath, stickerName));
+  });
+
+  ipcMain.handle('sticker:get', () => {
+    const appPath = app.getAppPath();
+    const stickerPath = path.join(appPath, 'stickers');
+    if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
+    const stickers = fs
+      .readdirSync(stickerPath)
+      .filter((file) => file !== '.DS_Store')
+      .map((file) => ({
+        src: `sticker://${file}`,
+      }));
+    return stickers;
   });
 
   ipcMain.handle(

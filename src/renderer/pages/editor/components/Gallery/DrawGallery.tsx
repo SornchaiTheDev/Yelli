@@ -14,7 +14,7 @@ function DrawGallery() {
   const [type, setType] = useState<'pen' | 'erasor'>('pen');
   const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
     useEditorContext();
-  const { width, height } = usewindow();
+  const { width } = usewindow();
   const { theme } = useThemeContext();
 
   const { t } = useTranslation();

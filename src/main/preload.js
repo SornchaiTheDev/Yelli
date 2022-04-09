@@ -14,10 +14,15 @@ contextBridge.exposeInMainWorld('electron', {
     unListenFiles: () => ipcRenderer.removeAllListeners('files:new'),
     getByTime: (time) => ipcRenderer.invoke('files:getbytime', time),
     timeButtons: (photo) => ipcRenderer.invoke('files:timeButtons'),
-    choose: () => ipcRenderer.invoke('files:choose'),
+    choose: (type) => ipcRenderer.invoke('files:choose', type),
   },
   setting: {
     set: (field) => ipcRenderer.invoke('setting:set', field),
     get: (key) => ipcRenderer.invoke('setting:get', key),
+  },
+  stickers: {
+    import: (stickers) => ipcRenderer.invoke('sticker:import', stickers),
+    get: () => ipcRenderer.invoke('sticker:get'),
+    remove : (sticker) => ipcRenderer.invoke('sticker:remove',sticker),
   },
 });

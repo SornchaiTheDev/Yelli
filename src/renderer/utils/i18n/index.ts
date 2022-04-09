@@ -40,6 +40,9 @@ i18n.use(initReactI18next).init({
             setTheme: 'Set Theme',
             revert: 'Revert',
           },
+          stickers: {
+            title: 'Stickers',
+          },
         },
       },
     },
@@ -78,6 +81,9 @@ i18n.use(initReactI18next).init({
             text: 'สีตัวหนังสือ',
             setTheme: 'ตั้งค่าธีม',
             revert: 'ยกเลิก',
+          },
+          stickers: {
+            title: 'สติกเกอร์',
           },
         },
       },

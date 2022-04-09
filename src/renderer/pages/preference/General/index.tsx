@@ -62,7 +62,7 @@ function General() {
 
   const handlePhotosDirSelect = () => {
     window.electron.files
-      .choose()
+      .choose('dir')
       .then(({ filePaths }: { filePaths: string[] }) => {
         if (filePaths.length > 0) {
           const path = filePaths[0];
