@@ -22,7 +22,8 @@ contextBridge.exposeInMainWorld('electron', {
   },
   stickers: {
     import: (stickers) => ipcRenderer.invoke('sticker:import', stickers),
+    importDir: (dir) => ipcRenderer.invoke('sticker:importDir', dir),
     get: () => ipcRenderer.invoke('sticker:get'),
-    remove : (sticker) => ipcRenderer.invoke('sticker:remove',sticker),
+    remove: (sticker) => ipcRenderer.invoke('sticker:remove', sticker),
   },
 });

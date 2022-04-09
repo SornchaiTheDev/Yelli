@@ -18,6 +18,10 @@ function InputSticker({
     e.preventDefault();
     const filePaths = Array.from(e.dataTransfer.files).map((file) => file.path);
     const isImage = /image\//g.test(e.dataTransfer.files[0].type);
+    if (!isImage && e.dataTransfer.files[0].type === '')
+      window.electron.stickers
+        .importDir(filePaths[0])
+        .then((stickers: StickerInterface[]) => onImport(stickers));
     if (e.dataTransfer.files && isImage)
       window.electron.stickers
         .import(filePaths)
@@ -30,7 +34,7 @@ function InputSticker({
       onDrop={handleOnDrop}
       onClick={() => window.electron.files.choose('file').then(handleSelected)}
     >
-      <h1>Click or Drop Sticker here</h1>
+      <h1>Click or Drag and Drop Sticker here</h1>
     </div>
   );
   return (

@@ -40,6 +40,24 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
     });
   });
 
+  ipcMain.handle('sticker:importDir', (_e: Event, dir: string) => {
+    const appPath = app.getAppPath();
+    const stickerPath = path.join(appPath, 'stickers');
+    if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
+    const stickersInDir = fs.readdirSync(dir);
+    const stickers = stickersInDir
+      .filter((file) => file !== '.DS_Store')
+      .map((file) => path.join(dir, file));
+    const stickerSrc = stickers.map((src: string) => {
+      const ext = path.extname(src);
+      const name =
+        crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
+      fs.copyFileSync(src, path.join(stickerPath, name));
+      return { src: `sticker://${name}` };
+    });
+    return stickerSrc;
+  });
+
   ipcMain.handle('sticker:import', (_e: Event, stickers: string[]) => {
     const appPath = app.getAppPath();
     const stickerPath = path.join(appPath, 'stickers');
