@@ -1,17 +1,23 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
-let win: BrowserWindow;
+let win: BrowserWindow | null;
 const createPreferenceWindow = () => {
-  win = new BrowserWindow({
-    fullscreenable: false,
-    resizable: false,
-    width: 900,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
-    },
+  if (!win) {
+    win = new BrowserWindow({
+      fullscreenable: false,
+      resizable: false,
+      width: 900,
+      height: 600,
+      webPreferences: {
+        preload: path.join(__dirname, 'preload.js'),
+      },
+    });
+    win.loadURL(`http://localhost:${1212}/index.html#/preference`);
+  }
+  if (!win.isFocused()) win.show();
+  win.on('close', () => {
+    win = null;
   });
-  win.loadURL(`http://localhost:${1212}/index.html#/preference`);
 };
 
 ipcMain.handle('getPrinters', () => {

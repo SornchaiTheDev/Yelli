@@ -48,7 +48,7 @@ i18n.use(initReactI18next).init({
             cancel: 'ยกเลิก',
             done: 'เสร็จสิ้น',
           },
-          draw: 'วาด',
+          draw: 'ปากกา',
           stickers: 'สติกเกอร์',
         },
         print: {

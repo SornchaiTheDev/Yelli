@@ -16,7 +16,7 @@ function BrushTrickness({
     { section: 2, size: [25, 30, 35, 40] },
   ];
   return (
-    <table className="border-collapse border-0 border-black  table-fixed ">
+    <table className="border-gray-300  table-fixed">
       <tbody>
         {thicknessArr.map(({ section, size }) => (
           <tr className="h-12" key={section}>
@@ -27,7 +27,7 @@ function BrushTrickness({
                   backgroundColor:
                     thickness === value ? theme.primary.color : 'transparent',
                 }}
-                className="w-12"
+                className="w-12 border-2"
                 onClick={() => selected(value)}
               >
                 <div className="flex justify-center items-center ">

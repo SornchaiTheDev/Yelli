@@ -70,7 +70,7 @@ function Themes() {
             );
           })}
       </div>
-      <div className="fixed bottom-0 bg-white flex space-x-2 w-full px-4 py-4">
+      <div className="fixed bottom-0 bg-white flex space-x-2 w-full px-4 py-4 border-t-2">
         <div
           style={{ backgroundColor: theme.primary.color }}
           className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"

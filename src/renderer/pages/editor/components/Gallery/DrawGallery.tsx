@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 function DrawGallery() {
   const [thickness, setThickness] = useState<number>(1);
-  const [selectedColor, setSelectedColor] = useColor('hex', '#ffffff');
+  const [selectedColor, setSelectedColor] = useColor('hex', '#000000');
   const [type, setType] = useState<'pen' | 'erasor'>('pen');
   const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
     useEditorContext();
@@ -28,10 +28,10 @@ function DrawGallery() {
   }, [type, thickness, selectedColor]);
 
   return (
-    <div className="flex flex-col space-y-3 p-4 w-full ">
-      <div className="flex justify-center items-center w-full ">
+    <div className="flex flex-col space-y-3 p-4 w-full border-gray-300 rounded-lg border-4">
+      <div className="flex justify-center items-center w-full">
         <h1
-          className="text-3xl font-bold"
+          className="text-2xl font-bold"
           style={{
             color: theme.text.color,
           }}
@@ -48,6 +48,7 @@ function DrawGallery() {
           >
             <BiUndo size="100%" />
           </div>
+
           <div
             style={{
               color: canRedo ? theme.primary.color : theme.secondary.color,
@@ -82,8 +83,6 @@ function DrawGallery() {
         hideRGB
         onChange={(e) => setSelectedColor(e)}
       />
-
-      <div></div>
     </div>
   );
 }

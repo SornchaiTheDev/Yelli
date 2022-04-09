@@ -12,9 +12,9 @@ function StickerGallery() {
   const { t } = useTranslation();
   const { theme } = useThemeContext();
   return (
-    <div className="px-4">
+    <div className="p-4 border-4 border-gray-300 rounded-lg mt-4">
       <h1
-        className="text-3xl font-bold"
+        className="text-2xl font-bold"
         style={{
           color: theme.text.color,
         }}
