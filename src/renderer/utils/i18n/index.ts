@@ -42,6 +42,8 @@ i18n.use(initReactI18next).init({
           },
           stickers: {
             title: 'Stickers',
+            initial: 'Click or Drag and Drop Sticker here',
+            drop: 'Drop to import',
           },
         },
       },
@@ -84,6 +86,8 @@ i18n.use(initReactI18next).init({
           },
           stickers: {
             title: 'สติกเกอร์',
+            initial: 'คลิก หรือ ลากสติ๊กเกอร์มาวางที่นี่',
+            drop: 'ปล่อยได้เลย',
           },
         },
       },

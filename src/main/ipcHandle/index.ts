@@ -47,6 +47,7 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
     const stickersInDir = fs.readdirSync(dir);
     const stickers = stickersInDir
       .filter((file) => file !== '.DS_Store')
+      .filter((file) => fs.statSync(path.join(dir, file)).isFile())
       .map((file) => path.join(dir, file));
     const stickerSrc = stickers.map((src: string) => {
       const ext = path.extname(src);
