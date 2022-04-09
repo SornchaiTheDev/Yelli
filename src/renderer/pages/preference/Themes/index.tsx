@@ -6,7 +6,7 @@
  */
 import { useTranslation } from 'react-i18next';
 import Store from 'renderer/utils/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useThemeContext } from 'renderer/context/ThemeContext';
 import { Theme } from 'renderer/utils/interface/theme';
@@ -15,7 +15,12 @@ function Themes() {
   const { t } = useTranslation();
   const { theme, setTheme } = useThemeContext();
   const [_theme, _setTheme] = useState<Theme>(theme);
+  const [isThemeChanged, setIsThemeChanged] = useState<boolean>(false);
   const store = new Store();
+
+  useEffect(() => {
+    setIsThemeChanged(JSON.stringify(_theme) !== JSON.stringify(theme));
+  }, [_theme, theme]);
 
   const handleThemeSetting = () => {
     setTheme(_theme);
@@ -70,32 +75,34 @@ function Themes() {
             );
           })}
       </div>
-      <div className="fixed bottom-0 bg-white flex space-x-2 w-full px-4 py-4 border-t-2">
-        <div
-          style={{ backgroundColor: theme.primary.color }}
-          className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"
-          onClick={handleThemeSetting}
-        >
-          <h1
-            className="text-md font-medium"
-            style={{ color: theme.text.color }}
+      {isThemeChanged && (
+        <div className="fixed bottom-0 bg-white flex space-x-2 w-full px-4 py-4 border-t-2">
+          <div
+            style={{ backgroundColor: theme.primary.color }}
+            className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"
+            onClick={handleThemeSetting}
           >
-            Set Theme
-          </h1>
-        </div>
-        <div
-          style={{ backgroundColor: theme.secondary.color }}
-          className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"
-          onClick={revertThemeSetting}
-        >
-          <h1
-            className="text-md font-medium"
-            style={{ color: theme.text.color }}
+            <h1
+              className="text-md font-medium"
+              style={{ color: theme.text.color }}
+            >
+              {t('setting.theme.setTheme')}
+            </h1>
+          </div>
+          <div
+            style={{ backgroundColor: theme.secondary.color }}
+            className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"
+            onClick={revertThemeSetting}
           >
-            Cancel
-          </h1>
+            <h1
+              className="text-md font-medium"
+              style={{ color: theme.text.color }}
+            >
+              {t('setting.theme.revert')}
+            </h1>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
