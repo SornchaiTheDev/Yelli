@@ -158,11 +158,26 @@ app
 
     protocol.registerFileProtocol('sticker', (request, callback) => {
       const sticker = request.url.replace(/sticker:\//, '');
-
-      const stickerPath = path.join(app.getAppPath(), 'stickers', sticker);
+      const StickerPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'assets', 'stickers', sticker)
+        : path.join(__dirname, '../../assets', 'stickers', sticker);
 
       try {
-        return callback(stickerPath);
+        return callback(StickerPath);
+      } catch (err) {
+        return callback('err');
+      }
+    });
+
+    protocol.registerFileProtocol('banner', (request, callback) => {
+      const banner = request.url.replace(/banner:\//, '');
+
+      const BannerPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'assets', 'banner', banner)
+        : path.join(__dirname, '../../assets', 'banner', banner);
+
+      try {
+        return callback(BannerPath);
       } catch (err) {
         return callback('err');
       }

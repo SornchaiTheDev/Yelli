@@ -74,6 +74,10 @@ function PhotoEditor({
         width: containerRef.current.getBoundingClientRect().width,
         height: (containerRef.current.getBoundingClientRect().width * 2) / 3,
       });
+      console.log(containerRef.current.getBoundingClientRect().width);
+      console.log(containerRef.current.getBoundingClientRect().height);
+      console.log('bannerWidth :', containerSize.width);
+      console.log('bannerHeight :', containerSize.width * (101 / 900));
     }
   }, [containerRef.current]);
 
@@ -108,7 +112,8 @@ function PhotoEditor({
           <KonvaImage
             image={banner}
             width={containerSize.width}
-            y={containerSize.height - bannerHeight}
+            height={containerSize.width * (200 / 900)}
+            y={containerSize.height - containerSize.width * (200 / 900)}
           />
           {lines.map(({ points, tool, key }) => (
             <Line

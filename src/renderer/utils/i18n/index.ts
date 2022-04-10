@@ -45,6 +45,11 @@ i18n.use(initReactI18next).init({
             initial: 'Click or Drag and Drop Sticker here',
             drop: 'Drop to import',
           },
+          watermark: {
+            title: 'Watermark',
+            initial: 'Click or Drag and Drop Watermark here',
+            drop: 'Drop to import',
+          },
         },
       },
     },
@@ -87,6 +92,11 @@ i18n.use(initReactI18next).init({
           stickers: {
             title: 'สติกเกอร์',
             initial: 'คลิก หรือ ลากสติ๊กเกอร์มาวางที่นี่',
+            drop: 'ปล่อยได้เลย',
+          },
+          watermark: {
+            title: 'ลายน้ำ',
+            initial: 'คลิก หรือ ลากลายน้ำมาวางที่นี่',
             drop: 'ปล่อยได้เลย',
           },
         },

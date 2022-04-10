@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { BsGear, BsPalette, BsHeart } from 'react-icons/bs';
+import { AiOutlineFileImage } from 'react-icons/ai';
 import General from './General';
 import Themes from './Themes';
 import Stickers from './Stickers';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'renderer/context/ThemeContext';
+import Watermark from './Watermark';
 
 function Preference() {
   const [selected, setSelected] = useState<string>('General');
@@ -13,6 +15,7 @@ function Preference() {
     { name: 'General', icon: <BsGear color={theme.text.color} /> },
     { name: 'Theme', icon: <BsPalette color={theme.text.color} /> },
     { name: 'Sticker', icon: <BsHeart color={theme.text.color} /> },
+    { name: 'Watermark', icon: <AiOutlineFileImage color={theme.text.color} /> },
   ];
 
   const { t } = useTranslation();
@@ -48,6 +51,7 @@ function Preference() {
         {selected === 'General' && <General />}
         {selected === 'Theme' && <Themes />}
         {selected === 'Sticker' && <Stickers />}
+        {selected === 'Watermark' && <Watermark />}
       </div>
     </div>
   );

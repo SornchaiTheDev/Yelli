@@ -1,5 +1,6 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
+import { resolveHtmlPath } from './util';
 let win: BrowserWindow | null;
 const createPreferenceWindow = () => {
   if (!win) {
@@ -12,7 +13,7 @@ const createPreferenceWindow = () => {
         preload: path.join(__dirname, 'preload.js'),
       },
     });
-    win.loadURL(`http://localhost:${1212}/index.html#/preference`);
+    win.loadURL(resolveHtmlPath('index.html#/preference'));
   }
   if (!win.isFocused()) win.show();
   win.on('close', () => {

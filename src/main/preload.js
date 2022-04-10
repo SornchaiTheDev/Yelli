@@ -26,4 +26,9 @@ contextBridge.exposeInMainWorld('electron', {
     get: () => ipcRenderer.invoke('sticker:get'),
     remove: (sticker) => ipcRenderer.invoke('sticker:remove', sticker),
   },
+  banner: {
+    import: (bannerSrc) => ipcRenderer.invoke('banner:import', bannerSrc),
+    get: () => ipcRenderer.invoke('banner:get'),
+    remove: () => ipcRenderer.invoke('banner:remove'),
+  },
 });

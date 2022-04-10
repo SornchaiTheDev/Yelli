@@ -10,6 +10,10 @@ import { PhotoInterface } from 'renderer/utils/interface/index';
 import { initialProcess } from '../initialize';
 import { removeThumbnailListener } from '../thumbnails';
 
+const stickerPath = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets', 'stickers')
+  : path.join(__dirname, '../../../assets', 'stickers');
+
 const ipcHandle = (mainWindow: BrowserWindow) => {
   const store = new Store();
   let photosDir: string =
@@ -31,18 +35,22 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
     return timeButtons(photosDir);
   });
 
-  ipcMain.handle('files:choose', (_e: Event, type: 'dir' | 'file') => {
-    return dialog.showOpenDialog({
-      properties:
-        type === 'dir'
-          ? ['openDirectory', 'createDirectory']
-          : ['openFile', 'multiSelections'],
-    });
-  });
+  ipcMain.handle(
+    'files:choose',
+    (_e: Event, type: 'dir' | 'file-single' | 'file-multiple') => {
+      return dialog.showOpenDialog({
+        properties:
+          type === 'dir'
+            ? ['openDirectory', 'createDirectory']
+            : type === 'file-single'
+            ? ['openFile']
+            : ['openFile', 'multiSelections'],
+        filters: [{ name: 'Images', extensions: ['png', 'jpg', 'JPG'] }],
+      });
+    }
+  );
 
   ipcMain.handle('sticker:importDir', (_e: Event, dir: string) => {
-    const appPath = app.getAppPath();
-    const stickerPath = path.join(appPath, 'stickers');
     if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
     const stickersInDir = fs.readdirSync(dir);
     const stickers = stickersInDir
@@ -60,8 +68,6 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('sticker:import', (_e: Event, stickers: string[]) => {
-    const appPath = app.getAppPath();
-    const stickerPath = path.join(appPath, 'stickers');
     if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
     const stickerSrc = stickers.map((src: string) => {
       const ext = path.extname(src);
@@ -74,15 +80,11 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('sticker:remove', (_e: Event, sticker: string) => {
-    const appPath = app.getAppPath();
-    const stickerPath = path.join(appPath, 'stickers');
     const stickerName = sticker.split('://')[1];
     fs.unlinkSync(path.join(stickerPath, stickerName));
   });
 
   ipcMain.handle('sticker:get', () => {
-    const appPath = app.getAppPath();
-    const stickerPath = path.join(appPath, 'stickers');
     if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
     const stickers = fs
       .readdirSync(stickerPath)
@@ -113,6 +115,33 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
   ipcMain.handle('setting:get', (_e: Event, key: string) => {
     const store = new Store();
     return store.get(key);
+  });
+
+  const bannerPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets', 'banner')
+    : path.join(__dirname, '../../../assets', 'banner');
+
+  ipcMain.handle('banner:import', (_e: Event, bannerSrc: string) => {
+    if (!fs.existsSync(bannerPath)) mkdirSync(bannerPath);
+    const sizeOf = require('image-size');
+    const _bannerSrc = path.join(bannerPath, 'banner.png');
+
+    fs.copyFileSync(bannerSrc, path.join(bannerPath, 'banner.png'));
+
+    return { src: 'banner://banner.png', size: sizeOf(_bannerSrc) };
+  });
+
+  ipcMain.handle('banner:get', () => {
+    const sizeOf = require('image-size');
+    const bannerSrc = path.join(bannerPath, 'banner.png');
+    if (fs.existsSync(bannerSrc)) {
+      return { src: 'banner://banner.png', size: sizeOf(bannerSrc) };
+    }
+    return 'no-banner';
+  });
+
+  ipcMain.handle('banner:remove', () => {
+    fs.unlinkSync(path.join(bannerPath, 'banner.png'));
   });
 
   ipcMain.handle('printing', (_e: Event, file: string) => {
