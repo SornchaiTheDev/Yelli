@@ -24,6 +24,7 @@ i18n.use(initReactI18next).init({
         },
         setting: {
           title: 'Settings',
+          not_supported: 'Does not support this file type',
           general: {
             title: 'General',
             photosDir: 'Photo directory',
@@ -73,6 +74,7 @@ i18n.use(initReactI18next).init({
         },
         setting: {
           title: 'ตั้งค่า',
+          not_supported: 'ไม่รองรับไฟล์ประเภทนี้',
           general: {
             title: 'ทั่วไป',
             photosDir: 'โฟลเดอร์รูป',

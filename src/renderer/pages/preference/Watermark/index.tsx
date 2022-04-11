@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GrFormClose } from 'react-icons/gr';
-import FileDrop from './components/FileDrop';
+import FileDrop from '../components/FileDrop';
 import PhotoFrame from './components/PhotoFrame';
 
 interface Banner {
@@ -17,7 +17,6 @@ function Banner() {
   const { t } = useTranslation();
   const onImport = () => {
     window.electron.banner.get().then((banner: any) => {
-      console.log(banner);
       setBanner(banner);
     });
   };
@@ -40,7 +39,7 @@ function Banner() {
         {t('setting.watermark.title')}
       </h1>
       <div className="flex flex-col justify-center items-center">
-        <FileDrop onImport={onImport} />
+        <FileDrop drop="watermark" fileType="file-single" onImport={onImport} />
         <div className="mt-4 w-2/3 relative">
           <PhotoFrame src={banner.src} size={banner.size} />
           {banner.src !== '' && (

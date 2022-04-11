@@ -53,32 +53,28 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
     }
   );
 
-  ipcMain.handle('sticker:importDir', (_e: Event, dir: string) => {
+  ipcMain.handle('sticker:import', (_e: Event, stickers: string[] | string) => {
     if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
-    const stickersInDir = fs.readdirSync(dir);
-    const stickers = stickersInDir
-      .filter((file) => file !== '.DS_Store')
-      .filter((file) => fs.statSync(path.join(dir, file)).isFile())
-      .map((file) => path.join(dir, file));
-    const stickerSrc = stickers.map((src: string) => {
-      const ext = path.extname(src);
-      const name =
-        crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
-      fs.copyFileSync(src, path.join(stickerPath, name));
-      return { src: `sticker://${name}` };
-    });
-    return stickerSrc;
-  });
+    let allStickers: string[] = [];
 
-  ipcMain.handle('sticker:import', (_e: Event, stickers: string[]) => {
-    if (!fs.existsSync(stickerPath)) mkdirSync(stickerPath);
-    const stickerSrc = stickers.map((src: string) => {
-      const ext = path.extname(src);
-      const name =
-        crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
-      fs.copyFileSync(src, path.join(stickerPath, name));
-      return { src: `sticker://${name}` };
-    });
+    if (typeof stickers === 'string') {
+      allStickers = fs
+        .readdirSync(stickers)
+        .map((src) => path.join(stickers, src));
+    } else {
+      allStickers = stickers as string[];
+    }
+
+    const stickerSrc = allStickers
+      .filter((file) => path.basename(file) !== '.DS_Store')
+      .filter((file) => fs.statSync(file).isFile())
+      .map((src: string) => {
+        const ext = path.extname(src);
+        const name =
+          crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
+        fs.copyFileSync(src, path.join(stickerPath, name));
+        return `sticker://${name}` as string;
+      });
     return stickerSrc;
   });
 
@@ -92,9 +88,7 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
     const stickers = fs
       .readdirSync(stickerPath)
       .filter((file) => file !== '.DS_Store')
-      .map((file) => ({
-        src: `sticker://${file}`,
-      }));
+      .map((file) => `sticker://${file}`);
     return stickers;
   });
 
