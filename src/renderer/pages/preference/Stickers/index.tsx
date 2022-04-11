@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import FileDrop from '../components/FileDrop';
-
 import Sticker from './components/Sticker';
+
 
 function Stickers() {
   const { t } = useTranslation();

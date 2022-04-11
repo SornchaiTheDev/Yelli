@@ -1,17 +1,14 @@
 import { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import useWindow from 'renderer/hooks/useWindow';
-
-interface Banner {
-  src: string;
-  size: { width: number; type: string; height: number };
-}
+import { Banner } from '../interface/';
 
 function PhotoFrame({ src, size }: Banner) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { width } = useWindow();
 
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
   /* create img element for KonvaImage */
   const handleImage = (path: string) => {
     const img = new Image();

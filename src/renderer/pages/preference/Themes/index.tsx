@@ -1,13 +1,6 @@
-/**
- *
- * todos
- * - [ ] customize theme colors
- *
- */
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Store from 'renderer/utils/store';
-import { useEffect, useState } from 'react';
-
 import { useThemeContext } from 'renderer/context/ThemeContext';
 import { Theme } from 'renderer/utils/interface/theme';
 

@@ -9,6 +9,7 @@ import { useThemeContext } from 'renderer/context/ThemeContext';
 import Watermark from './Watermark';
 
 function Preference() {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<string>('General');
   const { theme } = useThemeContext();
   const menu = [
@@ -21,7 +22,6 @@ function Preference() {
     },
   ];
 
-  const { t } = useTranslation();
   return (
     <div
       className="grid grid-cols-5 h-screen w-full"
