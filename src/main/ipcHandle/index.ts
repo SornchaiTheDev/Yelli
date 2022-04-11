@@ -123,25 +123,38 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
 
   ipcMain.handle('banner:import', (_e: Event, bannerSrc: string) => {
     if (!fs.existsSync(bannerPath)) mkdirSync(bannerPath);
-    const sizeOf = require('image-size');
-    const _bannerSrc = path.join(bannerPath, 'banner.png');
-
-    fs.copyFileSync(bannerSrc, path.join(bannerPath, 'banner.png'));
-
-    return { src: 'banner://banner.png', size: sizeOf(_bannerSrc) };
+    fs.readdirSync(bannerPath).map((file) =>
+      fs.unlinkSync(path.join(bannerPath, file))
+    );
+    const ext = path.extname(bannerSrc);
+    const name =
+      crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
+    fs.copyFileSync(bannerSrc, path.join(bannerPath, name));
   });
 
   ipcMain.handle('banner:get', () => {
     const sizeOf = require('image-size');
-    const bannerSrc = path.join(bannerPath, 'banner.png');
-    if (fs.existsSync(bannerSrc)) {
-      return { src: 'banner://banner.png', size: sizeOf(bannerSrc) };
+    if (
+      fs.existsSync(bannerPath) &&
+      fs.readdirSync(bannerPath).filter((file) => file !== '.DS_Store').length >
+        0
+    ) {
+      const bannerSrc = fs
+        .readdirSync(bannerPath)
+        .filter((file) => file !== '.DS_Store')[0];
+      const name = path.basename(bannerSrc);
+
+      return {
+        src: `banner://${name}`,
+        size: sizeOf(path.join(bannerPath, bannerSrc)),
+      };
     }
     return 'no-banner';
   });
 
-  ipcMain.handle('banner:remove', () => {
-    fs.unlinkSync(path.join(bannerPath, 'banner.png'));
+  ipcMain.handle('banner:remove', (_e: Event, bannerSrc: string) => {
+    const bannerName = bannerSrc.split('://')[1];
+    fs.unlinkSync(path.join(bannerPath, bannerName));
   });
 
   ipcMain.handle('printing', (_e: Event, file: string) => {
@@ -160,13 +173,15 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
   });
 
   ipcMain.handle('uploading', (_e: Event, photo: PhotoInterface) => {
-    const photosDir: string = path.join(app.getPath('documents'), 'photos');
     const photoName = crypto
       .randomBytes(6)
       .toString('base64')
       .replace(/\//g, '-');
     const ext = photo.src.slice(-4);
-    const filePath = path.join(photosDir, 'print', photoName + ext);
+    const uploadPath = app.isPackaged
+      ? path.join(process.resourcesPath, 'assets', 'upload')
+      : path.join(__dirname, '../../../assets', 'upload');
+    const filePath = path.join(uploadPath, photoName + ext);
 
     fs.writeFileSync(
       filePath,

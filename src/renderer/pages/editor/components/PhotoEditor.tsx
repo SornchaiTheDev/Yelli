@@ -7,12 +7,9 @@ import {
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import handleEvent from '../utils/handleEvent';
-import bannerPath from '../../../../../public/banner.png';
+import _bannerPath from '../../../../../public/banner.png';
 
-function PhotoEditor({
-  src,
-  bannerHeight,
-}: SelectedPhotoInterface): JSX.Element {
+function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
     lines,
@@ -32,7 +29,9 @@ function PhotoEditor({
 
   /* Add Image to canvas */
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
-  const [banner, setBanner] = useState<HTMLImageElement | undefined>(undefined);
+  const [_banner, _setBanner] = useState<HTMLImageElement | undefined>(
+    undefined
+  );
   const { isPrinting } = useEditorContext();
 
   /* Container Size use to set Stage and KonvaImage size */
@@ -49,10 +48,9 @@ function PhotoEditor({
   /* set Stage size to image size */
   useEffect(() => {
     setImage(handleImage(src));
-    setBanner(handleImage(bannerPath));
-    // setBannerOffset(bannerInit.height);
+    _setBanner(handleImage(banner.src));
     setStickers([]);
-  }, [src]);
+  }, [src,banner]);
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
@@ -76,8 +74,6 @@ function PhotoEditor({
       });
       console.log(containerRef.current.getBoundingClientRect().width);
       console.log(containerRef.current.getBoundingClientRect().height);
-      console.log('bannerWidth :', containerSize.width);
-      console.log('bannerHeight :', containerSize.width * (101 / 900));
     }
   }, [containerRef.current]);
 
@@ -110,10 +106,15 @@ function PhotoEditor({
             height={containerSize.height}
           />
           <KonvaImage
-            image={banner}
+            image={_banner}
             width={containerSize.width}
-            height={containerSize.width * (200 / 900)}
-            y={containerSize.height - containerSize.width * (200 / 900)}
+            height={
+              containerSize.width * (banner.size.height / banner.size.width)
+            }
+            y={
+              containerSize.height -
+              containerSize.width * (banner.size.height / banner.size.width)
+            }
           />
           {lines.map(({ points, tool, key }) => (
             <Line

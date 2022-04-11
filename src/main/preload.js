@@ -29,6 +29,6 @@ contextBridge.exposeInMainWorld('electron', {
   banner: {
     import: (bannerSrc) => ipcRenderer.invoke('banner:import', bannerSrc),
     get: () => ipcRenderer.invoke('banner:get'),
-    remove: () => ipcRenderer.invoke('banner:remove'),
+    remove: (bannerSrc) => ipcRenderer.invoke('banner:remove', bannerSrc),
   },
 });

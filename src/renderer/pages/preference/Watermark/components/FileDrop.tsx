@@ -6,15 +6,13 @@ interface Banner {
   size: { width: number; type: string; height: number };
 }
 
-function FileDrop({ onImport }: { onImport: (banner: Banner) => void }) {
+function FileDrop({ onImport }: { onImport: () => void }) {
   const [status, setStatus] = useState<string>('setting.watermark.initial');
   const { t } = useTranslation();
 
   const handleSelected = ({ filePaths }: { filePaths: string[] }) => {
-    if (filePaths) {
-      window.electron.banner
-        .import(filePaths[0])
-        .then((banner: any) => onImport(banner));
+    if (filePaths.length > 0) {
+      window.electron.banner.import(filePaths[0]).then(() => onImport());
     }
   };
   const handleOnDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -23,9 +21,7 @@ function FileDrop({ onImport }: { onImport: (banner: Banner) => void }) {
     const isImage = /image\//g.test(e.dataTransfer.files[0].type);
 
     if (isImage)
-      window.electron.banner
-        .import(filePaths)
-        .then((banner: any) => onImport(banner));
+      window.electron.banner.import(filePaths).then(() => onImport());
     setStatus('setting.watermark.initial');
   };
   return (

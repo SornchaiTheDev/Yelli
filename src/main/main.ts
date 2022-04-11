@@ -17,6 +17,7 @@ import { resolveHtmlPath } from './util';
 import ipcHandle from './ipcHandle';
 import Store from 'electron-store';
 import { initialProcess } from './initialize';
+import fs from 'fs';
 
 export default class AppUpdater {
   constructor() {

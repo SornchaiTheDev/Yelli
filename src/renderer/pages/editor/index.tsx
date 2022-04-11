@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PhotoEditor from './components/PhotoEditor';
 import Button from 'renderer/components/Button';
 import { useEditorContext } from 'renderer/context';
@@ -7,16 +7,32 @@ import { useNavigate } from 'react-router-dom';
 import DrawGallery from './components/Gallery/DrawGallery';
 import StickerGallery from './components/Gallery/StickerGallery';
 import { useTranslation } from 'react-i18next';
-
+interface Banner {
+  src: string;
+  size: { width: number; type: string; height: number };
+}
 function Content() {
   const { selectedPhoto, handlePrint } = useEditorContext();
   const { theme } = useThemeContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [banner, setBanner] = useState<Banner>({
+    src: '',
+    size: { width: 0, height: 0, type: 'null' },
+  });
 
   useEffect(() => {
     if (selectedPhoto === null) navigate('/explorer');
   }, [selectedPhoto]);
+
+  useEffect(() => {
+    window.electron.banner
+      .get()
+      .then(
+        (banner: Banner | 'no-banner') =>
+          banner !== 'no-banner' && setBanner(banner)
+      );
+  }, []);
 
   return (
     <div
@@ -49,7 +65,7 @@ function Content() {
         <div className="col-span-8 self-center">
           {/* Photo Editor */}
           {selectedPhoto && (
-            <PhotoEditor src={selectedPhoto!.src} bannerHeight={101} />
+            <PhotoEditor src={selectedPhoto!.src} banner={banner} />
           )}
         </div>
       </div>

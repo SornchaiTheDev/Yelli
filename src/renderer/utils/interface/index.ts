@@ -13,9 +13,14 @@ export interface StickerProperties {
   rotation: number;
 }
 
+interface Banner {
+  src: string;
+  size: { width: number; type: string; height: number };
+}
+
 export interface SelectedPhotoInterface {
   src: string;
-  bannerHeight: number;
+  banner: Banner;
   onFinishDecorate?: onFinishDecorateInterface;
 }
 
