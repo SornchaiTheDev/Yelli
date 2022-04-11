@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Store from 'renderer/utils/store';
 import { useThemeContext } from 'renderer/context/ThemeContext';
 import { Theme } from 'renderer/utils/interface/theme';
+import SaveBtn from './components/SaveBtn';
 
 function Themes() {
   const { t } = useTranslation();
@@ -51,7 +52,6 @@ function Themes() {
                       }))
                     }
                   />
-
                   <input
                     type="color"
                     onChange={(e) =>
@@ -68,34 +68,12 @@ function Themes() {
             );
           })}
       </div>
-      {isThemeChanged && (
-        <div className="fixed bottom-0 bg-white flex space-x-2 w-full px-4 py-4 border-t-2">
-          <div
-            style={{ backgroundColor: theme.primary.color }}
-            className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"
-            onClick={handleThemeSetting}
-          >
-            <h1
-              className="text-md font-medium"
-              style={{ color: theme.text.color }}
-            >
-              {t('setting.theme.setTheme')}
-            </h1>
-          </div>
-          <div
-            style={{ backgroundColor: theme.secondary.color }}
-            className="rounded-lg flex justify-center px-4 py-2 cursor-pointer"
-            onClick={revertThemeSetting}
-          >
-            <h1
-              className="text-md font-medium"
-              style={{ color: theme.text.color }}
-            >
-              {t('setting.theme.revert')}
-            </h1>
-          </div>
-        </div>
-      )}
+      <SaveBtn
+        show={isThemeChanged}
+        theme={theme}
+        handleThemeSetting={handleThemeSetting}
+        revertThemeSetting={revertThemeSetting}
+      />
     </>
   );
 }
