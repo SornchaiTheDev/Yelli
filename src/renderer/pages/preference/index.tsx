@@ -10,8 +10,8 @@ import Watermark from './Watermark';
 
 function Preference() {
   const { t } = useTranslation();
-  const [selected, setSelected] = useState<string>('General');
   const { theme } = useThemeContext();
+  const [selected, setSelected] = useState<string>('General');
   const menu = [
     { name: 'General', icon: <BsGear color={theme.text.color} /> },
     { name: 'Theme', icon: <BsPalette color={theme.text.color} /> },

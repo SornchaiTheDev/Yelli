@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import Store from 'renderer/utils/store';
 
 function Language() {
-  const [language, setLanguage] = useState<string>('en');
   const { t, i18n } = useTranslation();
   const store = new Store();
+  const [language, setLanguage] = useState<string>('en');
 
   const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const lang: string = e.target.value;

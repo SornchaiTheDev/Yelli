@@ -6,11 +6,11 @@ import PhotoFrame from './components/PhotoFrame';
 import { Banner } from './interface/';
 
 function Banner() {
+  const { t } = useTranslation();
   const [banner, setBanner] = useState<Banner>({
     src: '',
     size: { width: 0, height: 0, type: 'null' },
   });
-  const { t } = useTranslation();
   const onImport = () => {
     window.electron.banner.get().then((banner: any) => {
       setBanner(banner);

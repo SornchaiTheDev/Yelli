@@ -10,9 +10,9 @@ function FileDrop({
   drop: 'stickers' | 'watermark';
   fileType: 'file-single' | 'file-multiple';
 }) {
-  const [status, setStatus] = useState<string>(`setting.${drop}.initial`);
-
   const { t } = useTranslation();
+
+  const [status, setStatus] = useState<string>(`setting.${drop}.initial`);
 
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
