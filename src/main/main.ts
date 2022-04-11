@@ -104,8 +104,8 @@ ipcMain.handle('initialize', () => {
 app
   .whenReady()
   .then(async () => {
-    protocolInitial();
     await createWindow();
+    protocolInitial();
     ipcHandle(mainWindow!);
     // const store = new Store();
     // store.clear();

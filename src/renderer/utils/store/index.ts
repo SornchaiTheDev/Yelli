@@ -1,4 +1,5 @@
 class Store {
+  constructor() {}
   get(key: string): Promise<any | undefined> {
     const resolve = window.electron.setting.get(key);
     return resolve;

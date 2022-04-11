@@ -1,9 +1,4 @@
-import {
-  MemoryRouter as Router,
-  Route,
-  Routes,
-  HashRouter,
-} from 'react-router-dom';
+import { Route, Routes, HashRouter } from 'react-router-dom';
 import './App.css';
 
 import Initialize from './pages/initialize';
