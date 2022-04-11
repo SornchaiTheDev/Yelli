@@ -22,10 +22,12 @@ function Banner() {
       <h1 className="text-2xl font-semibold mb-4 ">
         {t('setting.watermark.title')}
       </h1>
-
-      <FileDrop onImport={onImport} />
-      <div className="mt-4"></div>
-      <PhotoFrame src={banner.src} size={banner.size} />
+      <div className="flex flex-col justify-center items-center">
+        <FileDrop onImport={onImport} />
+        <div className="mt-4 w-2/3">
+          <PhotoFrame src={banner.src} size={banner.size} />
+        </div>
+      </div>
     </div>
   );
 }
