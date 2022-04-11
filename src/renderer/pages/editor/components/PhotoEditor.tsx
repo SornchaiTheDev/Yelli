@@ -9,7 +9,7 @@ import { useEditorContext } from '../../../context';
 import useWindow from 'renderer/hooks/useWindow';
 import handleEvent from '../utils/handleEvent';
 
-function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
+function PhotoEditor({ src, watermark }: SelectedPhotoInterface): JSX.Element {
   const {
     selectSticker,
     lines,
@@ -29,7 +29,7 @@ function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
 
   /* Add Image to canvas */
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
-  const [_banner, _setBanner] = useState<HTMLImageElement | undefined>(
+  const [_watermark, _setWatermark] = useState<HTMLImageElement | undefined>(
     undefined
   );
   const { isPrinting } = useEditorContext();
@@ -49,9 +49,9 @@ function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
   /* set Stage size to image size */
   useEffect(() => {
     setImage(handleImage(src));
-    _setBanner(handleImage(banner.src));
+    _setWatermark(handleImage(watermark.src));
     setStickers([]);
-  }, [src, banner]);
+  }, [src, watermark]);
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
@@ -105,14 +105,16 @@ function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
             height={containerSize.height}
           />
           <KonvaImage
-            image={_banner}
+            image={_watermark}
             width={containerSize.width}
             height={
-              containerSize.width * (banner.size.height / banner.size.width)
+              containerSize.width *
+              (watermark.size.height / watermark.size.width)
             }
             y={
               containerSize.height -
-              containerSize.width * (banner.size.height / banner.size.width)
+              containerSize.width *
+                (watermark.size.height / watermark.size.width)
             }
           />
           {lines.map(({ points, tool, key }) => (

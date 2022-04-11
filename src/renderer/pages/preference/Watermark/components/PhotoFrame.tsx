@@ -1,9 +1,9 @@
 import { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import useWindow from 'renderer/hooks/useWindow';
-import { Banner } from '../interface/';
+import { watermarkInterface } from '../interface/';
 
-function PhotoFrame({ src, size }: Banner) {
+function PhotoFrame({ src, size }: watermarkInterface) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const { width } = useWindow();
 

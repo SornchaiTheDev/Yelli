@@ -1,3 +1,4 @@
+import { watermarkInterface } from 'renderer/pages/preference/Watermark/interface';
 import { Theme } from 'renderer/utils/interface/theme';
 
 declare global {
@@ -13,14 +14,9 @@ export interface StickerProperties {
   rotation: number;
 }
 
-interface Banner {
-  src: string;
-  size: { width: number; type: string; height: number };
-}
-
 export interface SelectedPhotoInterface {
   src: string;
-  banner: Banner;
+  watermark: watermarkInterface;
   onFinishDecorate?: onFinishDecorateInterface;
 }
 

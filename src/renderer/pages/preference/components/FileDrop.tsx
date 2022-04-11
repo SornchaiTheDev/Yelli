@@ -33,9 +33,19 @@ function FileDrop({
     return setStatus(`setting.${drop}.drop`);
   };
 
-  const handleSelected = ({ filePaths }: { filePaths: string[] }) => {
-    if (filePaths.length > 0) {
-      window.electron.banner.import(filePaths[0]).then(() => onImport());
+  const handleSelected = ({
+    filePaths,
+    canceled,
+  }: Electron.OpenDialogReturnValue) => {
+    if (!canceled) {
+      if (drop === 'watermark') {
+        window.electron.watermark.import(filePaths[0]).then(() => onImport());
+      }
+      if (drop === 'stickers') {
+        window.electron.stickers
+          .import(filePaths)
+          .then((res: string[]) => onImport(res));
+      }
     }
   };
   const handleOnDrop = (e: DragEvent<HTMLDivElement>) => {
@@ -54,7 +64,7 @@ function FileDrop({
     if (isSupport) {
       if (drop === 'watermark') {
         const filePaths = e.dataTransfer.files[0].path;
-        window.electron.banner.import(filePaths).then(() => onImport());
+        window.electron.watermark.import(filePaths).then(() => onImport());
       }
 
       if (drop === 'stickers') {

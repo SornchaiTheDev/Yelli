@@ -7,16 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import Draw from './components/LeftMenu/Draw';
 import Sticker from './components/LeftMenu/Sticker';
 import { useTranslation } from 'react-i18next';
-interface Banner {
-  src: string;
-  size: { width: number; type: string; height: number };
-}
+import { watermarkInterface } from '../preference/Watermark/interface';
+
 function Content() {
   const { selectedPhoto, handlePrint } = useEditorContext();
   const { theme } = useThemeContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [banner, setBanner] = useState<Banner>({
+  const [watermark, setWatermark] = useState<watermarkInterface>({
     src: '',
     size: { width: 0, height: 0, type: 'null' },
   });
@@ -26,11 +24,11 @@ function Content() {
   }, [selectedPhoto]);
 
   useEffect(() => {
-    window.electron.banner
+    window.electron.watermark
       .get()
       .then(
-        (banner: Banner | 'no-banner') =>
-          banner !== 'no-banner' && setBanner(banner)
+        (watermark: watermarkInterface | 'no-watermark') =>
+          watermark !== 'no-watermark' && setWatermark(watermark)
       );
   }, []);
 
@@ -65,7 +63,7 @@ function Content() {
         <div className="col-span-8 self-center">
           {/* Photo Editor */}
           {selectedPhoto && (
-            <PhotoEditor src={selectedPhoto!.src} banner={banner} />
+            <PhotoEditor src={selectedPhoto!.src} watermark={watermark} />
           )}
         </div>
       </div>

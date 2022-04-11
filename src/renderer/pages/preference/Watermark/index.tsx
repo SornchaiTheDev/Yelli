@@ -3,29 +3,29 @@ import { useTranslation } from 'react-i18next';
 import { GrFormClose } from 'react-icons/gr';
 import FileDrop from '../components/FileDrop';
 import PhotoFrame from './components/PhotoFrame';
-import { Banner } from './interface/';
+import { watermarkInterface } from './interface/';
 
-function Banner() {
+function watermark() {
   const { t } = useTranslation();
-  const [banner, setBanner] = useState<Banner>({
+  const [watermark, setWatermark] = useState<watermarkInterface>({
     src: '',
     size: { width: 0, height: 0, type: 'null' },
   });
   const onImport = () => {
-    window.electron.banner.get().then((banner: any) => {
-      setBanner(banner);
+    window.electron.watermark.get().then((watermark: any) => {
+      setWatermark(watermark);
     });
   };
   const onRemove = () => {
-    window.electron.banner.remove(banner.src).then(() => {
-      setBanner({ src: '', size: { width: 0, height: 0, type: 'null' } });
+    window.electron.watermark.remove(watermark.src).then(() => {
+      setWatermark({ src: '', size: { width: 0, height: 0, type: 'null' } });
     });
   };
 
   useEffect(() => {
-    window.electron.banner.get().then((banner: any) => {
-      if (banner === 'no-banner') return;
-      setBanner(banner);
+    window.electron.watermark.get().then((watermark: any) => {
+      if (watermark === 'no-watermark') return;
+      setWatermark(watermark);
     });
   }, []);
 
@@ -37,8 +37,8 @@ function Banner() {
       <div className="flex flex-col justify-center items-center">
         <FileDrop drop="watermark" fileType="file-single" onImport={onImport} />
         <div className="mt-4 w-2/3 relative">
-          <PhotoFrame src={banner.src} size={banner.size} />
-          {banner.src !== '' && (
+          <PhotoFrame src={watermark.src} size={watermark.size} />
+          {watermark.src !== '' && (
             <div
               className="absolute w-6 h-6 bg-red-500 -right-2 -top-2 rounded-full flex justify-center items-center"
               onClick={() => onRemove()}
@@ -52,4 +52,4 @@ function Banner() {
   );
 }
 
-export default Banner;
+export default watermark;
