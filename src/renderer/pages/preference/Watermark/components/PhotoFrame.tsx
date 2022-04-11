@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { Stage, Layer, Image as KonvaImage } from 'react-konva';
+import useWindow from 'renderer/hooks/useWindow';
 
 interface Banner {
   src: string;
@@ -8,6 +9,7 @@ interface Banner {
 
 function PhotoFrame({ src, size }: Banner) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const { width } = useWindow();
 
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   /* create img element for KonvaImage */
@@ -20,15 +22,15 @@ function PhotoFrame({ src, size }: Banner) {
 
   useEffect(() => {
     if (containerRef.current !== null) {
-      const { width, height } = containerRef.current?.getBoundingClientRect();
-      setContainerSize({ width, height });
+      const { width } = containerRef.current?.getBoundingClientRect();
+      setContainerSize({ width, height: (width * 2) / 3 });
     }
-  }, [containerRef.current]);
+  }, [containerRef.current, width]);
 
   return (
     <div
       className="w-full shadow-lg rounded-lg overflow-hidden"
-      style={{ height: (containerSize.width * 2) / 3 }}
+      style={{ height: containerSize.height }}
       ref={containerRef}
     >
       <Stage

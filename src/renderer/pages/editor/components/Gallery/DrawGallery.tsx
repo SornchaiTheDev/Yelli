@@ -5,7 +5,7 @@ import { ColorPicker, useColor } from 'react-color-palette';
 import 'react-color-palette/lib/css/styles.css';
 import BrushTrickness from './components/BrushTrickness';
 import { BiUndo, BiRedo } from 'react-icons/bi';
-import usewindow from 'renderer/hooks/usewindow';
+import useWindow from 'renderer/hooks/useWindow';
 import { useTranslation } from 'react-i18next';
 
 function DrawGallery() {
@@ -14,7 +14,7 @@ function DrawGallery() {
   const [type, setType] = useState<'pen' | 'erasor'>('pen');
   const { setSelectedTool, handleUndo, handleRedo, canUndo, canRedo } =
     useEditorContext();
-  const { width } = usewindow();
+  const { width } = useWindow();
   const { theme } = useThemeContext();
 
   const { t } = useTranslation();

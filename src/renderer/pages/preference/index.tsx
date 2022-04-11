@@ -15,7 +15,10 @@ function Preference() {
     { name: 'General', icon: <BsGear color={theme.text.color} /> },
     { name: 'Theme', icon: <BsPalette color={theme.text.color} /> },
     { name: 'Sticker', icon: <BsHeart color={theme.text.color} /> },
-    { name: 'Watermark', icon: <AiOutlineFileImage color={theme.text.color} /> },
+    {
+      name: 'Watermark',
+      icon: <AiOutlineFileImage color={theme.text.color} />,
+    },
   ];
 
   const { t } = useTranslation();

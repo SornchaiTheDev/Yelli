@@ -37,7 +37,10 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
 
   ipcMain.handle(
     'files:choose',
-    (_e: Event, type: 'dir' | 'file-single' | 'file-multiple') => {
+    (
+      _e: Event,
+      type: 'dir' | 'file-single' | 'file-multiple'
+    ): Promise<Electron.OpenDialogReturnValue> => {
       return dialog.showOpenDialog({
         properties:
           type === 'dir'

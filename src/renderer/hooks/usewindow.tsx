@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-function usewindow() {
+function useWindow() {
   const [size, setSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -15,4 +15,4 @@ function usewindow() {
   return { width: size.width, height: size.height };
 }
 
-export default usewindow;
+export default useWindow;

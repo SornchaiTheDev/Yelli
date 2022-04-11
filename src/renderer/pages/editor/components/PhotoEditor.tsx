@@ -6,6 +6,7 @@ import {
 } from 'renderer/utils/interface';
 import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
+import useWindow from 'renderer/hooks/useWindow';
 import handleEvent from '../utils/handleEvent';
 import _bannerPath from '../../../../../public/banner.png';
 
@@ -37,6 +38,7 @@ function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
   /* Container Size use to set Stage and KonvaImage size */
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const { width } = useWindow();
 
   /* create img element for KonvaImage */
   const handleImage = (path: string) => {
@@ -50,7 +52,7 @@ function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
     setImage(handleImage(src));
     _setBanner(handleImage(banner.src));
     setStickers([]);
-  }, [src,banner]);
+  }, [src, banner]);
 
   /* save sticker properties */
   const handleTransfromEnd: onTransfromEnd = ({ stickerIndex, properties }) => {
@@ -72,10 +74,8 @@ function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
         width: containerRef.current.getBoundingClientRect().width,
         height: (containerRef.current.getBoundingClientRect().width * 2) / 3,
       });
-      console.log(containerRef.current.getBoundingClientRect().width);
-      console.log(containerRef.current.getBoundingClientRect().height);
     }
-  }, [containerRef.current]);
+  }, [containerRef.current, width]);
 
   return (
     <div

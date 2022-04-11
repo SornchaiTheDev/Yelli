@@ -26,7 +26,7 @@ function FileDrop({ onImport }: { onImport: () => void }) {
   };
   return (
     <div
-      className="w-full h-36 border-2 border-dashed rounded-lg flex justify-center items-center"
+      className="w-full h-36 border-2 border-dashed rounded-lg flex justify-center items-center cursor-pointer"
       onDragOver={(e) => {
         e.preventDefault();
         setStatus('setting.watermark.drop');
