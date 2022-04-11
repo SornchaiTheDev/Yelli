@@ -184,6 +184,20 @@ app
       }
     });
 
+    protocol.registerFileProtocol('assets', (request, callback) => {
+      const asset = request.url.replace(/assets:\//, '');
+
+      const BannerPath = app.isPackaged
+        ? path.join(process.resourcesPath, 'assets', asset)
+        : path.join(__dirname, '../../assets', asset);
+
+      try {
+        return callback(BannerPath);
+      } catch (err) {
+        return callback('err');
+      }
+    });
+
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.

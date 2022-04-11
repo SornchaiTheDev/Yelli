@@ -4,8 +4,8 @@ import Button from 'renderer/components/Button';
 import { useEditorContext } from 'renderer/context';
 import { useThemeContext } from 'renderer/context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
-import DrawGallery from './components/Gallery/DrawGallery';
-import StickerGallery from './components/Gallery/StickerGallery';
+import Draw from './components/LeftMenu/Draw';
+import Sticker from './components/LeftMenu/Sticker';
 import { useTranslation } from 'react-i18next';
 interface Banner {
   src: string;
@@ -56,8 +56,8 @@ function Content() {
         <div className="col-span-2 flex flex-col w-full rounded-lg shadow-xl bg-white">
           <div className="flex-1 my-6   overflow-scroll px-6">
             <div className="h-2">
-              <DrawGallery />
-              <StickerGallery />
+              <Draw />
+              <Sticker />
             </div>
           </div>
         </div>

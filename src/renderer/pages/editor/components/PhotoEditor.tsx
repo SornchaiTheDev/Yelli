@@ -8,7 +8,6 @@ import Sticker from './Sticker';
 import { useEditorContext } from '../../../context';
 import useWindow from 'renderer/hooks/useWindow';
 import handleEvent from '../utils/handleEvent';
-import _bannerPath from '../../../../../public/banner.png';
 
 function PhotoEditor({ src, banner }: SelectedPhotoInterface): JSX.Element {
   const {

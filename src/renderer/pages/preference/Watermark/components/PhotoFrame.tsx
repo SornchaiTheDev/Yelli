@@ -37,7 +37,7 @@ function PhotoFrame({ src, size }: Banner) {
       >
         <Layer>
           <KonvaImage
-            image={handleImage('photos://src/IMG_0006.JPG')}
+            image={handleImage('assets://placeholder.png')}
             width={containerSize.width}
             height={containerSize.height}
           />

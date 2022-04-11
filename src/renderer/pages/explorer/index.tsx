@@ -12,7 +12,7 @@ interface Ctime {
   last_ctime: number;
 }
 
-const Index = (): JSX.Element => {
+const Explorer = (): JSX.Element => {
   const { setSelectedPhoto } = useEditorContext();
   const { theme } = useThemeContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
@@ -144,4 +144,4 @@ const Index = (): JSX.Element => {
   );
 };
 
-export default Index;
+export default Explorer;
