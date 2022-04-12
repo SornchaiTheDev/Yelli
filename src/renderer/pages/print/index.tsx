@@ -31,7 +31,7 @@ function Print() {
 
   const onPrint = () => {
     window.electron.print(photo?.path);
-    navigate('/');
+    navigate('/explorer');
   };
 
   return (

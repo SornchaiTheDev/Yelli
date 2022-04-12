@@ -38,7 +38,9 @@ function Content() {
       style={{ backgroundColor: theme.background.color }}
     >
       <div className="w-full pl-6 py-2 flex justify-between items-center">
-        <Button onClick={() => navigate('/')}>{t('editor.btn.cancel')}</Button>
+        <Button onClick={() => navigate('/explorer')}>
+          {t('editor.btn.cancel')}
+        </Button>
         <div>
           <Button
             onClick={() => {

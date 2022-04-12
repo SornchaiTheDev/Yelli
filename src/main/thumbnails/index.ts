@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import path from 'path';
 import fs from 'fs';
 
-let photosWatcher: chokidar.FSWatcher, thumbsWatcher: chokidar.FSWatcher;
+let photosWatcher: chokidar.FSWatcher;
 
 const createThumbnail = (
   mainWindow: BrowserWindow,
@@ -34,7 +34,6 @@ const createThumbnail = (
 
 const removeThumbnailListener = () => {
   photosWatcher.close();
-  thumbsWatcher.close();
 };
 
 export { createThumbnail, removeThumbnailListener };
