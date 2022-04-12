@@ -5,6 +5,7 @@ let win: BrowserWindow | null;
 const createPreferenceWindow = () => {
   if (!win) {
     win = new BrowserWindow({
+      autoHideMenuBar : true,
       fullscreenable: false,
       resizable: false,
       width: 900,

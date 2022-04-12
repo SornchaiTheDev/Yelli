@@ -6,7 +6,7 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import ipcHandle from './ipcHandle';
 import { initialProcess } from './initialize';
-import Store from 'electron-store'
+import Store from 'electron-store';
 
 import protocolInitial from './protocols';
 
@@ -52,6 +52,7 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
+    autoHideMenuBar: true,
     width: 1270,
     height: 720,
     icon: getAssetPath('icon.png'),
