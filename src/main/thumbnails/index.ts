@@ -13,14 +13,14 @@ const createThumbnail = (
 ) => {
   mainWindow.webContents.send('initialize-watcher');
   photosWatcher = chokidar.watch(photosDir, {
-    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
+    ignored: /(^|[\/\\])\..|Icon|.tmp$/, // ignore dotfiles
     depth: 0,
     persistent: true,
   });
 
   photosWatcher.on('add', (file) => {
-    const re = new RegExp(photosDir + '/', 'g');
-    const fileName = file.replace(re, '');
+    const fileName = path.win32.basename(file);
+
     const tmpfile = path.join(thumbDir, fileName);
     sharp(file).resize(900, 600).toFile(tmpfile);
   });
@@ -32,12 +32,11 @@ const createThumbnail = (
   });
 
   thumbsWatcher.on('add', (file) => {
-    const re = new RegExp(thumbDir + '/', 'g');
-    const fileName = file.replace(re, '');
+    const fileName = path.win32.basename(file);
 
     mainWindow.webContents.send('files:new', {
-      thumbnail: path.join('photos://tmp', fileName),
-      src: path.join('photos://src', fileName),
+      thumbnail: path.normalize(`photos://tmp/${fileName}`),
+      src: path.normalize(`photos://src/${fileName}`),
       createdTime: fs.statSync(path.join(photosDir, fileName)).ctime,
       stickers: [],
     });
