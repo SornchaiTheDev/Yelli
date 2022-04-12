@@ -23,17 +23,6 @@ const createThumbnail = (
 
     const tmpfile = path.join(thumbDir, fileName);
     sharp(file).resize(900, 600).toFile(tmpfile);
-  });
-
-  thumbsWatcher = chokidar.watch(thumbDir, {
-    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
-    depth: 0,
-    persistent: true,
-  });
-
-  thumbsWatcher.on('add', (file) => {
-    const fileName = path.win32.basename(file);
-
     mainWindow.webContents.send('files:new', {
       thumbnail: path.normalize(`photos://tmp/${fileName}`),
       src: path.normalize(`photos://src/${fileName}`),

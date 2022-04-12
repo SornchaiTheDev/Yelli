@@ -29,7 +29,7 @@ const timeButtons = (photosDir: string) => {
   const isPhotosDirExist =
     fs
       .readdirSync(photosDir)
-      .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file)).length > 0;
+      .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file)).length > 1;
 
   if (!isPhotosDirExist) return 'no-photos';
 

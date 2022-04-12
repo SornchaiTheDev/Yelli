@@ -14,7 +14,6 @@ const printIpcHandler = () => {
         exec(`lpr ${file} -P ${printer}`);
         break;
       case 'win32':
-        console.log(`"${irfanviewPath}" "${file}" /print=${printer}`);
         exec(`"${irfanviewPath}" "${file}" /print=${printer}`);
         break;
     }

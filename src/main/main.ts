@@ -6,6 +6,7 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import ipcHandle from './ipcHandle';
 import { initialProcess } from './initialize';
+import Store from 'electron-store'
 
 import protocolInitial from './protocols';
 
