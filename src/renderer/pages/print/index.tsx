@@ -15,6 +15,9 @@ function Print() {
   const [countdown, setCountdown] = useState<number>(30);
 
   useEffect(() => {
+    if (selectedPhoto === null) {
+      return navigate('/explorer');
+    }
     window.electron.upload(selectedPhoto).then((uploadPhoto: UploadPhoto) => {
       setPhoto(uploadPhoto);
     });
@@ -40,14 +43,18 @@ function Print() {
       style={{ backgroundColor: theme.background.color }}
     >
       <div className="flex w-full justify-center items-start space-x-4 px-4">
-        <div className="flex flex-col justify-center items-center">
-          <Photo
-            onClick={onPrint}
-            className="drop-shadow-xl w-11/12"
-            path={selectedPhoto!.thumbnail as string}
-          />
-        </div>
-        <Upload photo={photo} countdown={countdown} />
+        {selectedPhoto && (
+          <>
+            <div className="flex flex-col justify-center items-center">
+              <Photo
+                onClick={onPrint}
+                className="drop-shadow-xl w-11/12"
+                path={selectedPhoto!.thumbnail as string}
+              />
+            </div>
+            <Upload photo={photo} countdown={countdown} />
+          </>
+        )}
       </div>
     </div>
   );

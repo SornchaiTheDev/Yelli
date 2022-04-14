@@ -13,6 +13,7 @@ function Upload({
 }) {
   const { t } = useTranslation();
   const { theme } = useThemeContext();
+  const photoName = photo !== null ? photo.name.split('.')[0] : '';
 
   return (
     <div className="flex flex-col justify-center h-full items-center space-y-10 px-4 bg-white rounded-lg">
@@ -25,13 +26,17 @@ function Upload({
       <h2 className="text-xl text-center" style={{ color: theme.text.color }}>
         {t('print.uploadDesc')}
       </h2>
-      {photo && <QRCode value={`https://pip.pics/${photo.name}`} size={300} />}
+      {photo && (
+        <QRCode value={`http://192.168.1.8:3000/${photoName}`} size={300} />
+      )}
 
       <div
         className="px-4 py-2 border-2 rounded-md"
         style={{ backgroundColor: theme.secondary.color }}
       >
-        {photo && <h3 className="text-2xl">https://pip.pics/{photo.name}</h3>}
+        {photo && (
+          <h3 className="text-2xl">http://192.168.1.8:3000/{photoName}</h3>
+        )}
       </div>
 
       <Link
