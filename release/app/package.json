@@ -14,8 +14,11 @@
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
   "dependencies": {
-    "fsevents" : "~2.3.2",
-    "sharp" : "^0.30.3"
+    "fsevents": "~2.3.2",
+    "sharp": "^0.30.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/sharp": "^0.30.2"
+  }
 }
