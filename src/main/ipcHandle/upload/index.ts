@@ -4,7 +4,7 @@ import path from 'path';
 import fs from 'fs';
 import { PhotoInterface } from 'renderer/utils/interface';
 import admin, { storage } from 'firebase-admin';
-import * as serviceAccount from './yelli-bebb3-firebase-adminsdk-mlqt5-0182861185.json';
+import * as serviceAccount from './serviceAccount.json';
 
 const params = {
   type: serviceAccount.type,
