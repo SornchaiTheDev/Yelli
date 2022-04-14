@@ -3,10 +3,8 @@ import crypto from 'crypto';
 import path from 'path';
 import fs from 'fs';
 import { PhotoInterface } from 'renderer/utils/interface';
-import uploadImageToFirebase from './uploadImageToFirebase';
 
 const uploadIpcHandler = () => {
-  uploadImageToFirebase();
   ipcMain.handle('uploading', (_e: Event, photo: PhotoInterface) => {
     const ext = photo.src.slice(-4);
     const photoName =

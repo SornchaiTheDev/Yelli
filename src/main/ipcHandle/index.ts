@@ -5,6 +5,7 @@ import filesIpcMainHandler from './files';
 import settingsIpcHandler from './settings';
 import uploadIpcHandler from './upload';
 import printIpcHandler from './print';
+import uploadImageToFirebase from './upload/uploadImageToFirebase';
 
 const ipcHandle = (mainWindow: BrowserWindow) => {
   stickerIpcHandler();
@@ -16,6 +17,8 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
   settingsIpcHandler(mainWindow!);
 
   uploadIpcHandler();
+
+  uploadImageToFirebase();
 
   printIpcHandler();
 };

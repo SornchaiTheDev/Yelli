@@ -58,12 +58,12 @@ const Explorer = (): JSX.Element => {
     if (isAFK) getPhotos();
   }, [time, isAFK]);
 
-  useEffect(() => {
-    window.electron.files.onPhotosDirChange(() => {
-      setAllPhotos([]);
-    });
-    return () => window.electron.files.unsubscribePhotosDirChange();
-  }, []);
+  // useEffect(() => {
+  //   window.electron.files.onPhotosDirChange(() => {
+  //     setAllPhotos([]);
+  //   });
+  //   return () => window.electron.files.unsubscribePhotosDirChange();
+  // }, []);
 
   useEffect(() => {
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {

@@ -15,6 +15,7 @@ const filesIpcMainHandle = () => {
   });
 
   ipcMain.handle('files:getbytime', (_e: Event, time: number) => {
+    console.log(photosDir);
     const files = getByTime(time, photosDir);
     return files;
   });

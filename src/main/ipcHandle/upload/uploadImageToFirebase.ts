@@ -3,6 +3,7 @@ import * as serviceAccount from './serviceAccount.json';
 import { app } from 'electron';
 import chokidar from 'chokidar';
 import path from 'path';
+import { unlinkSync } from 'fs';
 
 const params = {
   type: serviceAccount.type,
@@ -48,10 +49,21 @@ const uploadImageToFirebase = () => {
     const dest = `upload/${photoName}`;
     const docId = photoName.split('.')[0];
     try {
+      console.log('upload called');
+      await admin
+        .firestore()
+        .collection('upload')
+        .doc(docId)
+        .set({ src: 'uploading' });
+
       await admin.storage().bucket(bucketName).upload(filePath, {
         destination: dest,
       });
+
+      unlinkSync(filePath);
+
       await storage().bucket(bucketName).file(dest).makePublic();
+
       admin
         .firestore()
         .collection('upload')
