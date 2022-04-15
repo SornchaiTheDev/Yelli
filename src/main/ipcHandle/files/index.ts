@@ -34,10 +34,13 @@ const filesIpcMainHandle = () => {
     let photosDir: string =
       (store.get('photosDir') as string) ||
       path.join(app.getPath('documents'), 'photos');
+
     const isPhotosDirExist =
       fs
         .readdirSync(photosDir)
-        .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file)).length > 2;
+        .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file))
+        .filter((file) => fs.statSync(path.join(photosDir, file)).isFile())
+        .length > 0;
 
     if (!isPhotosDirExist) return 'no-photos';
 
