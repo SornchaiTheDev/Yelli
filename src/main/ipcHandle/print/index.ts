@@ -12,7 +12,7 @@ const printIpcHandler = () => {
     switch (os.platform()) {
       case 'linux':
       case 'darwin':
-        exec(`lpr ${file} -P ${printer}`);
+        exec(`lpr ${file.replace(/\s/g, '\\ ')} -P ${printer}`);
         break;
       case 'win32':
         exec(`${irfanviewPath} ${file} /print=${printer}`);

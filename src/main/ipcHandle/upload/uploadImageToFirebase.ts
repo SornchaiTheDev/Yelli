@@ -3,6 +3,7 @@ import * as serviceAccount from './serviceAccount.json';
 import { app } from 'electron';
 import chokidar from 'chokidar';
 import path from 'path';
+import Store from 'electron-store';
 
 const params = {
   type: serviceAccount.type,
@@ -21,18 +22,23 @@ admin.initializeApp({
   credential: admin.credential.cert(params),
 });
 
-const uploadDir = app.isPackaged
-  ? path.join(process.resourcesPath, 'assets', 'upload')
-  : path.join(__dirname, '../../../../assets', 'upload');
-
-let uploadWatcher = chokidar.watch(uploadDir, {
-  ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
-  depth: 0,
-  ignoreInitial: true,
-  persistent: true,
-});
+let uploadWatcher: chokidar.FSWatcher;
 
 const uploadImageToFirebase = () => {
+  const store = new Store();
+
+  const photoDir: string =
+    (store.get('photosDir') as string) ||
+    path.join(app.getPath('documents'), 'photos');
+
+  const uploadDir = path.join(photoDir, 'print');
+  uploadWatcher = chokidar.watch(uploadDir, {
+    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
+    depth: 0,
+    ignoreInitial: true,
+    persistent: true,
+  });
+
   uploadWatcher.on('add', (file) => {
     const fileName = path.win32.basename(file);
     upload({ filePath: file, photoName: fileName });
@@ -73,3 +79,7 @@ const uploadImageToFirebase = () => {
 };
 
 export default uploadImageToFirebase;
+
+export const removeUploadListener = () => {
+  uploadWatcher.close();
+};
