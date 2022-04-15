@@ -6,7 +6,7 @@ import { PhotoInterface } from 'renderer/utils/interface';
 
 const uploadIpcHandler = () => {
   ipcMain.handle('uploading', (_e: Event, photo: PhotoInterface) => {
-    const ext = photo.src.slice(-4);
+    const ext = path.extname(photo.src);
     const photoName =
       crypto.randomBytes(6).toString('base64').replace(/\//g, '-') + ext;
     const uploadPath = app.isPackaged

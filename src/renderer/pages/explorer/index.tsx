@@ -47,7 +47,6 @@ const Explorer = (): JSX.Element => {
     setIsLoading(true);
 
     window.electron.files.getByTime(time).then((res: any) => {
-      console.log(res);
       setTimeout(() => {
         setAllPhotos(res);
         setIsLoading(false);
