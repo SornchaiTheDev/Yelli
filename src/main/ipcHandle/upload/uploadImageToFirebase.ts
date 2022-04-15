@@ -22,17 +22,17 @@ admin.initializeApp({
   credential: admin.credential.cert(params),
 });
 
+const uploadDir = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets', 'upload')
+  : path.join(__dirname, '../../../../assets', 'upload');
+
+let uploadWatcher = chokidar.watch(uploadDir, {
+  ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
+  depth: 0,
+  persistent: true,
+});
+
 const uploadImageToFirebase = () => {
-  const uploadDir = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets', 'upload')
-    : path.join(__dirname, '../../../../assets', 'upload');
-
-  const uploadWatcher = chokidar.watch(uploadDir, {
-    ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
-    depth: 0,
-    persistent: true,
-  });
-
   uploadWatcher.on('add', (file) => {
     const fileName = path.win32.basename(file);
     upload({ filePath: file, photoName: fileName });
@@ -49,7 +49,6 @@ const uploadImageToFirebase = () => {
     const dest = `upload/${photoName}`;
     const docId = photoName.split('.')[0];
     try {
-      console.log('upload called');
       await admin
         .firestore()
         .collection('upload')

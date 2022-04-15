@@ -1,27 +1,14 @@
-import { app, dialog, ipcMain } from 'electron';
-import { getFiles, getByTime, timeButtons } from '../../files';
-import Store from 'electron-store';
-import path from 'path';
+import { dialog, ipcMain } from 'electron';
+import {  getByTime, timeButtons } from '../../files';
 
 const filesIpcMainHandle = () => {
-  const store = new Store();
-  let photosDir: string =
-    (store.get('photosDir') as string) ||
-    path.join(app.getPath('documents'), 'photos');
-  let thumbDir: string = path.join(photosDir, 'thumbnails');
-  ipcMain.handle('files:listen', async () => {
-    const files = await getFiles(photosDir, thumbDir);
-    return files;
-  });
-
   ipcMain.handle('files:getbytime', (_e: Event, time: number) => {
-    console.log(photosDir);
-    const files = getByTime(time, photosDir);
+    const files = getByTime(time);
     return files;
   });
 
   ipcMain.handle('files:timeButtons', () => {
-    return timeButtons(photosDir);
+    return timeButtons();
   });
 
   ipcMain.handle(

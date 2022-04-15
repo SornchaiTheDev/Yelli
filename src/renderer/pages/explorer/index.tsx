@@ -32,6 +32,7 @@ const Explorer = (): JSX.Element => {
   };
 
   const makeTimeButtons = () => {
+    console.log("called makeTimeButtons")
     window.electron.files.timeButtons().then((res: any) => {
       if (res === 'no-photos') return setCTime(null);
       if (isAFK) setTime(res.last_ctime % 24);
@@ -47,6 +48,7 @@ const Explorer = (): JSX.Element => {
     setIsLoading(true);
 
     window.electron.files.getByTime(time).then((res: any) => {
+      console.log(res);
       setTimeout(() => {
         setAllPhotos(res);
         setIsLoading(false);
@@ -58,15 +60,17 @@ const Explorer = (): JSX.Element => {
     if (isAFK) getPhotos();
   }, [time, isAFK]);
 
-  // useEffect(() => {
-  //   window.electron.files.onPhotosDirChange(() => {
-  //     setAllPhotos([]);
-  //   });
-  //   return () => window.electron.files.unsubscribePhotosDirChange();
-  // }, []);
+  useEffect(() => {
+    window.electron.files.onPhotosDirChange(() => {
+      // makeTimeButtons();
+      setAllPhotos([]);
+    });
+    return () => window.electron.files.unsubscribePhotosDirChange();
+  }, []);
 
   useEffect(() => {
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {
+      console.log(file);
       if (time === null || file.createdTime.getHours() !== time)
         makeTimeButtons();
       if (file.createdTime.getHours() === time && isAFK) {

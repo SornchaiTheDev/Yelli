@@ -1,40 +1,28 @@
+import { app } from 'electron';
 import fs from 'fs';
 import path from 'path';
+import Store from 'electron-store';
 
-const createTmpDir = (photosDir: string) => {
+const store = new Store();
+let photosDir: string =
+  (store.get('photosDir') as string) ||
+  path.join(app.getPath('documents'), 'photos');
+
+const createTmpDir = () => {
   const thumbnailDir = fs.mkdirSync(path.join(photosDir, 'thumbnails'));
   return thumbnailDir;
 };
 
-const getFiles = (photosDir: string, thumbDir: string) => {
-  const srcDir = fs
-    .readdirSync(photosDir)
-    .filter((file) => !['.DS_Store', 'Icon\r'].includes(file));
-  const thumbnailDir = fs
-    .readdirSync(thumbDir)
-    .filter((file) => !['.DS_Store', 'Icon\r'].includes(file));
-  const returnFiles = thumbnailDir.map((data, index) => {
-    return {
-      thumbnail: path.join('photos://tmp', data),
-      src: path.join('photos://src', srcDir[index]),
-      createdTime: fs.statSync(path.join(photosDir, srcDir[index])).ctime,
-      stickers: [],
-    };
-  });
-
-  return returnFiles;
-};
-
-const timeButtons = (photosDir: string) => {
+const timeButtons = () => {
   const isPhotosDirExist =
     fs
       .readdirSync(photosDir)
-      .filter((file) => !['.DS_Store', 'Icon\r'].includes(file)).length > 2;
+      .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file)).length > 2;
 
   if (!isPhotosDirExist) return 'no-photos';
 
   const files = fs.readdirSync(photosDir).filter((file) => {
-    if (['.DS_Store', 'Icon\r'].includes(file)) return false;
+    if (!/.DS_Store|Icon\r'|.tmp$/.test(file)) return false;
     return fs.statSync(path.join(photosDir, file)).isFile();
   });
 
@@ -55,10 +43,10 @@ const timeButtons = (photosDir: string) => {
   return { first_ctime, last_ctime };
 };
 
-const getByTime = (time: number, photosDir: string) => {
+const getByTime = (time: number) => {
   const files = fs
     .readdirSync(photosDir)
-    .filter((file) => !['.DS_Store', 'Icon\r'].includes(file))
+    .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file))
     .filter((file) => fs.statSync(path.join(photosDir, file)).isFile())
     .filter((file) => {
       const file_timed = fs
@@ -76,4 +64,4 @@ const getByTime = (time: number, photosDir: string) => {
   return files;
 };
 
-export { getFiles, createTmpDir, getByTime, timeButtons };
+export { createTmpDir, getByTime, timeButtons };
