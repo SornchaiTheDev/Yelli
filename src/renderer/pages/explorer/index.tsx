@@ -32,8 +32,9 @@ const Explorer = (): JSX.Element => {
   };
 
   const makeTimeButtons = () => {
-    console.log("called makeTimeButtons")
+    console.log('called makeTimeButtons');
     window.electron.files.timeButtons().then((res: any) => {
+      console.log(res);
       if (res === 'no-photos') return setCTime(null);
       if (isAFK) setTime(res.last_ctime % 24);
       setCTime(res);
@@ -70,7 +71,7 @@ const Explorer = (): JSX.Element => {
 
   useEffect(() => {
     window.electron.files.listenFiles((_: never, file: PhotoInterface) => {
-      console.log(file);
+      console.log('new file added!');
       if (time === null || file.createdTime.getHours() !== time)
         makeTimeButtons();
       if (file.createdTime.getHours() === time && isAFK) {

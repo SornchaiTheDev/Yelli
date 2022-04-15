@@ -17,9 +17,7 @@ export const initialProcess = (mainWindow: BrowserWindow) => {
 
   let isUploadDirExist = fs.existsSync(uploadPath);
 
-  let isThumbDirExist = fs
-    .readdirSync(path.join(photosDir, 'thumbnails'))
-    .filter((file) => file.includes('thumbnails')).length;
+  let isThumbDirExist = fs.existsSync(path.join(photosDir, 'thumbnails'));
 
   /* check photos folder exist */
 
