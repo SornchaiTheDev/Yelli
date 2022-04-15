@@ -242,6 +242,7 @@
     "electron-log": "^4.4.6",
     "electron-store": "^8.0.1",
     "electron-updater": "^4.6.5",
+    "express": "^4.17.3",
     "firebase-admin": "^10.0.2",
     "gm": "^1.23.1",
     "hammerjs": "^2.0.8",

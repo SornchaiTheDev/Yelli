@@ -6,12 +6,12 @@ import Store from 'renderer/utils/store';
 function PrintRemains() {
   const store = new Store();
   const { t } = useTranslation();
-  const [remains, setRemains] = useState<string>('');
+  const [remains, setRemains] = useState<number>(0);
 
   const handleRemains = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const _remains: string = e.target.value;
+    const _remains = Number(e.target.value);
     setRemains(_remains);
-    store.set('remains', remains);
+    store.set('remains', _remains);
   };
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import { PhotoInterface } from 'renderer/utils/interface';
 import { useNavigate } from 'react-router-dom';
 import Loading from './components/Loading';
 import TimeButton from './components/TimeButton';
+import Store from 'renderer/utils/store';
 
 interface Ctime {
   first_ctime: number;
@@ -13,10 +14,12 @@ interface Ctime {
 }
 
 const Explorer = (): JSX.Element => {
+  const store = new Store();
   const { setSelectedPhoto } = useEditorContext();
   const { theme } = useThemeContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
   const [time, setTime] = useState<number | null>(null);
+  const [remains, setRemains] = useState<number | null>(null);
   const [cTime, setCTime] = useState<Ctime | null>({
     first_ctime: 0,
     last_ctime: 0,
@@ -38,10 +41,6 @@ const Explorer = (): JSX.Element => {
       setCTime(res);
     });
   };
-
-  useEffect(() => {
-    makeTimeButtons();
-  }, []);
 
   const getPhotos = () => {
     setIsLoading(true);

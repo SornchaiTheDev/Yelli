@@ -25,7 +25,6 @@ function General() {
       <div className="flex flex-col w-3/4 space-y-4 px-4">
         <PhotosDir />
         <Language />
-        <PrintRemains />
         <Printers />
       </div>
     </>
