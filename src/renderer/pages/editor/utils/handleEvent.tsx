@@ -93,20 +93,22 @@ function handleEvent(): HandleEvent {
   const handleMouseUp = (
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
-    const stage = e.target.getStage();
-    const pos = stage!.getPointerPosition();
-    let lastLine = lines[lines.length - 1];
-    const isSamePos =
-      lastLine.points[0] === pos!.x && lastLine.points[1] === pos!.y;
-    if (isSamePos) {
-      // add point
-      lastLine.points = lastLine.points.concat([pos!.x, pos!.y]);
-
-      // replace last
-      lines.splice(lines.length - 1, 1, lastLine);
-      setLines(lines.concat());
-    }
     isDrawing.current = false;
+    if (lines.length > 0) {
+      const stage = e.target.getStage();
+      const pos = stage!.getPointerPosition();
+      let lastLine = lines[lines.length - 1];
+      const isSamePos =
+        lastLine.points[0] === pos!.x && lastLine.points[1] === pos!.y;
+      if (isSamePos) {
+        // add point
+        lastLine.points = lastLine.points.concat([pos!.x, pos!.y]);
+
+        // replace last
+        lines.splice(lines.length - 1, 1, lastLine);
+        setLines(lines.concat());
+      }
+    }
   };
 
   const removeSelectedLine = (key: string) => {
