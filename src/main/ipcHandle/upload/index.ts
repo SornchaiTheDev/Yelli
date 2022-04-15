@@ -12,6 +12,7 @@ const uploadIpcHandler = () => {
     const uploadPath = app.isPackaged
       ? path.join(process.resourcesPath, 'assets', 'upload')
       : path.join(__dirname, '../../../../assets', 'upload');
+
     const filePath = path.join(uploadPath, photoName);
 
     fs.writeFileSync(

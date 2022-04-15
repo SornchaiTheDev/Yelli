@@ -3,7 +3,6 @@ import * as serviceAccount from './serviceAccount.json';
 import { app } from 'electron';
 import chokidar from 'chokidar';
 import path from 'path';
-import { unlinkSync } from 'fs';
 
 const params = {
   type: serviceAccount.type,
@@ -29,6 +28,7 @@ const uploadDir = app.isPackaged
 let uploadWatcher = chokidar.watch(uploadDir, {
   ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
   depth: 0,
+  ignoreInitial: true,
   persistent: true,
 });
 
@@ -58,8 +58,6 @@ const uploadImageToFirebase = () => {
       await admin.storage().bucket(bucketName).upload(filePath, {
         destination: dest,
       });
-
-      unlinkSync(filePath);
 
       await storage().bucket(bucketName).file(dest).makePublic();
 
