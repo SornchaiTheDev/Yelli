@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import fs from 'fs';
-import { createTmpDir } from './files';
 import { createThumbnail } from './thumbnails';
 import Store from 'electron-store';
 
@@ -26,6 +25,6 @@ export const initialProcess = (mainWindow: BrowserWindow) => {
     store.set('photosDir', photosDir);
   }
   if (!isUploadDirExist) fs.mkdirSync(uploadPath);
-  if (!isThumbDirExist) createTmpDir();
+  if (!isThumbDirExist) fs.mkdirSync(path.join(photosDir, 'thumbnails'));
   createThumbnail(mainWindow!, photosDir);
 };

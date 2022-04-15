@@ -63,7 +63,7 @@ const Explorer = (): JSX.Element => {
 
   useEffect(() => {
     window.electron.files.onPhotosDirChange(() => {
-      // makeTimeButtons();
+      makeTimeButtons();
       setAllPhotos([]);
     });
     return () => window.electron.files.unsubscribePhotosDirChange();
