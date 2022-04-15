@@ -1,6 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useEffect, useState, useRef, DragEvent } from 'react';
 import { useEditorContext } from 'renderer/context';
+import { Lines } from 'renderer/utils/interface';
 import { v4 as uuid } from 'uuid';
 
 interface HandleEvent {
@@ -12,7 +13,9 @@ interface HandleEvent {
   handleMouseMove: (
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => void;
-  handleMouseUp: () => void;
+  handleMouseUp: (
+    e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
+  ) => void;
   removeSelectedLine: (key: string) => void;
 }
 
@@ -60,25 +63,20 @@ function handleEvent(): HandleEvent {
   ) => {
     isDrawing.current = true;
     if (selectSticker !== null) return;
-    if (selectedTool.type !== 'erasor') {
-      const pos = e.target.getStage()!.getPointerPosition();
-      handleDrawing({
-        key: uuid(),
-        tool: selectedTool,
-        points: [pos!.x, pos!.y],
-      });
-    }
+
+    const pos = e.target.getStage()!.getPointerPosition();
+    handleDrawing({
+      key: uuid(),
+      tool: selectedTool,
+      points: [pos!.x, pos!.y],
+    });
   };
 
   const handleMouseMove = (
     e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
   ) => {
     // no drawing - skipping
-    if (
-      !isDrawing.current ||
-      selectedTool.type === 'erasor' ||
-      selectSticker !== null
-    ) {
+    if (!isDrawing.current || selectSticker !== null) {
       return;
     }
     const stage = e.target.getStage();
@@ -92,7 +90,22 @@ function handleEvent(): HandleEvent {
     setLines(lines.concat());
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (
+    e: KonvaEventObject<globalThis.MouseEvent> | KonvaEventObject<TouchEvent>
+  ) => {
+    const stage = e.target.getStage();
+    const pos = stage!.getPointerPosition();
+    let lastLine = lines[lines.length - 1];
+    const isSamePos =
+      lastLine.points[0] === pos!.x && lastLine.points[1] === pos!.y;
+    if (isSamePos) {
+      // add point
+      lastLine.points = lastLine.points.concat([pos!.x, pos!.y]);
+
+      // replace last
+      lines.splice(lines.length - 1, 1, lastLine);
+      setLines(lines.concat());
+    }
     isDrawing.current = false;
   };
 
