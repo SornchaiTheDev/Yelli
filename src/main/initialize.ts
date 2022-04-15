@@ -15,21 +15,19 @@ export const initialProcess = (mainWindow: BrowserWindow) => {
     (store.get('photosDir') as string) ||
     path.join(app.getPath('documents'), 'photos');
 
+  let isUploadDirExist = fs.existsSync(uploadPath);
+
+  let isThumbDirExist = fs
+    .readdirSync(path.join(photosDir, 'thumbnails'))
+    .filter((file) => file.includes('thumbnails')).length;
+
   /* check photos folder exist */
 
   if (!fs.existsSync(photosDir)) {
     fs.mkdirSync(photosDir);
     store.set('photosDir', photosDir);
   }
-
-  let isPrintDirExist = fs.existsSync(uploadPath);
-
-  let thumbDir = path.join(photosDir, 'thumbnails');
-  let isThumbDirExist = fs
-    .readdirSync(photosDir)
-    .filter((file) => file.includes('thumbnails')).length;
-
-  if (!isPrintDirExist) fs.mkdirSync(uploadPath);
-  if (!isThumbDirExist) createTmpDir(photosDir);
-  createThumbnail(mainWindow!, photosDir, thumbDir);
+  if (!isUploadDirExist) fs.mkdirSync(uploadPath);
+  if (!isThumbDirExist) createTmpDir();
+  createThumbnail(mainWindow!, photosDir);
 };

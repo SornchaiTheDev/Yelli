@@ -9,8 +9,8 @@ let photosWatcher: chokidar.FSWatcher, thumbsWatcher: chokidar.FSWatcher;
 const createThumbnail = (
   mainWindow: BrowserWindow,
   photosDir: string,
-  thumbDir: string
 ) => {
+  const thumbDir = path.join(photosDir, 'thumbnails');
   mainWindow.webContents.send('initialize-watcher');
   photosWatcher = chokidar.watch(photosDir, {
     ignored: /(^|[\/\\])\..|Icon/, // ignore dotfiles
