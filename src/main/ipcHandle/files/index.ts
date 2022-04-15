@@ -12,7 +12,7 @@ const filesIpcMainHandle = () => {
       path.join(app.getPath('documents'), 'photos');
     const files = fs
       .readdirSync(photosDir)
-      .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file))
+      .filter((file) => !/.DS_Store|Icon\\r|Icon|.tmp$/.test(file))
       .filter((file) => fs.statSync(path.join(photosDir, file)).isFile())
       .filter((file) => {
         const file_timed = fs
@@ -38,14 +38,14 @@ const filesIpcMainHandle = () => {
     const isPhotosDirExist =
       fs
         .readdirSync(photosDir)
-        .filter((file) => !/.DS_Store|Icon\r'|.tmp$/.test(file))
+        .filter((file) => !/.DS_Store|Icon\\r|Icon|.tmp$/.test(file))
         .filter((file) => fs.statSync(path.join(photosDir, file)).isFile())
         .length > 0;
 
     if (!isPhotosDirExist) return 'no-photos';
 
     const files = fs.readdirSync(photosDir).filter((file) => {
-      if (/.DS_Store|Icon\r'|.tmp$/.test(file)) return false;
+      if (/.DS_Store|Icon\\r|Icon|.tmp$/.test(file)) return false;
       return fs.statSync(path.join(photosDir, file)).isFile();
     });
 
