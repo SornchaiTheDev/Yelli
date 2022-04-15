@@ -11,6 +11,7 @@ function Sticker({
   properties = { x: 0, y: 0, scale: 1, rotation: 0 },
   src,
   onSelect,
+  unSelect,
   onTransfromEnd,
   handleDeleteSticker,
 }: StickerInteface & {
@@ -18,6 +19,7 @@ function Sticker({
   stickerIndex: string;
   isSelected: boolean;
   onSelect: () => void;
+  unSelect: () => void;
   handleDeleteSticker: () => void;
 }) {
   const transfromRef = useRef<any>(null);
@@ -83,7 +85,7 @@ function Sticker({
   return (
     <>
       <KonvaImage
-        onMouseEnter={selected}
+        onMouseOver={selected}
         image={img}
         draggable={draggable}
         offsetX={img ? img.width / 2 : 0}

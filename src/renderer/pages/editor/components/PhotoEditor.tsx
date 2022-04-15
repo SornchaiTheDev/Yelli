@@ -95,12 +95,12 @@ function PhotoEditor({ src, watermark }: SelectedPhotoInterface): JSX.Element {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
         onMouseLeave={handleMouseUp}
+        onClick={() => setSelectSticker(null)}
+        onTap={() => setSelectSticker(null)}
       >
         <Layer>
           <KonvaImage
             image={image}
-            onClick={() => setSelectSticker(null)}
-            onTap={() => setSelectSticker(null)}
             width={containerSize.width}
             height={containerSize.height}
           />
@@ -140,6 +140,7 @@ function PhotoEditor({ src, watermark }: SelectedPhotoInterface): JSX.Element {
               isSelected={selectSticker === key && !isPrinting}
               onTransfromEnd={handleTransfromEnd}
               onSelect={() => setSelectSticker(key)}
+              unSelect={() => setSelectSticker(null)}
               handleDeleteSticker={handleDeleteSticker}
             />
           ))}
