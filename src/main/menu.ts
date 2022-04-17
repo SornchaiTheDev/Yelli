@@ -103,7 +103,6 @@ export default class MenuBuilder {
           },
         ],
       },
-      {},
       {
         label: '&View',
         submenu: [
