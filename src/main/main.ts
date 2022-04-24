@@ -51,7 +51,7 @@ const createWindow = async () => {
   };
 
   mainWindow = new BrowserWindow({
-    show: false,
+    title: 'Yelli - Photobooth',
     autoHideMenuBar: true,
     width: 1270,
     height: 720,

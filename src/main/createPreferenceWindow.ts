@@ -5,7 +5,8 @@ let win: BrowserWindow | null;
 const createPreferenceWindow = () => {
   if (!win) {
     win = new BrowserWindow({
-      autoHideMenuBar : true,
+      title: 'Yelli - Preferences',
+      autoHideMenuBar: true,
       fullscreenable: false,
       resizable: false,
       width: 900,

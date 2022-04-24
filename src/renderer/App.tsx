@@ -14,7 +14,6 @@ export default function App() {
     <HashRouter>
       <ThemeContext>
         <EditorContext>
-          <title>Yelli</title>
           <Routes>
             <Route path="/preference" element={<Preference />} />
 
