@@ -7,6 +7,7 @@ import Store from 'electron-store';
 
 const uploadIpcHandler = () => {
   const store = new Store();
+
   ipcMain.handle('uploading', (_e: Event, photo: PhotoInterface) => {
     const ext = path.extname(photo.src);
     const photoName =

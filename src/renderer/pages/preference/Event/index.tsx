@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import CreateEvent from './Components/CreateEvent';
 import Events from './Components/Events';

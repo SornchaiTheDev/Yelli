@@ -51,10 +51,12 @@ const EditorCxt = createContext<EditorContext>({
 });
 
 const Provider = ({ children }: { children: ReactNode }): JSX.Element => {
+  /* handle Photos */
   const [thumbDir, setThumbDir] = useState<string | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoInterface | null>(
     null
   );
+
   const [isPrinting, setIsPrinting] = useState(false);
 
   /* Languages */

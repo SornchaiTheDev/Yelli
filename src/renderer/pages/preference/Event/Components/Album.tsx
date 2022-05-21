@@ -1,8 +1,11 @@
 import { AlbumProps } from '@decor/Album';
-const Album = ({ imgset, name, amount, id }: AlbumProps) => {
+const Album = ({ imgset, name, amount, onClick }: AlbumProps) => {
   return (
-    <div className="flex flex-col items-center gap-4 col-span-1">
-      <div className="grid grid-cols-2 gap-2 justify-items-stretch place-items-stretch w-full h-full">
+    <div
+      className="flex flex-col items-center gap-4 col-span-1"
+      onClick={onClick}
+    >
+      <div className="grid grid-cols-2 gap-2 justify-items-stretch place-items-center w-full h-full flex-1">
         {imgset
           .filter((_, index) => index < imgset.length - 1)
           .map(({ src }, index) => (
@@ -35,7 +38,9 @@ const Album = ({ imgset, name, amount, id }: AlbumProps) => {
           )}
         </div>
       </div>
-      <h2 className="text-center">{name}</h2>
+      <h2 className="text-center font-semibold">
+        {name.length > 20 ? name.slice(0, 20) + '...' : name}
+      </h2>
     </div>
   );
 };

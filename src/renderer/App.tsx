@@ -12,6 +12,7 @@ import Sticker from './pages/preference/Stickers';
 import Watermark from './pages/preference/Watermark';
 import Theme from './pages/preference/Themes';
 import Event from './pages/preference/Event';
+import InAlbum from './pages/preference/Event/Components/InAlbum';
 
 export default function App() {
   return (
@@ -20,12 +21,13 @@ export default function App() {
         <EditorContext>
           <Routes>
             <Route path="/preference">
-              <Route path="" element={<General />} />
+              <Route index element={<General />} />
               <Route path="General" element={<General />} />
               <Route path="Sticker" element={<Sticker />} />
               <Route path="Watermark" element={<Watermark />} />
               <Route path="Theme" element={<Theme />} />
               <Route path="Event" element={<Event />} />
+              <Route path="Event/:id" element={<InAlbum />} />
             </Route>
 
             <Route path="/">

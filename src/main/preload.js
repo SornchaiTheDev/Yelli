@@ -5,6 +5,9 @@ contextBridge.exposeInMainWorld('electron', {
   upload: (photo) => ipcRenderer.invoke('uploading', photo),
   getPrinters: () => ipcRenderer.invoke('getPrinters'),
   print: (file) => ipcRenderer.invoke('printing', file),
+  create_event: (event) => ipcRenderer.invoke('create_event', event),
+  get_events: () => ipcRenderer.invoke('get_events'),
+  get_event: (id) => ipcRenderer.invoke('get_event', id),
   files: {
     onPhotosDirChange: (callBack) =>
       ipcRenderer.on('initialize-watcher', callBack),

@@ -15,7 +15,7 @@ function withSideBar({ children }: { children: ReactNode }) {
     {
       name: 'General',
       icon: <BsGear color={theme.text.color} />,
-      path: '/preference',
+      path: '/preference/General',
     },
     {
       name: 'Theme',
@@ -51,11 +51,12 @@ function withSideBar({ children }: { children: ReactNode }) {
             key={name}
             onClick={() => navigate(path)}
             style={{
-              backgroundColor:
-                location.pathname === path ? theme.primary.color : '',
+              backgroundColor: location.pathname.match(name)
+                ? theme.primary.color
+                : '',
             }}
             className={`flex items-center space-x-4 p-2 w-full cursor-pointer ${
-              location.pathname === path ? 'rounded-lg' : ''
+              location.pathname.match(name) ? 'rounded-lg' : ''
             }`}
           >
             {icon}

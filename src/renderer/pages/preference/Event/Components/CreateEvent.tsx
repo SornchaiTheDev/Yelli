@@ -2,6 +2,7 @@ import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Store from 'renderer/utils/store';
 import { useThemeContext } from 'renderer/context/ThemeContext';
+import { v4 as uuid } from 'uuid';
 
 function Event() {
   const { t, i18n } = useTranslation();
@@ -14,7 +15,8 @@ function Event() {
   };
 
   const handleCreateEvent = () => {
-    store.set('eventName', eventName);
+    window.electron.create_event({ name: eventName, id: uuid() });
+    // store.set('event', JSON.stringify({ name: eventName, id: uuid() }));
   };
   return (
     <div className="w-full flex gap-2 items-center">

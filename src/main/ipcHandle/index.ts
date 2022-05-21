@@ -5,6 +5,7 @@ import filesIpcMainHandler from './files';
 import settingsIpcHandler from './settings';
 import uploadIpcHandler from './upload';
 import printIpcHandler from './print';
+import eventIpcHandler from './event';
 
 const ipcHandle = (mainWindow: BrowserWindow) => {
   stickerIpcHandler();
@@ -18,5 +19,7 @@ const ipcHandle = (mainWindow: BrowserWindow) => {
   uploadIpcHandler();
 
   printIpcHandler();
+
+  eventIpcHandler();
 };
 export default ipcHandle;

@@ -4,6 +4,7 @@ import { app } from 'electron';
 import chokidar from 'chokidar';
 import path from 'path';
 import Store from 'electron-store';
+import { v4 as uuid } from 'uuid';
 
 const params = {
   type: serviceAccount.type,
@@ -53,11 +54,15 @@ const uploadImageToFirebase = () => {
   }) => {
     const bucketName = 'yelli-bebb3.appspot.com';
     const dest = `upload/${photoName}`;
-    const docId = photoName.split('.')[0];
+    const docId = uuid();
+    const eventFromStore = (await store.get('event')) as string;
+    const event = JSON.parse(eventFromStore);
     try {
       await admin
         .firestore()
-        .collection('upload')
+        .collection('events')
+        .doc(event.id)
+        .collection('photos')
         .doc(docId)
         .set({ src: 'uploading' });
 
@@ -67,9 +72,17 @@ const uploadImageToFirebase = () => {
 
       await storage().bucket(bucketName).file(dest).makePublic();
 
+      await admin
+        .firestore()
+        .collection('events')
+        .doc(event.id)
+        .update({ amount: admin.firestore.FieldValue.increment(1) });
+
       admin
         .firestore()
-        .collection('upload')
+        .collection('events')
+        .doc(event.id)
+        .collection('photos')
         .doc(docId)
         .set({ src: `https://storage.googleapis.com/${bucketName}/${dest}` });
     } catch (err) {
