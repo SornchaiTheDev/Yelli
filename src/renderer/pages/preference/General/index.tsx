@@ -10,13 +10,12 @@ import { useTranslation } from 'react-i18next';
 import PhotosDir from './components/PhotosDir';
 import Language from './components/Language';
 import Printers from './components/Printers';
-import Event from './components/Event';
-
+import WithSideBar from '../HOC/withSideBar';
 function General() {
   const { t } = useTranslation();
 
   return (
-    <>
+    <WithSideBar>
       <h1 className="text-2xl font-semibold mb-4 px-4 pt-4">
         {t('setting.general.title')}
       </h1>
@@ -24,9 +23,8 @@ function General() {
         <PhotosDir />
         <Language />
         <Printers />
-        <Event />
       </div>
-    </>
+    </WithSideBar>
   );
 }
 

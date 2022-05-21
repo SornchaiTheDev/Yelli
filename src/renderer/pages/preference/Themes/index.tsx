@@ -4,6 +4,7 @@ import Store from 'renderer/utils/store';
 import { useThemeContext } from 'renderer/context/ThemeContext';
 import { Theme } from 'renderer/utils/interface/theme';
 import SaveBtn from './components/SaveBtn';
+import WithSideBar from '../HOC/withSideBar';
 
 function Themes() {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ function Themes() {
   };
 
   return (
-    <>
+    <WithSideBar>
       <h1 className="text-2xl font-semibold mb-4 px-4 pt-4">
         {t('setting.theme.title')}
       </h1>
@@ -74,7 +75,7 @@ function Themes() {
         handleThemeSetting={handleThemeSetting}
         revertThemeSetting={revertThemeSetting}
       />
-    </>
+    </WithSideBar>
   );
 }
 

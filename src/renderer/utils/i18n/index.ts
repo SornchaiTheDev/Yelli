@@ -51,6 +51,13 @@ i18n.use(initReactI18next).init({
             initial: 'Click or Drag and Drop Watermark here',
             drop: 'Drop to import',
           },
+          event: {
+            title: 'Event',
+            createEvent: {
+              title: 'Event Name',
+              btn : "Create Event"
+            },
+          },
         },
       },
     },

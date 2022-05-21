@@ -6,8 +6,12 @@ import PhotoExplorer from './pages/explorer';
 import Editor from './pages/editor';
 import EditorContext from './context';
 import Print from './pages/print';
-import Preference from './pages/preference';
+import General from './pages/preference/General';
 import ThemeContext from './context/ThemeContext';
+import Sticker from './pages/preference/Stickers';
+import Watermark from './pages/preference/Watermark';
+import Theme from './pages/preference/Themes';
+import Event from './pages/preference/Event';
 
 export default function App() {
   return (
@@ -15,7 +19,14 @@ export default function App() {
       <ThemeContext>
         <EditorContext>
           <Routes>
-            <Route path="/preference" element={<Preference />} />
+            <Route path="/preference">
+              <Route path="" element={<General />} />
+              <Route path="General" element={<General />} />
+              <Route path="Sticker" element={<Sticker />} />
+              <Route path="Watermark" element={<Watermark />} />
+              <Route path="Theme" element={<Theme />} />
+              <Route path="Event" element={<Event />} />
+            </Route>
 
             <Route path="/">
               <Route path="" element={<Initialize />} />
