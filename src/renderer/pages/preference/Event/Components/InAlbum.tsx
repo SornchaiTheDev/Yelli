@@ -17,7 +17,6 @@ function InAlbum() {
       .get_event(id)
       .then(({ event, photos }: { event: EventI; photos: PhotoI[] }) => {
         setEvent(event);
-
         setPhotos(photos);
       });
   }, []);

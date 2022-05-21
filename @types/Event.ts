@@ -4,7 +4,7 @@ export interface PhotoI {
 export interface EventI {
   amount: number;
   name: string;
-  date : string;
+  date: { _seconds: number; _nanoseconds: number };
   id: string;
   imgset: PhotoI[];
 }
