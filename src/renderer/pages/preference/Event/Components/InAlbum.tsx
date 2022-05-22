@@ -42,12 +42,12 @@ function InAlbum() {
   const handleSelectClick = () => {
     setIsSelected(!isSelected);
   };
-  const handleSelectEvent = (id: string) => {
+  const handleSelectEvent = (id: string , src : string) => {
     if (isSelected) {
       if (selects.includes(id)) {
-        return setSelects(selects.filter((item) => item !== id));
+        return setSelects(selects.filter((item) => item.id !== id));
       }
-      setSelects([...selects, id]);
+      setSelects([...selects, {id , src}]);
     }
   };
 
@@ -148,7 +148,7 @@ function InAlbum() {
                   className={`relative ${
                     isSelected ? 'cursor-pointer' : 'cursor-default'
                   }`}
-                  onClick={() => handleSelectEvent(id)}
+                  onClick={() => handleSelectEvent(id,src)}
                 >
                   {isSelected && (
                     <div className="absolute right-2 top-0">
