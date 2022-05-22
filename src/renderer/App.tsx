@@ -23,7 +23,7 @@ export default function App() {
             <Route path="/preference">
               <Route index element={<General />} />
               <Route path="General" element={<General />} />
-              <Route path="Sticker" element={<Sticker />} />
+              <Route path="Stickers" element={<Sticker />} />
               <Route path="Watermark" element={<Watermark />} />
               <Route path="Theme" element={<Theme />} />
               <Route path="Event" element={<Event />} />

@@ -9,12 +9,13 @@ import { EventI, PhotoI } from '@decor/Event';
 
 import { useEventContext } from '../Context/EventContext';
 import { useTranslation } from 'react-i18next';
+import Store from 'renderer/utils/store';
 
 function InAlbum() {
   const { t } = useTranslation();
   const { id } = useParams();
   const [event, setEvent] = useState<EventI | null>(null);
-  const [selects, setSelects] = useState<string[]>([]);
+  const [selects, setSelects] = useState<{ src: string; id: string }[]>([]);
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [photos, setPhotos] = useState<PhotoI[]>([]);
   const navigate = useNavigate();
@@ -42,12 +43,12 @@ function InAlbum() {
   const handleSelectClick = () => {
     setIsSelected(!isSelected);
   };
-  const handleSelectEvent = (id: string , src : string) => {
+  const handleSelectEvent = (id: string, src: string) => {
     if (isSelected) {
-      if (selects.includes(id)) {
+      if (selects.find((select) => select.id === id)) {
         return setSelects(selects.filter((item) => item.id !== id));
       }
-      setSelects([...selects, {id , src}]);
+      setSelects([...selects, { id, src }]);
     }
   };
 
@@ -60,13 +61,20 @@ function InAlbum() {
     window.electron.delete_photos(id, selects).then(() => {
       setSelects([]);
       setIsSelected(false);
-      setPhotos(photos.filter((item) => !selects.includes(item.id)));
+      setPhotos(
+        photos.filter(
+          (item) =>
+            selects.find((select) => select.id === item.id)?.id === undefined
+        )
+      );
     });
   };
 
   const handleDeleteEvent = () => {
+    const store = new Store();
     window.electron.delete_event(id);
     deleteEvent(id as string);
+    store.set('event', 'no-event');
     navigate('/preference/Event');
   };
 
@@ -148,14 +156,17 @@ function InAlbum() {
                   className={`relative ${
                     isSelected ? 'cursor-pointer' : 'cursor-default'
                   }`}
-                  onClick={() => handleSelectEvent(id,src)}
+                  onClick={() => handleSelectEvent(id, src!)}
                 >
                   {isSelected && (
                     <div className="absolute right-2 top-0">
                       <input
                         type="checkbox"
-                        checked={selects.includes(id)}
-                        onChange={() => handleSelectEvent(id)}
+                        checked={
+                          selects.find((select) => select.id === id)?.id !==
+                          undefined
+                        }
+                        onChange={() => handleSelectEvent(id, src!)}
                       />
                     </div>
                   )}

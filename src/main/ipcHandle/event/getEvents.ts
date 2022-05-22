@@ -9,7 +9,6 @@ const getEvents = () => {
       .firestore()
       .collection('events')
       .orderBy('date', 'desc')
-      .limit(10)
       .get();
     docs.forEach((event) => {
       events.push({

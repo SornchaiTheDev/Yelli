@@ -23,9 +23,9 @@ function withSideBar({ children }: { children: ReactNode }) {
       path: '/preference/Theme',
     },
     {
-      name: 'Sticker',
+      name: 'Stickers',
       icon: <BsHeart color={theme.text.color} />,
-      path: '/preference/Sticker',
+      path: '/preference/Stickers',
     },
     {
       name: 'Watermark',
@@ -61,7 +61,7 @@ function withSideBar({ children }: { children: ReactNode }) {
           >
             {icon}
             <h1 className="text-gray-900" style={{ color: theme.text.color }}>
-              {name}
+              {t(`setting.${name.toLowerCase()}.title`)}
             </h1>
           </div>
         ))}

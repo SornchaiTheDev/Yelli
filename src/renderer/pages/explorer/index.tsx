@@ -6,6 +6,7 @@ import { PhotoInterface } from 'renderer/utils/interface';
 import { useNavigate } from 'react-router-dom';
 import Loading from './components/Loading';
 import TimeButton from './components/TimeButton';
+import Store from '../../utils/store';
 
 interface Ctime {
   first_ctime: number;
@@ -13,6 +14,8 @@ interface Ctime {
 }
 
 const Explorer = (): JSX.Element => {
+  const store = new Store();
+  const [isNoEvent, setIsNoEvent] = useState<boolean>(false);
   const { setSelectedPhoto } = useEditorContext();
   const { theme } = useThemeContext();
   const [allPhotos, setAllPhotos] = useState<PhotoInterface[] | []>([]);
@@ -50,7 +53,15 @@ const Explorer = (): JSX.Element => {
     });
   };
 
+  const getEvent = async () => {
+    const event = await store.get('event');
+    if (event === 'no-event') {
+      setIsNoEvent(true);
+    }
+  };
+
   useEffect(() => {
+    getEvent();
     makeTimeButtons();
     window.electron.files.onPhotosDirChange(() => {
       window.location.reload();
@@ -107,6 +118,11 @@ const Explorer = (): JSX.Element => {
         className="px-10 pt-10 flex flex-col space-y-2 h-screen"
         style={{ backgroundColor: theme.background.color }}
       >
+        {isNoEvent && (
+          <p className="absolute top-10 right-10 text-red-500 font-bold">
+            *ยังไม่ได้สร้างงาน
+          </p>
+        )}
         {cTime !== null && (
           <TimeButton
             cTime={cTime}

@@ -10,7 +10,7 @@ const settingsIpcHandler = (mainWindow: BrowserWindow) => {
       const { key, value } = arg;
       const store = new Store();
       store.set(key, value);
-      if (['language', 'theme'].includes(key)) {
+      if (['language', 'theme',"event"].includes(key)) {
         return mainWindow!.webContents.reload();
       }
       if (key === 'photosDir') {

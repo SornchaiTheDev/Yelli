@@ -4,9 +4,12 @@ import { ipcMain } from 'electron';
 const deletePhotos = () => {
   ipcMain.handle(
     'delete_photos',
-    async (_event: Event, eventId: string, selects: {src : string , id : string}[]) => {
+    async (
+      _event: Event,
+      eventId: string,
+      selects: { src: string; id: string }[]
+    ) => {
       try {
-
         for (let select of selects) {
           await admin
             .firestore()
@@ -15,9 +18,15 @@ const deletePhotos = () => {
             .collection('photos')
             .doc(select.id)
             .delete();
-            const photoRef = select.src.replace("https://storage.googleapis.com/yelli-bebb3.appspot.com/" , "")
-            const ref = admin.storage().ref(photoRef)
-            await ref.delete()
+          const photoRef = select.src.replace(
+            'https://storage.googleapis.com/yelli-bebb3.appspot.com/',
+            ''
+          );
+
+          const bucketName = 'yelli-bebb3.appspot.com';
+
+          const bucket = admin.storage().bucket(bucketName);
+          await bucket.file(photoRef).delete();
         }
 
         await admin
@@ -27,10 +36,9 @@ const deletePhotos = () => {
           .update({
             amount: admin.firestore.FieldValue.increment(-selects.length),
           });
-      }catch (err) {
-        console.log("delete photo error :" , err)
+      } catch (err) {
+        console.log('delete photo error :', err);
       }
-
     }
   );
 };
