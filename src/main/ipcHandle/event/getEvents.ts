@@ -5,7 +5,12 @@ import { EventI, PhotoI } from '@decor/Event';
 const getEvents = () => {
   ipcMain.handle('get_events', async (_e: Event) => {
     const events: EventI[] = [];
-    const docs = await admin.firestore().collection('events').get();
+    const docs = await admin
+      .firestore()
+      .collection('events')
+      .orderBy('date', 'desc')
+      .limit(10)
+      .get();
     docs.forEach((event) => {
       events.push({
         ...(event.data() as EventI),
@@ -26,7 +31,7 @@ const getEvents = () => {
 
       let photos: PhotoI[] = [];
       getPhotos.forEach((photo) => photos.push(photo.data() as PhotoI));
-      console.log(photos.length);
+
       if (photos.length < 4) {
         photos = photos.concat(
           Array(4 - photos.length).fill({ src: null })

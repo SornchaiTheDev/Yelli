@@ -11,7 +11,7 @@ const createThumbnail = (mainWindow: BrowserWindow, photosDir: string) => {
   mainWindow.webContents.send('initialize-watcher');
   photosWatcher = chokidar.watch(photosDir, {
     ignored: /(^|[\/\\])\..|Icon|.tmp$/, // ignore dotfiles
-    ignoreInitial : true,
+    ignoreInitial: true,
     depth: 0,
     persistent: true,
   });
@@ -30,7 +30,8 @@ const createThumbnail = (mainWindow: BrowserWindow, photosDir: string) => {
           createdTime: fs.statSync(path.join(photosDir, fileName)).ctime,
           stickers: [],
         });
-      });
+      })
+      .catch((err) => console.log('sharp resize error : ', err));
   });
 };
 

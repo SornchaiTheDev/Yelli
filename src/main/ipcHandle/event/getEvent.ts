@@ -17,6 +17,7 @@ const getPhotos = () => {
       .collection('events')
       .doc(id)
       .collection('photos')
+      .limit(10)
       .get();
     fetchPhotos.forEach((doc) =>
       photos.push({ ...(doc.data() as PhotoI), id: doc.id })

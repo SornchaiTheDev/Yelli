@@ -6,15 +6,18 @@ import { format } from 'date-fns';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { EventI, PhotoI } from '@decor/Event';
-import Store from 'renderer/utils/store';
+
+import { useEventContext } from '../Context/EventContext';
 
 function InAlbum() {
   const { id } = useParams();
   const [event, setEvent] = useState<EventI | null>(null);
+  const [selects, setSelects] = useState<string[]>([]);
   const [isSelected, setIsSelected] = useState<boolean>(false);
   const [photos, setPhotos] = useState<PhotoI[]>([]);
   const navigate = useNavigate();
-  const store = new Store();
+  const { deleteEvent } = useEventContext();
+
   useEffect(() => {
     window.electron
       .get_event(id)
@@ -34,29 +37,37 @@ function InAlbum() {
       );
   }, []);
 
-  useEffect(() => {
-    if (event) {
-      store.get('event').then((event) => {
-        if (event.id === id) {
-          setIsSelected(true);
-        }
-      });
+  const handleSelectClick = () => {
+    setIsSelected(!isSelected);
+  };
+  const handleSelectEvent = (id: string) => {
+    if (isSelected) {
+      if (selects.includes(id)) {
+        return setSelects(selects.filter((item) => item !== id));
+      }
+      setSelects([...selects, id]);
     }
-  }, [event]);
+  };
 
-  const handleSelectEvent = () => {
-    store.set('event', event!);
-    setIsSelected(true);
+  const handleSelectCancel = () => {
+    setSelects([]);
+    setIsSelected(false);
+  };
 
-    // navigate('/preference/event');
+  const handleDeletePhotos = () => {
+    window.electron.delete_photos(id, selects).then(() => {
+      setSelects([]);
+      setIsSelected(false);
+      setPhotos(photos.filter((item) => !selects.includes(item.id)));
+    });
   };
 
   const handleDeleteEvent = () => {
     window.electron.delete_event(id);
+    deleteEvent(id as string);
     navigate('/preference/Event');
   };
 
-  console.log(photos);
   return (
     <WithSideBar>
       <div className="mt-5 w-full flex flex-col items-center">
@@ -84,26 +95,64 @@ function InAlbum() {
                 <p>{event?.amount} Photo</p>
               </span>
             </div>
-            <div className="flex gap-2">
-              <button
-                className="w-full px-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg font-semibold"
-                onClick={handleSelectEvent}
-              >
-                {isSelected ? 'Selected' : 'Select Event'}
-              </button>
-              <button
-                className="w-full px-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-semibold"
-                onClick={handleDeleteEvent}
-              >
-                Delete Event
-              </button>
+            <div className="w-1/2 flex gap-2 justify-center items-center">
+              {isSelected ? (
+                <>
+                  {selects.length > 0 && (
+                    <button
+                      className="w-full p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-semibold"
+                      onClick={handleDeletePhotos}
+                    >
+                      Delete ({selects.length})
+                    </button>
+                  )}
+                  <button
+                    className="w-full p-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg font-semibold"
+                    onClick={handleSelectCancel}
+                  >
+                    Cancel
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="w-full p-2 text-white bg-green-500 hover:bg-green-600 rounded-lg font-semibold"
+                    onClick={handleSelectClick}
+                  >
+                    Select
+                  </button>
+                  <button
+                    className="w-full p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-semibold"
+                    onClick={handleDeleteEvent}
+                  >
+                    Delete Event
+                  </button>
+                </>
+              )}
             </div>
           </div>
+
           <div className="grid grid-cols-4 gap-x-6 gap-y-14 p-4">
             {photos
               .filter(({ src }) => src !== 'uploading')
               .map(({ src, id }) => (
-                <Image key={id} src={src!} onClick={() => {}} />
+                <div
+                  className={`relative ${
+                    isSelected ? 'cursor-pointer' : 'cursor-default'
+                  }`}
+                  onClick={() => handleSelectEvent(id)}
+                >
+                  {isSelected && (
+                    <div className="absolute right-2 top-0">
+                      <input
+                        type="checkbox"
+                        checked={selects.includes(id)}
+                        onChange={() => handleSelectEvent(id)}
+                      />
+                    </div>
+                  )}
+                  <Image key={id} src={src!} />
+                </div>
               ))}
           </div>
         </div>

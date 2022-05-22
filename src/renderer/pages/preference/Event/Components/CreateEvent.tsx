@@ -1,14 +1,15 @@
 import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Store from 'renderer/utils/store';
 import { useThemeContext } from 'renderer/context/ThemeContext';
 import { v4 as uuid } from 'uuid';
 import { EventI } from '@decor/Event';
+import { useEventContext } from '../Context/EventContext';
 
-function Event({ onCreate }: { onCreate: (event: EventI) => void }) {
-  const { t, i18n } = useTranslation();
+function Event() {
+  const { t } = useTranslation();
   const { theme } = useThemeContext();
-  const store = new Store();
+  const { addEvent } = useEventContext();
+
   const [eventName, setEventName] = useState<string>('');
 
   const handleInputChange = (e: FormEvent<HTMLInputElement>) => {
@@ -16,15 +17,17 @@ function Event({ onCreate }: { onCreate: (event: EventI) => void }) {
   };
 
   const handleCreateEvent = () => {
-    const event = {
-      name: eventName,
-      id: uuid(),
-      imgset: [{ src: null }, { src: null }, { src: null }, { src: null }],
-      amount: 0,
-      date: { _seconds: Date.now() / 1000 },
-    };
-    window.electron.create_event(event);
-    onCreate(event);
+    if (eventName.length > 0) {
+      const event = {
+        name: eventName,
+        id: uuid(),
+        imgset: [{ src: null }, { src: null }, { src: null }, { src: null }],
+        amount: 0,
+        date: { _seconds: Date.now() / 1000 },
+      } as EventI;
+      window.electron.create_event(event);
+      addEvent(event);
+    }
   };
   return (
     <div className="w-full flex gap-2 items-center">

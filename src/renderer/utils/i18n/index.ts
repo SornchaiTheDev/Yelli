@@ -55,7 +55,7 @@ i18n.use(initReactI18next).init({
             title: 'Event',
             createEvent: {
               title: 'Event Name',
-              btn : "Create Event"
+              btn: 'Create Event',
             },
           },
         },
@@ -100,13 +100,23 @@ i18n.use(initReactI18next).init({
           },
           stickers: {
             title: 'สติกเกอร์',
-            initial: 'คลิก หรือ ลากสติ๊กเกอร์มาวางที่นี่',
+            initial: 'แตะ หรือ ลากเพื่อวาง',
             drop: 'ปล่อยได้เลย',
           },
           watermark: {
             title: 'ลายน้ำ',
-            initial: 'คลิก หรือ ลากลายน้ำมาวางที่นี่',
+            initial: 'แตะ หรือ ลากเพื่อวาง',
             drop: 'ปล่อยได้เลย',
+          },
+          event: {
+            title: 'งาน',
+            createEvent: {
+              title: 'ชื่องาน',
+              btn: 'สร้างงาน',
+            },
+          },
+          inEvent: {
+            photo: 'รูป',
           },
         },
       },

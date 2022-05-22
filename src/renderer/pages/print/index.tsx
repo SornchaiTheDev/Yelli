@@ -18,7 +18,7 @@ function Print() {
     if (selectedPhoto === null) {
       return navigate('/explorer');
     }
-    console.log('upload called');
+
     window.electron.upload(selectedPhoto).then((uploadPhoto: UploadPhoto) => {
       setPhoto(uploadPhoto);
     });

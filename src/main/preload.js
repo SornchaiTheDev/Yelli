@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('electron', {
   get_events: () => ipcRenderer.invoke('get_events'),
   get_event: (id) => ipcRenderer.invoke('get_event', id),
   delete_event: (id) => ipcRenderer.invoke('delete_event', id),
+  delete_photos: (eventId, selects) =>
+    ipcRenderer.invoke('delete_photos', eventId, selects),
   files: {
     onPhotosDirChange: (callBack) =>
       ipcRenderer.on('initialize-watcher', callBack),
