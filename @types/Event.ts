@@ -1,5 +1,6 @@
 export interface PhotoI {
   src: string | null;
+  id: string;
 }
 export interface EventI {
   amount?: number;

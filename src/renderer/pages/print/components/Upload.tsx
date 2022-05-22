@@ -40,7 +40,7 @@ function Upload({
       </div>
 
       <Link
-        to="/"
+        to="/explorer"
         style={{
           backgroundColor: theme.primary.color,
           color: theme.text.color,

@@ -18,7 +18,9 @@ const getPhotos = () => {
       .doc(id)
       .collection('photos')
       .get();
-    fetchPhotos.forEach((doc) => photos.push(doc.data() as PhotoI));
+    fetchPhotos.forEach((doc) =>
+      photos.push({ ...(doc.data() as PhotoI), id: doc.id })
+    );
     return { event, photos, id };
   });
 };

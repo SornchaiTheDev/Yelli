@@ -55,6 +55,8 @@ function InAlbum() {
     window.electron.delete_event(id);
     navigate('/preference/Event');
   };
+
+  console.log(photos);
   return (
     <WithSideBar>
       <div className="mt-5 w-full flex flex-col items-center">
@@ -98,9 +100,11 @@ function InAlbum() {
             </div>
           </div>
           <div className="grid grid-cols-4 gap-x-6 gap-y-14 p-4">
-            {photos.map(({ src }) => (
-              <Image src={src!} onClick={() => {}} />
-            ))}
+            {photos
+              .filter(({ src }) => src !== 'uploading')
+              .map(({ src, id }) => (
+                <Image key={id} src={src!} onClick={() => {}} />
+              ))}
           </div>
         </div>
       </div>
