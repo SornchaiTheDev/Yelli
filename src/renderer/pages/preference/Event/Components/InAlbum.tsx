@@ -8,8 +8,10 @@ import { useEffect, useState } from 'react';
 import { EventI, PhotoI } from '@decor/Event';
 
 import { useEventContext } from '../Context/EventContext';
+import { useTranslation } from 'react-i18next';
 
 function InAlbum() {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [event, setEvent] = useState<EventI | null>(null);
   const [selects, setSelects] = useState<string[]>([]);
@@ -92,7 +94,10 @@ function InAlbum() {
               <p>•</p>
               <span className="inline-flex items-center gap-1">
                 <AiOutlineFileImage />
-                <p>{event?.amount} Photo</p>
+                <p>
+                  {event?.amount} {t('setting.inEvent.photo')}
+                  {event?.amount! > 1 && 's'}
+                </p>
               </span>
             </div>
             <div className="w-1/2 flex gap-2 justify-center items-center">
@@ -103,29 +108,31 @@ function InAlbum() {
                       className="w-full p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-semibold"
                       onClick={handleDeletePhotos}
                     >
-                      Delete ({selects.length})
+                      {t('setting.inEvent.delete_photos')} ({selects.length})
                     </button>
                   )}
                   <button
                     className="w-full p-2 text-white bg-yellow-500 hover:bg-yellow-600 rounded-lg font-semibold"
                     onClick={handleSelectCancel}
                   >
-                    Cancel
+                    {t('setting.inEvent.cancel')}
                   </button>
                 </>
               ) : (
                 <>
-                  <button
-                    className="w-full p-2 text-white bg-green-500 hover:bg-green-600 rounded-lg font-semibold"
-                    onClick={handleSelectClick}
-                  >
-                    Select
-                  </button>
+                  {photos.length > 0 && (
+                    <button
+                      className="w-full p-2 text-white bg-green-500 hover:bg-green-600 rounded-lg font-semibold"
+                      onClick={handleSelectClick}
+                    >
+                      {t('setting.inEvent.select')}
+                    </button>
+                  )}
                   <button
                     className="w-full p-2 text-white bg-red-500 hover:bg-red-600 rounded-lg font-semibold"
                     onClick={handleDeleteEvent}
                   >
-                    Delete Event
+                    {t('setting.inEvent.delete_event')}
                   </button>
                 </>
               )}
@@ -137,6 +144,7 @@ function InAlbum() {
               .filter(({ src }) => src !== 'uploading')
               .map(({ src, id }) => (
                 <div
+                  key={src}
                   className={`relative ${
                     isSelected ? 'cursor-pointer' : 'cursor-default'
                   }`}

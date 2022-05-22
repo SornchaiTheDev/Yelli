@@ -4,11 +4,13 @@ import { useThemeContext } from 'renderer/context/ThemeContext';
 import { v4 as uuid } from 'uuid';
 import { EventI } from '@decor/Event';
 import { useEventContext } from '../Context/EventContext';
+import Store from 'renderer/utils/store';
 
 function Event() {
   const { t } = useTranslation();
   const { theme } = useThemeContext();
   const { addEvent } = useEventContext();
+  const store = new Store();
 
   const [eventName, setEventName] = useState<string>('');
 
@@ -25,8 +27,11 @@ function Event() {
         amount: 0,
         date: { _seconds: Date.now() / 1000 },
       } as EventI;
+
       window.electron.create_event(event);
       addEvent(event);
+      store.set('event', event);
+      setEventName('');
     }
   };
   return (
