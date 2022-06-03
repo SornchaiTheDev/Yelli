@@ -8,6 +8,11 @@ const create_event = () => {
       amount: 0,
       date: admin.firestore.FieldValue.serverTimestamp(),
     });
+    await admin
+      .firestore()
+      .collection('count')
+      .doc('events')
+      .update({ amount: admin.firestore.FieldValue.increment(1) });
   });
 };
 
